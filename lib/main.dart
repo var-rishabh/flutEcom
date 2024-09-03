@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// screens
+import 'package:flut_mart/screens/home.dart';
+import 'package:flut_mart/screens/splash.dart';
+
+// utils
+import 'package:flut_mart/utils/theme/theme.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -9,9 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Text('Hello World'),
+      themeMode: ThemeMode.system,
+      theme: KThemeData.lightTheme,
+      darkTheme: KThemeData.darkTheme,
+      routes: {
+        SplashScreen.routeName: (context) => const SplashScreen(),
+        Home.routeName: (context) => const Home(),
+      },
     );
   }
 }
