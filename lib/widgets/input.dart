@@ -6,6 +6,7 @@ class KInputField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final TextInputType keyboardType;
+  final int? maxLength;
   final String? Function(String?)? validator;
 
   const KInputField({
@@ -15,6 +16,7 @@ class KInputField extends StatelessWidget {
     required this.controller,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
+    this.maxLength,
     this.validator,
   });
 
@@ -26,29 +28,32 @@ class KInputField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
+        maxLength: maxLength,
         validator: validator,
         decoration: InputDecoration(
           labelText: labelText,
-          floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
           labelStyle: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
           ),
+          floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
           prefixIcon: icon != null ? Icon(icon) : null,
           prefixIconColor: Theme.of(context).iconTheme.color,
           contentPadding: const EdgeInsets.all(16.0),
           focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(
               color: Theme.of(context).primaryColor,
             ),
           ),
           enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(
               color: Theme.of(context).dividerColor,
             ),
           ),
         ),
         style: TextStyle(
-          color: Theme.of(context).textTheme.bodyLarge?.color,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );

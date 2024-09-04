@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // utils
-import 'package:flut_mart/utils/constants/colors.dart';
+import 'package:flut_mart/utils/constants/colors.constant..dart';
 import 'package:flut_mart/utils/theme/text.theme.dart';
 
 class KThemeData {

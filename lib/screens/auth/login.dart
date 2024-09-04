@@ -1,8 +1,13 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
+// services
+import 'package:flut_mart/services/auth.service.dart';
+import 'package:flut_mart/services/token.service.dart';
+
 // widgets
 import 'package:flut_mart/widgets/input.dart';
+import 'package:flut_mart/widgets/snackbar.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = '/login';
@@ -16,6 +21,34 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthApiService _authApiService = AuthApiService();
+
+  // method to login user
+  void _loginUser() async {
+    try {
+      final username = _usernameController.text;
+      final password = _passwordController.text;
+
+      final response = await _authApiService.loginUser(username, password);
+      final token = response['token'];
+
+      await TokenService.saveToken(token);
+      if (mounted) {
+        CustomSnackBar.show(
+          context: context,
+          label: 'Login Successful',
+        );
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    } catch (e) {
+      if (mounted) {
+        CustomSnackBar.show(
+          context: context,
+          label: 'Invalid Credentials',
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: Lottie.asset(
                   'assets/animations/auth.json',
-                  height: 300,
+                  height: 350,
                 ),
               ),
               Text(
@@ -67,16 +100,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: _loginUser,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
                         padding: const EdgeInsets.symmetric(
                           vertical: 18,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: Text(
