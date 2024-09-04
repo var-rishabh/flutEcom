@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
       theme: KThemeData.lightTheme,
       darkTheme: KThemeData.darkTheme,
       routes: {
-        // SplashScreen.routeName: (context) => const SplashScreen(),
+        SplashScreen.routeName: (context) => const SplashScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         SignupScreen.routeName: (context) => const SignupScreen(),
         Home.routeName: (context) => const Home(),
       },
-      initialRoute: '/login',
+      initialRoute: '/',
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
+
   const SplashScreen({super.key});
 
   @override
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/home');
+          Navigator.of(context).pushReplacementNamed('/login');
         }
       });
     });
@@ -30,19 +31,17 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              transform: Matrix4.translationValues(0, 70, 0),
-              child: Text(
-                'Runo Store',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
+            Text(
+              'Runo Store',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
+            const SizedBox(height: 20),
             Lottie.asset(
               'assets/animations/loader.json',
-              height: 250,
+              height: 80,
             ),
           ],
         ),
