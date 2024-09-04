@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 
-// text theme
-import 'package:flut_mart/utils/theme/text_theme.dart';
+// utils
+import 'package:flut_mart/utils/constants/colors.dart';
+import 'package:flut_mart/utils/theme/text.theme.dart';
 
 class KThemeData {
-  // Primary Colors
-  static const Color _primaryColor = Color(0xFFF21D08);
-
   // Light Theme
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    primaryColor: _primaryColor,
-    scaffoldBackgroundColor: Colors.white,
+    primaryColor: KColors.primaryColor,
+    scaffoldBackgroundColor: KColors.bgLight,
     textTheme: KTextTheme.suseTextTheme,
     buttonTheme: const ButtonThemeData(
-      buttonColor: _primaryColor,
+      buttonColor: KColors.primaryColor,
       textTheme: ButtonTextTheme.primary,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: _primaryColor,
+      backgroundColor: KColors.primaryColor,
     ),
-    iconTheme: const IconThemeData(color: Colors.black54),
-    dividerColor: Colors.grey.shade300,
+    iconTheme: const IconThemeData(color: KColors.lightBlackColor),
+    dividerColor: KColors.greyShade700,
     colorScheme: ColorScheme.fromSwatch().copyWith(
-      secondary: _primaryColor,
+      secondary: KColors.secondaryColor,
       brightness: Brightness.light,
     ),
   );
@@ -33,20 +31,20 @@ class KThemeData {
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    primaryColor: _primaryColor,
-    scaffoldBackgroundColor: Colors.grey.shade900,
+    primaryColor: KColors.primaryColor,
+    scaffoldBackgroundColor: KColors.bgDark,
     textTheme: KTextTheme.suseTextTheme,
     buttonTheme: const ButtonThemeData(
-      buttonColor: _primaryColor,
+      buttonColor: KColors.primaryColor,
       textTheme: ButtonTextTheme.primary,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: _primaryColor,
+      backgroundColor: KColors.primaryColor,
     ),
-    iconTheme: const IconThemeData(color: Colors.white54),
-    dividerColor: Colors.grey.shade700,
+    iconTheme: IconThemeData(color: KColors.greyShade300),
+    dividerColor: KColors.greyShade300,
     colorScheme: ColorScheme.fromSwatch().copyWith(
-      secondary: _primaryColor,
+      secondary: KColors.whiteColor,
       brightness: Brightness.dark,
     ),
   );
