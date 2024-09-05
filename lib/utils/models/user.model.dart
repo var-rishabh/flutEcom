@@ -73,7 +73,7 @@ class GeoLocation {
 
   GeoLocation({required this.lat, required this.long});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     return {
       'lat': lat,
       'long': long,

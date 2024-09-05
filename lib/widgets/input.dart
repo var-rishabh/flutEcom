@@ -35,6 +35,9 @@ class KInputField extends StatelessWidget {
           labelStyle: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
           ),
+          counterStyle: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
           floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
           prefixIcon: icon != null ? Icon(icon) : null,
           prefixIconColor: Theme.of(context).iconTheme.color,
