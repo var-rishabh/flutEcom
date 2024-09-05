@@ -38,7 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context,
           label: 'Login Successful',
         );
-        Navigator.of(context).pushReplacementNamed('/home');
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/home',
+          (route) => false,
+        );
       }
     } catch (e) {
       if (mounted) {
