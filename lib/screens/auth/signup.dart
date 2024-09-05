@@ -52,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           city.isEmpty ||
           street.isEmpty ||
           zipCode.isEmpty) {
-        CustomSnackBar.show(
+        KSnackBar.show(
           context: context,
           label: 'Please fill all the fields',
         );
@@ -84,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       print('id ============ $id');
       if (mounted && id != null) {
-        CustomSnackBar.show(
+        KSnackBar.show(
           context: context,
           label: 'SignUp Successful. Please login.',
         );
@@ -92,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     } catch (e) {
       if (mounted) {
-        CustomSnackBar.show(
+        KSnackBar.show(
           context: context,
           label: 'Invalid Credentials',
         );

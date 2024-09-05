@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       await TokenService.saveToken(token);
       if (mounted) {
-        CustomSnackBar.show(
+        KSnackBar.show(
           context: context,
           label: 'Login Successful',
         );
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        CustomSnackBar.show(
+        KSnackBar.show(
           context: context,
           label: 'Invalid Credentials',
         );

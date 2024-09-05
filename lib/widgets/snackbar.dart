@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomSnackBar {
+class KSnackBar {
   static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> show({
     required BuildContext context,
     required String label,

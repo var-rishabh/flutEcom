@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class KColors {
-  static const Color primaryColor = Color(0xFFF21D08);
+  static const Color primaryColor = Color.fromRGBO(250, 90, 42, 1);
   static const Color secondaryColor = Colors.black;
   static const Color bgLight = Colors.white;
   static Color bgDark = Colors.grey.shade900;

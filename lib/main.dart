@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // screens
-import 'package:flut_mart/screens/home.dart';
+import 'package:flut_mart/screens/app.dart';
 import 'package:flut_mart/screens/splash.dart';
 import 'package:flut_mart/screens/auth/login.dart';
 import 'package:flut_mart/screens/auth/signup.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         SplashScreen.routeName: (context) => const SplashScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         SignUpScreen.routeName: (context) => const SignUpScreen(),
-        Home.routeName: (context) => const Home(),
+        AppScreen.routeName: (context) => const AppScreen(),
       },
       initialRoute: '/',
     );
