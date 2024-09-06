@@ -21,8 +21,11 @@ class KBottomNavigationBar extends StatelessWidget {
         topRight: Radius.circular(20),
       ),
       child: BottomAppBar(
-        height: 60,
-        color: Theme.of(context).primaryColor,
+        height: 65,
+        // elevation: 8,
+        color: Theme.of(context).scaffoldBackgroundColor,
+        // shadowColor: Colors.red,
+        // color: Colors.transparent,
         shape: const CircularNotchedRectangle(),
         notchMargin: 5,
         child: Row(

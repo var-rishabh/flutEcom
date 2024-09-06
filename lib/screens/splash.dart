@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         _isLoggedIn().then((isLoggedIn) {
           if (mounted) {
             if (isLoggedIn) {
-              Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context).pushReplacementNamed('/app');
             } else {
               Navigator.of(context).pushReplacementNamed('/login');
             }

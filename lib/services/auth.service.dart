@@ -1,21 +1,25 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// utils
-import 'package:flut_mart/utils/models/user.model.dart';
+// constants
+import 'package:flut_mart/utils/constants/endpoint.constant.dart';
 
-// Base URL for Fake Store API
-const String baseUrl = 'https://api.escuelajs.co/api/v1';
+// models
+import 'package:flut_mart/utils/models/user.model.dart';
 
 class AuthApiService {
   final http.Client client;
+
+  static const baseUrl = Endpoint.baseUrl;
+  static const login = Endpoint.login;
+  static const signup = Endpoint.signup;
 
   AuthApiService({http.Client? client}) : client = client ?? http.Client();
 
   // Login user
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/auth/login'),
+      Uri.parse('$baseUrl$login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -35,7 +39,7 @@ class AuthApiService {
   // SignUp user
   Future<Map<String, dynamic>> signupUser(User user) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/users'),
+      Uri.parse('$baseUrl$signup'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
