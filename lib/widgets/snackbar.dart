@@ -6,6 +6,7 @@ class KSnackBar {
     required String label,
     String? actionLabel,
     VoidCallback? actionFunction,
+    String? type,
   }) {
     // closing any existing snackbars
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -14,7 +15,11 @@ class KSnackBar {
     final snackBar = SnackBar(
       content: Text(label),
       duration: const Duration(seconds: 30),
-      backgroundColor: Colors.black54,
+      backgroundColor: type == 'error'
+          ? Colors.red
+          : type == 'success'
+              ? Colors.green
+              : Colors.black54,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

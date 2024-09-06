@@ -2,8 +2,8 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenService {
-  static const _tokenKey = 'jwt_token';
-  
+  static const _tokenKey = 'access_token';
+
   // Store JWT Token in SharedPreferences
   static Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();

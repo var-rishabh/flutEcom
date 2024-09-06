@@ -19,27 +19,37 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthApiService _authApiService = AuthApiService();
 
   // method to login user
   void _loginUser() async {
     try {
-      final username = _usernameController.text;
+      final email = _emailController.text;
       final password = _passwordController.text;
 
-      final response = await _authApiService.loginUser(username, password);
-      final token = response['token'];
+      if (email.isEmpty || password.isEmpty) {
+        KSnackBar.show(
+          context: context,
+          label: 'Please fill all fields',
+          type: 'error',
+        );
+        return;
+      }
 
+      final response = await _authApiService.loginUser(email, password);
+      final token = response['access_token'];
       await TokenService.saveToken(token);
+
       if (mounted) {
         KSnackBar.show(
           context: context,
           label: 'Login Successful',
+          type: 'success',
         );
         Navigator.of(context).pushNamedAndRemoveUntil(
-          '/home',
+          '/app',
           (route) => false,
         );
       }
@@ -48,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         KSnackBar.show(
           context: context,
           label: 'Invalid Credentials',
+          type: 'error',
         );
       }
     }
@@ -86,9 +97,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 30),
               KInputField(
-                labelText: 'Username',
-                icon: Icons.person,
-                controller: _usernameController,
+                labelText: 'Email',
+                icon: Icons.email,
+                controller: _emailController,
               ),
               const SizedBox(height: 8),
               KInputField(

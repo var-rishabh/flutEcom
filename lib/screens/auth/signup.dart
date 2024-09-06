@@ -21,13 +21,12 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
 
   final AuthApiService _authApiService = AuthApiService();
@@ -35,17 +34,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // method to signup user
   void _signupUser() async {
     try {
-      final email = _emailController.text;
-      final username = _usernameController.text;
-      final password = _passwordController.text;
       final firstName = _firstNameController.text;
       final lastName = _lastNameController.text;
-      final city = _cityController.text;
+      final email = _emailController.text;
+      final password = _passwordController.text;
       final street = _streetController.text;
+      final city = _cityController.text;
       final zipCode = _zipCodeController.text;
 
       if (email.isEmpty ||
-          username.isEmpty ||
           password.isEmpty ||
           firstName.isEmpty ||
           lastName.isEmpty ||
@@ -55,38 +52,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
         KSnackBar.show(
           context: context,
           label: 'Please fill all the fields',
+          type: 'error',
         );
         return;
       }
 
       User userData = User(
         email: email,
-        username: username,
+        name: '$firstName $lastName',
         password: password,
-        phone: '1-570-236-7033',
-        name: Name(
-          firstname: firstName,
-          lastname: lastName,
-        ),
-        address: Address(
-            city: city,
-            street: street,
-            zipcode: zipCode,
-            number: 1234,
-            geolocation: GeoLocation(
-              lat: '45.12',
-              long: '23.56',
-            )),
+        avatar:
+            "https://www.shareicon.net/data/128x128/2016/07/05/791220_people_512x512.png",
       );
 
       final response = await _authApiService.signupUser(userData);
       final id = response['id'];
 
-      print('id ============ $id');
       if (mounted && id != null) {
         KSnackBar.show(
           context: context,
           label: 'SignUp Successful. Please login.',
+          type: 'success',
         );
         Navigator.of(context).pushReplacementNamed('/login');
       }
@@ -95,6 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         KSnackBar.show(
           context: context,
           label: 'Invalid Credentials',
+          type: 'error',
         );
       }
     }
@@ -113,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Center(
                 child: Lottie.asset(
                   'assets/animations/signup.json',
-                  height: 150,
+                  height: 250,
                 ),
               ),
               Text(
@@ -130,14 +117,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       color: Theme.of(context).colorScheme.secondary,
                     ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: KInputField(
                       labelText: 'First Name',
                       controller: _firstNameController,
-                      maxLength: 20,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -145,7 +131,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: KInputField(
                       labelText: 'Last Name',
                       controller: _lastNameController,
-                      maxLength: 20,
                     ),
                   ),
                 ],
@@ -154,11 +139,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 labelText: 'Email',
                 icon: Icons.email,
                 controller: _emailController,
-              ),
-              KInputField(
-                labelText: 'Username',
-                icon: Icons.person,
-                controller: _usernameController,
               ),
               KInputField(
                 labelText: 'Password',
@@ -191,7 +171,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -218,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
