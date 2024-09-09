@@ -50,7 +50,7 @@ class _KAppBarState extends State<KAppBar> {
                   size: 25,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context, true);
                 },
               ),
             ),

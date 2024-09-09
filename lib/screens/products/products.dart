@@ -1,4 +1,3 @@
-import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
 // models
@@ -28,32 +27,61 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   final ProductApiService _productApiService = ProductApiService();
   List<Product> _products = [];
+  final ScrollController _scrollController = ScrollController();
 
   int _currentPage = 1;
   bool _isAscending = true;
   int _categoryId = 0;
   bool _isInitialized = false;
   bool _hasMoreProducts = true;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener); // Add scroll listener
+  }
 
   Future<void> fetchProducts() async {
+    if (_isLoading) return; // Prevent multiple calls while loading
+
+    setState(() {
+      _isLoading = true;
+    });
+
     final List<Product> products =
         await _productApiService.getProductsByCategoryId(
       _categoryId,
       _currentPage,
       _isAscending ? 0 : 1,
     );
+
     setState(() {
-      _products = products;
-      _hasMoreProducts = products.length ==
-          20; // If exactly 20 products, assume there might be more
+      if (_currentPage == 1) {
+        _products = products;
+      } else {
+        _products.addAll(products); // Add new products to the list
+      }
+      _hasMoreProducts = products.length == 20;
+      _isLoading = false;
     });
   }
 
   void _sortProducts() {
     setState(() {
       _isAscending = !_isAscending;
+      _currentPage = 1; // Reset to the first page when sorting changes
     });
     fetchProducts();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        _hasMoreProducts &&
+        !_isLoading) {
+      _loadNextPage();
+    }
   }
 
   void _loadNextPage() {
@@ -61,15 +89,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
       _currentPage++;
     });
     fetchProducts();
-  }
-
-  void _loadPreviousPage() {
-    if (_currentPage > 1) {
-      setState(() {
-        _currentPage--;
-      });
-      fetchProducts();
-    }
   }
 
   @override
@@ -90,6 +109,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -106,6 +126,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         needBackButton: true,
       ),
       body: SingleChildScrollView(
+        controller: _scrollController, // Assign the scroll controller
         child: Column(
           children: [
             Padding(
@@ -140,10 +161,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ElevatedButton.icon(
                         onPressed: _sortProducts,
                         style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(
+                          foregroundColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).colorScheme.secondary,
                           ),
-                          backgroundColor: WidgetStateProperty.all<Color>(
+                          backgroundColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).scaffoldBackgroundColor,
                           ),
                         ),
@@ -192,35 +213,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       );
                     },
                   ),
-                  if (_products.isEmpty) const NoData(),
-                  if (_products.length > 1)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: _currentPage > 1
-                              ? _loadPreviousPage
-                              : null, // Disable if on the first page
-                        ),
-                        Text(
-                          'Page $_currentPage',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward),
-                          onPressed: _hasMoreProducts
-                              ? _loadNextPage
-                              : null, // Disable if no more products
-                        ),
-                      ],
+                  if (_isLoading)
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
+                  if (!_isLoading && _products.isEmpty) const NoData(),
                 ],
               ),
             ),

@@ -55,7 +55,8 @@ class AuthApiService {
 
   // Get User Profile
   Future<Map<String, dynamic>> getUserProfile(int userId) async {
-    final response = await client.get(Uri.parse('https://api.escuelajs.co/api/v1/users/1'));
+    final response = await client
+        .get(Uri.parse('https://api.escuelajs.co/api/v1/users/$userId'));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

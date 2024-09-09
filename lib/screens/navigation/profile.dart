@@ -5,6 +5,8 @@ import 'package:flut_mart/utils/models/user.model.dart';
 
 // services
 import 'package:flut_mart/services/auth.service.dart';
+import 'package:flut_mart/services/cart.service.dart';
+import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
 // widgets
@@ -57,6 +59,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         label: 'Logout Successful',
         type: 'success',
       );
+      await CartService().clearCart();
+      await FavoritesService().clearFavorites();
     }
   }
 

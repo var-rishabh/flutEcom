@@ -40,7 +40,7 @@ class Product {
     if (discount > 0) {
       return price - (price * discount / 100);
     } else {
-      return 0;
+      return price;
     }
   }
 }

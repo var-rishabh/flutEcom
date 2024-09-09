@@ -87,6 +87,9 @@ class ProductApiService {
     // } else {
     //   throw Exception(response.body);
     // }
+
+    await Future.delayed(const Duration(seconds: 1));
+
     List<Product> allProd = allProducts
         .where((product) => product.categoryId == categoryId)
         .toList();

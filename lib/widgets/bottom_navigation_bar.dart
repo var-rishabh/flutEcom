@@ -15,17 +15,26 @@ class KBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05), // Shadow color
+            spreadRadius: 5,
+            blurRadius: 15,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
       ),
       child: BottomAppBar(
         height: 65,
-        // elevation: 8,
+        elevation: 8,
         color: Theme.of(context).scaffoldBackgroundColor,
-        // shadowColor: Colors.red,
-        // color: Colors.transparent,
         shape: const CircularNotchedRectangle(),
         notchMargin: 5,
         child: Row(
