@@ -5,6 +5,9 @@ class Endpoint {
   static const String login = '/auth/login';
   static const String signup = '/users';
 
+  // user endpoints
+  static const String getUser = '/users/';
+
   // category endpoints
   static const String getCategories = '/categories';
 

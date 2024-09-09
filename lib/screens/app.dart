@@ -5,6 +5,7 @@ import 'package:flut_mart/screens/navigation/cart.dart';
 import 'package:flut_mart/screens/navigation/explore.dart';
 import 'package:flut_mart/screens/navigation/favourite.dart';
 import 'package:flut_mart/screens/navigation/home.dart';
+import 'package:flut_mart/screens/navigation/profile.dart';
 
 // widgets
 import 'package:flut_mart/widgets/app_bar.dart';
@@ -43,7 +44,7 @@ class _AppState extends State<AppScreen> {
         currentIndex: _selectedIndex,
         onTabSelected: _onTabSelected,
       ),
-      const Center(child: Text('Profile Screen')),
+      const ProfileScreen(),
       CartScreen(
         currentIndex: _selectedIndex,
         onTabSelected: _onTabSelected,

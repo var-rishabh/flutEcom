@@ -13,6 +13,7 @@ class AuthApiService {
   static const baseUrl = Endpoint.baseUrl;
   static const login = Endpoint.login;
   static const signup = Endpoint.signup;
+  static const getUser = Endpoint.getUser;
 
   AuthApiService({http.Client? client}) : client = client ?? http.Client();
 
@@ -46,6 +47,17 @@ class AuthApiService {
       body: jsonEncode(user.toJson()),
     );
     if (response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  // Get User Profile
+  Future<Map<String, dynamic>> getUserProfile(int userId) async {
+    final response = await client.get(Uri.parse('https://api.escuelajs.co/api/v1/users/1'));
+
+    if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
       throw Exception(response.body);
