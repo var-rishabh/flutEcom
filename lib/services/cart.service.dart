@@ -24,4 +24,10 @@ class CartService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('cart');
   }
+
+  Future<bool> isInCart(String productId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> cart = prefs.getStringList('cart') ?? [];
+    return cart.contains(productId);
+  }
 }
