@@ -47,4 +47,39 @@ final List<Category> allCategories = [
     name: 'Stationery',
     image: 'assets/images/shoe.png',
   ),
+  Category(
+    id: 10,
+    name: 'Food',
+    image: 'assets/images/tshirt.png',
+  ),
+  Category(
+    id: 11,
+    name: 'Drinks',
+    image: 'assets/images/macbook.png',
+  ),
+  Category(
+    id: 12,
+    name: 'Health',
+    image: 'assets/images/shoe.png',
+  ),
+  Category(
+    id: 13,
+    name: 'Home',
+    image: 'assets/images/tshirt.png',
+  ),
+  Category(
+    id: 14,
+    name: 'Garden',
+    image: 'assets/images/macbook.png',
+  ),
+  Category(
+    id: 15,
+    name: 'Pets',
+    image: 'assets/images/shoe.png',
+  ),
+  Category(
+    id: 16,
+    name: 'Automotive',
+    image: 'assets/images/shoe.png',
+  ),
 ];

@@ -14,7 +14,7 @@ class KSnackBar {
     // Define the snackbar
     final snackBar = SnackBar(
       content: Text(label),
-      duration: const Duration(seconds: 30),
+      duration: const Duration(seconds: 2),
       backgroundColor: type == 'error'
           ? Colors.red
           : type == 'success'

@@ -12,7 +12,14 @@ import 'package:flut_mart/widgets/category_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int currentIndex;
+  final Function(int) onTabSelected;
+
+  const HomeScreen({
+    super.key,
+    required this.currentIndex,
+    required this.onTabSelected,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -22,9 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final CategoryApiService _categoryApiService = CategoryApiService();
   List<Category> _categories = [];
 
-  List<Category> _cat1 = [];
-  List<Category> _cat2 = [];
-
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
 
@@ -32,8 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Category> categories = await _categoryApiService.getCategories();
     setState(() {
       _categories = categories;
-      _cat1 = _categories.sublist(0, 8);
-      _cat2 = _categories.sublist(4, 10);
     });
   }
 
@@ -51,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final int halfLength = (_categories.length / 2).ceil();
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -99,46 +103,102 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: 130, // Adjust the height according to the card size
-            child: _cat2.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: _cat2.length,
-                    itemBuilder: (context, index) {
-                      final Category category = _cat2[index];
-                      return CategoryCard(
-                        key: Key(category.id.toString()),
-                        id: category.id,
-                        title: category.name,
-                        image: category.image,
-                        boxSize: 80, // Adjust the size of each category box
-                      );
-                    },
-                  ),
-          ),
-          SizedBox(
-            height: 130, // Adjust the height according to the card size
-            child: _cat1.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: _cat1.length,
-                    itemBuilder: (context, index) {
-                      final Category category = _cat1[index];
-                      return CategoryCard(
-                        key: Key(category.id.toString()),
-                        id: category.id,
-                        title: category.name,
-                        image: category.image,
-                        boxSize: 80, // Adjust the size of each category box
-                      );
-                    },
-                  ),
-          ),
+          _categories.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    SizedBox(
+                      height:
+                          130, // Adjust the height according to the card size
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: halfLength,
+                        itemBuilder: (context, index) {
+                          final Category category = _categories[index];
+                          return CategoryCard(
+                            key: Key(category.id.toString()),
+                            id: category.id,
+                            title: category.name,
+                            image: category.image,
+                            boxSize: 80,
+                            currentIndex: widget.currentIndex,
+                            onTabSelected: widget.onTabSelected,
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10), // Space between two rows
+                    SizedBox(
+                      height:
+                          130, // Adjust the height according to the card size
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: _categories.length - halfLength,
+                        itemBuilder: (context, index) {
+                          final Category category =
+                              _categories[halfLength + index];
+                          return CategoryCard(
+                            key: Key(category.id.toString()),
+                            id: category.id,
+                            title: category.name,
+                            image: category.image,
+                            boxSize: 80,
+                            currentIndex: widget.currentIndex,
+                            onTabSelected: widget.onTabSelected,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+          // SizedBox(
+          //   height: 130, // Adjust the height according to the card size
+          //   child: _categories.sublist(0, 5).isEmpty
+          //       ? const Center(child: CircularProgressIndicator())
+          //       : ListView.builder(
+          //           scrollDirection: Axis.horizontal,
+          //           padding: const EdgeInsets.symmetric(horizontal: 20),
+          //           itemCount: _categories.sublist(0, 5).length,
+          //           itemBuilder: (context, index) {
+          //             final Category category =
+          //                 _categories.sublist(0, 5)[index];
+          //             return CategoryCard(
+          //               key: Key(category.id.toString()),
+          //               id: category.id,
+          //               title: category.name,
+          //               image: category.image,
+          //               boxSize: 80,
+          //               currentIndex: widget.currentIndex,
+          //               onTabSelected: widget.onTabSelected,
+          //             );
+          //           },
+          //         ),
+          // ),
+          // SizedBox(
+          //   height: 130, // Adjust the height according to the card size
+          //   child: _categories.sublist(4, 9).isEmpty
+          //       ? const Center(child: CircularProgressIndicator())
+          //       : ListView.builder(
+          //           scrollDirection: Axis.horizontal,
+          //           padding: const EdgeInsets.symmetric(horizontal: 20),
+          //           itemCount: _categories.sublist(4, 9).length,
+          //           itemBuilder: (context, index) {
+          //             final Category category =
+          //                 _categories.sublist(4, 9)[index];
+          //             return CategoryCard(
+          //               key: Key(category.id.toString()),
+          //               id: category.id,
+          //               title: category.name,
+          //               image: category.image,
+          //               boxSize: 80,
+          //               currentIndex: widget.currentIndex,
+          //               onTabSelected: widget.onTabSelected,
+          //             );
+          //           },
+          //         ),
+          // ),
           const Padding(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: KCarousel(),

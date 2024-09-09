@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 // screens
+import 'package:flut_mart/screens/navigation/cart.dart';
 import 'package:flut_mart/screens/navigation/explore.dart';
+import 'package:flut_mart/screens/navigation/favourite.dart';
 import 'package:flut_mart/screens/navigation/home.dart';
 
 // widgets
@@ -20,14 +22,6 @@ class AppScreen extends StatefulWidget {
 class _AppState extends State<AppScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const ExploreScreen(),
-    const Center(child: Text('Favorites Screen')),
-    const Center(child: Text('Profile Screen')),
-    const Center(child: Text('Cart Screen')), // Floating Action Button page
-  ];
-
   void _onTabSelected(int index) {
     setState(() {
       _selectedIndex = index;
@@ -36,6 +30,25 @@ class _AppState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      HomeScreen(
+        currentIndex: _selectedIndex,
+        onTabSelected: _onTabSelected,
+      ),
+      ExploreScreen(
+        currentIndex: _selectedIndex,
+        onTabSelected: _onTabSelected,
+      ),
+      FavoritesScreen(
+        currentIndex: _selectedIndex,
+        onTabSelected: _onTabSelected,
+      ),
+      const Center(child: Text('Profile Screen')),
+      CartScreen(
+        currentIndex: _selectedIndex,
+        onTabSelected: _onTabSelected,
+      ),
+    ];
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: KAppBar(
@@ -66,7 +79,7 @@ class _AppState extends State<AppScreen> {
         currentIndex: _selectedIndex,
         onTabSelected: _onTabSelected,
       ),
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
     );
   }
 }

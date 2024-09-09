@@ -11,6 +11,8 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final String image;
   final double boxSize;
+  final int currentIndex;
+  final Function(int) onTabSelected;
 
   const CategoryCard({
     super.key,
@@ -18,38 +20,58 @@ class CategoryCard extends StatelessWidget {
     required this.title,
     required this.image,
     this.boxSize = 100,
+    required this.currentIndex,
+    required this.onTabSelected,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 20),
-      child: Column(
-        children: [
-          Container(
-            width: boxSize,
-            height: boxSize,
-            decoration: BoxDecoration(
-              color: colors[id % colors.length],
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Center(
-              child: Image.asset(
-                image,
-                width: boxSize * 0.7,
-                height: boxSize * 0.7,
+      child: OutlinedButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            '/products',
+            arguments: {
+              "categoryId": id,
+              "currentIndex": currentIndex,
+              "onTabSelected": onTabSelected,
+            },
+          );
+        },
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: boxSize,
+              height: boxSize,
+              decoration: BoxDecoration(
+                color: colors[id % colors.length],
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Center(
+                child: Image.asset(
+                  image,
+                  width: boxSize * 0.7,
+                  height: boxSize * 0.7,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ],
+            const SizedBox(height: 5),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }

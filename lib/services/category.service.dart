@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 // constants
@@ -34,7 +34,6 @@ class CategoryApiService {
     //   throw Exception(response.body);
     // }
 
-    //return data after 3 seconds
     return allCategories;
   }
 }

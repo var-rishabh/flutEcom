@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 // constants
@@ -43,7 +42,7 @@ class ProductApiService {
   }
 
   // Get Product by ID
-  Future<Product> getProductById(int id) async {
+  Future<Product> getProductById(String id) async {
     // final response = await client.get(Uri.parse('$baseUrl$getProduct/$id'));
 
     // if (response.statusCode == 200) {
@@ -61,11 +60,12 @@ class ProductApiService {
     // } else {
     //   throw Exception(response.body);
     // }
-    return allProducts.firstWhere((product) => product.id == id);
+    return allProducts.firstWhere((product) => product.id.toString() == id);
   }
 
   // Get Products by Category ID
-  Future<List<Product>> getProductsByCategoryId(int categoryId) async {
+  Future<List<Product>> getProductsByCategoryId(
+      int categoryId, int page, int sort) async {
     // final response = await client.get(Uri.parse('$baseUrl$getProducts'));
 
     // if (response.statusCode == 200) {
@@ -87,8 +87,18 @@ class ProductApiService {
     // } else {
     //   throw Exception(response.body);
     // }
-    return allProducts
+    List<Product> allProd = allProducts
         .where((product) => product.categoryId == categoryId)
         .toList();
+
+    // Sort products according to name
+    if (sort == 0) {
+      allProd.sort((a, b) => a.name.compareTo(b.name));
+    } else {
+      allProd.sort((a, b) => b.name.compareTo(a.name));
+    }
+
+    // Paginate the products
+    return allProd.skip((page - 1) * 20).take(20).toList();
   }
 }
