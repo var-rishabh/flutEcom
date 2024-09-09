@@ -35,11 +35,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
   bool _isInitialized = false;
   bool _hasMoreProducts = true;
   bool _isLoading = false;
+  bool _showScrollToTop = false;
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener); // Add scroll listener
+    _scrollController.addListener(_scrollListener);
   }
 
   Future<void> fetchProducts() async {
@@ -76,6 +77,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void _scrollListener() {
+    if (_scrollController.position.pixels > 300) {
+      setState(() {
+        _showScrollToTop = true;
+      });
+    } else {
+      setState(() {
+        _showScrollToTop = false;
+      });
+    }
+
     if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent &&
         _hasMoreProducts &&
@@ -89,6 +100,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
       _currentPage++;
     });
     fetchProducts();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -125,112 +144,131 @@ class _ProductsScreenState extends State<ProductsScreen> {
         onTabSelected: arguments['onTabSelected'],
         needBackButton: true,
       ),
-      body: SingleChildScrollView(
-        controller: _scrollController, // Assign the scroll controller
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  KSearchBar(
-                    controller: _searchController,
-                    hintText: 'Search Product...',
-                    onChanged: (query) {
-                      setState(() {
-                        searchQuery = query;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Products',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: _sortProducts,
-                        style: ButtonStyle(
-                          foregroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).colorScheme.secondary,
-                          ),
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).scaffoldBackgroundColor,
-                          ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            _currentPage = 1;
+          });
+          await fetchProducts();
+        },
+        child: SingleChildScrollView(
+          controller: _scrollController, // Assign the scroll controller
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    KSearchBar(
+                      controller: _searchController,
+                      hintText: 'Search Product...',
+                      onChanged: (query) {
+                        setState(() {
+                          searchQuery = query;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Products',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
-                        label: _isAscending
-                            ? const Text('Asc')
-                            : const Text('Des'),
-                        icon: _isAscending
-                            ? const Icon(Icons.arrow_downward)
-                            : const Icon(Icons.arrow_upward),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      mainAxisExtent: 270,
+                        ElevatedButton.icon(
+                          onPressed: _sortProducts,
+                          style: ButtonStyle(
+                            foregroundColor: WidgetStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.secondary,
+                            ),
+                            backgroundColor: WidgetStateProperty.all<Color>(
+                              Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                          label: _isAscending
+                              ? const Text('Asc')
+                              : const Text('Des'),
+                          icon: _isAscending
+                              ? const Icon(Icons.arrow_downward)
+                              : const Icon(Icons.arrow_upward),
+                        ),
+                      ],
                     ),
-                    itemCount: _products.length,
-                    itemBuilder: (context, index) {
-                      final Product product = searchQuery.isEmpty
-                          ? _products[index]
-                          : _products
-                              .where((product) => product.name
-                                  .toLowerCase()
-                                  .contains(searchQuery.toLowerCase()))
-                              .toList()[index];
-                      return ProductCard(
-                        product: product,
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/product-details',
-                            arguments: {
-                              'productId': product.id,
-                              'currentIndex': arguments['currentIndex'],
-                              'onTabSelected': arguments['onTabSelected'],
-                            },
-                          ).then((_) {
-                            setState(() {
-                              fetchProducts();
+                    const SizedBox(height: 20),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        mainAxisExtent: 270,
+                      ),
+                      itemCount: _products.length,
+                      itemBuilder: (context, index) {
+                        final Product product = searchQuery.isEmpty
+                            ? _products[index]
+                            : _products
+                                .where((product) => product.name
+                                    .toLowerCase()
+                                    .contains(searchQuery.toLowerCase()))
+                                .toList()[index];
+                        return ProductCard(
+                          product: product,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/product-details',
+                              arguments: {
+                                'productId': product.id,
+                                'currentIndex': arguments['currentIndex'],
+                                'onTabSelected': arguments['onTabSelected'],
+                              },
+                            ).then((value) {
+                              if (value != null && value == true) {
+                                setState(() {
+                                  _currentPage = 1;
+                                  _isInitialized = false;
+                                });
+                                fetchProducts();
+                              }
                             });
-                          });
-                        },
-                      );
-                    },
-                  ),
-                  if (_isLoading)
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                          },
+                        );
+                      },
                     ),
-                  if (!_isLoading && _products.isEmpty) const NoData(),
-                ],
+                    if (_isLoading)
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    if (!_isLoading && _products.isEmpty) const NoData(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+      floatingActionButton: _showScrollToTop
+          ? FloatingActionButton(
+              onPressed: _scrollToTop,
+              child: const Icon(Icons.arrow_upward),
+            )
+          : null,
     );
   }
 }

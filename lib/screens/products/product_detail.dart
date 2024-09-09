@@ -33,6 +33,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isInitialized = false;
   int _current = 0;
 
+  // Add a variable to keep track of the selected size
+  String _selectedSize = "";
+
   Future<void> _loadProductDetails() async {
     final product =
         await _productApiService.getProductById(_productId.toString());
@@ -123,7 +126,39 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               const SizedBox(height: 40),
               _buildProductDetails(),
               const SizedBox(height: 16),
-              _buildActionButton(),
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: _toggleCart,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 24,
+                      ),
+                      backgroundColor: Theme.of(context).primaryColor,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.shopping_cart, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Text(
+                          _isInCart ? 'Remove from Cart' : 'Add to Cart',
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ))
             ],
           ),
         ),
@@ -333,62 +368,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
         ),
         const SizedBox(height: 10),
+        // Display size buttons
         Row(
-          children: [
-            for (final size in ["S", "M", "L", "XL"])
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 35,
-                  vertical: 5,
-                ),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: ["S", "M", "X", "XL", "XXL"].map((size) {
+            final isSelected = _selectedSize == size;
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedSize = size;
+                });
+              },
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                // margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(15),
                   border: Border.all(
-                    color: Theme.of(context).primaryColor,
+                    color: isSelected
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey.shade300,
                   ),
                 ),
                 child: Text(
                   size,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.black,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                 ),
               ),
-          ],
+            );
+          }).toList(),
         ),
       ],
     );
-  }
-
-  Widget _buildActionButton() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-        child: ElevatedButton(
-          onPressed: _toggleCart,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            backgroundColor: Theme.of(context).primaryColor,
-            minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.shopping_cart, color: Colors.white),
-              const SizedBox(width: 10),
-              Text(
-                _isInCart ? 'Remove from Cart' : 'Add to Cart',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
-          ),
-        ));
   }
 }
