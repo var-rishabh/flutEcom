@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // models
 import 'package:flut_mart/utils/models/product.model.dart';
@@ -29,7 +30,7 @@ class _CartScreenState extends State<CartScreen> {
   final CartService _cartService = CartService();
   final ProductApiService _productApiService = ProductApiService();
   List<Product> _cartItems = [];
-  final Map<String, int> _cartQuantities = {};
+  Map<String, int> _cartQuantities = {};
 
   @override
   void initState() {
@@ -44,6 +45,22 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       _cartItems = products;
     });
+    await _loadQuantities();
+  }
+
+  Future<void> _loadQuantities() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      for (var product in _cartItems) {
+        _cartQuantities[product.id.toString()] =
+            prefs.getInt(product.id.toString()) ?? 1;
+      }
+    });
+  }
+
+  Future<void> _saveQuantity(String productId, int quantity) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(productId, quantity);
   }
 
   double _calculateTotalAmount() {
@@ -77,6 +94,31 @@ class _CartScreenState extends State<CartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                     ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Total: ',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          '\$${_calculateTotalAmount().toStringAsFixed(2)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -91,9 +133,9 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   itemCount: _cartItems.length,
                   itemBuilder: (context, index) {
-                    final Product product = _cartItems.toList()[index];
+                    final Product product = _cartItems[index];
                     return Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(10),
@@ -129,20 +171,43 @@ class _CartScreenState extends State<CartScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.remove_outlined),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (_cartQuantities[
-                                                  product.id.toString()]! >
-                                              1) {
-                                            _cartQuantities[product.id
-                                                .toString()] = _cartQuantities[
-                                                    product.id.toString()]! -
-                                                1;
-                                          }
-                                        });
-                                      },
+                                    Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 10, 10, 10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        style: const ButtonStyle(
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        icon: const Icon(Icons.remove_outlined),
+                                        onPressed: () {
+                                          setState(() {
+                                            if (_cartQuantities[
+                                                    product.id.toString()]! >
+                                                1) {
+                                              _cartQuantities[
+                                                      product.id.toString()] =
+                                                  _cartQuantities[product.id
+                                                          .toString()]! -
+                                                      1;
+                                              _saveQuantity(
+                                                  product.id.toString(),
+                                                  _cartQuantities[
+                                                      product.id.toString()]!);
+                                            }
+                                          });
+                                        },
+                                      ),
                                     ),
                                     Text(
                                       '${_cartQuantities[product.id.toString()] ?? 1}',
@@ -156,17 +221,41 @@ class _CartScreenState extends State<CartScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
-                                    IconButton(
-                                      icon: const Icon(Icons.add_outlined),
-                                      onPressed: () {
-                                        setState(() {
-                                          _cartQuantities[product.id
-                                              .toString()] = (_cartQuantities[
-                                                      product.id.toString()] ??
-                                                  1) +
-                                              1;
-                                        });
-                                      },
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.add_outlined),
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        style: const ButtonStyle(
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _cartQuantities[
+                                                    product.id.toString()] =
+                                                (_cartQuantities[product.id
+                                                            .toString()] ??
+                                                        1) +
+                                                    1;
+                                            _saveQuantity(
+                                                product.id.toString(),
+                                                _cartQuantities[
+                                                    product.id.toString()]!);
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -174,30 +263,50 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline),
-                                iconSize: 40,
-                                onPressed: () {
-                                  setState(() {
-                                    _cartService
-                                        .removeFromCart(product.id.toString());
-                                    _loadCartItems();
-                                  });
-                                  KSnackBar.show(
-                                    context: context,
-                                    label: 'Product removed from cart',
-                                    type: 'success',
-                                  );
-                                },
+                              Container(
+                                transform: Matrix4.rotationZ(0.8),
+                                transformAlignment: Alignment.center,
+                                child: IconButton(
+                                  icon: const Icon(Icons.add),
+                                  iconSize: 30,
+                                  onPressed: () {
+                                    setState(() {
+                                      _cartService.removeFromCart(
+                                          product.id.toString());
+                                      _loadCartItems();
+                                    });
+                                    SharedPreferences.getInstance()
+                                        .then((prefs) {
+                                      prefs.remove(product.id.toString());
+                                    });
+                                    KSnackBar.show(
+                                      context: context,
+                                      label: 'Product removed from cart',
+                                      type: 'success',
+                                      actionLabel: 'Undo',
+                                      actionFunction: () {
+                                        setState(() {
+                                          _cartService
+                                              .addToCart(product.id.toString());
+                                          _loadCartItems();
+                                          _saveQuantity(
+                                              product.id.toString(),
+                                              _cartQuantities[
+                                                  product.id.toString()]!);
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                               Text(
                                 '\$${product.discountedPrice}',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headlineSmall!
+                                    .titleLarge!
                                     .copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -205,6 +314,7 @@ class _CartScreenState extends State<CartScreen> {
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
+                              const SizedBox(height: 10),
                             ],
                           ),
                           const SizedBox(width: 15),

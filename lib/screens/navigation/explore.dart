@@ -83,8 +83,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    crossAxisSpacing: 10,
                     mainAxisSpacing: 20,
+                    mainAxisExtent: 130,
                   ),
                   itemCount: searchQuery.isEmpty
                       ? _categories.length

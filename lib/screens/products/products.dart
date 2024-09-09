@@ -43,7 +43,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> fetchProducts() async {
-    if (_isLoading) return; // Prevent multiple calls while loading
+    if (_isLoading) return;
 
     setState(() {
       _isLoading = true;
@@ -137,7 +137,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 children: [
                   KSearchBar(
                     controller: _searchController,
-                    hintText: 'Type Name...',
+                    hintText: 'Search Product...',
                     onChanged: (query) {
                       setState(() {
                         searchQuery = query;
@@ -161,10 +161,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ElevatedButton.icon(
                         onPressed: _sortProducts,
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(
+                          foregroundColor: WidgetStateProperty.all<Color>(
                             Theme.of(context).colorScheme.secondary,
                           ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
+                          backgroundColor: WidgetStateProperty.all<Color>(
                             Theme.of(context).scaffoldBackgroundColor,
                           ),
                         ),
@@ -208,7 +208,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               'currentIndex': arguments['currentIndex'],
                               'onTabSelected': arguments['onTabSelected'],
                             },
-                          );
+                          ).then((_) {
+                            setState(() {
+                              fetchProducts();
+                            });
+                          });
                         },
                       );
                     },

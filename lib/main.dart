@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // screens
 import 'package:flut_mart/screens/app.dart';
@@ -12,6 +13,11 @@ import 'package:flut_mart/screens/auth/signup.dart';
 import 'package:flut_mart/utils/theme/theme.dart';
 
 void main() {
+  // lock the orientation to portrait
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(const MyApp());
 }
 

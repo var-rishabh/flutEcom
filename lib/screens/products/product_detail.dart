@@ -47,11 +47,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     });
   }
 
-  void _toggleFavorite() async {
+  Future<void> _toggleFavorite() async {
     if (_isFavorite) {
-      await _favoritesService.addToFavorites(_product!.id.toString());
-    } else {
       await _favoritesService.removeFromFavorites(_product!.id.toString());
+    } else {
+      await _favoritesService.addToFavorites(_product!.id.toString());
     }
     setState(() {
       _isFavorite = !_isFavorite;
@@ -190,178 +190,175 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget _buildProductDetails() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                _product!.name,
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              _product!.name,
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            // add to favorites button
+            IconButton(
+              onPressed: _toggleFavorite,
+              icon: Icon(
+                _isFavorite ? Icons.favorite : Icons.favorite_border,
+                size: 30,
+                color: _isFavorite
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).iconTheme.color,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        Text(
+          _product!.description,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 5,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                'In Stock',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
                     ),
               ),
-              // add to favorites button
-              IconButton(
-                onPressed: _toggleFavorite,
-                icon: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  size: 30,
-                  color: _isFavorite
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).iconTheme.color,
-                ),
+            ),
+            const SizedBox(width: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 5,
               ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Text(
-            _product!.description,
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Text(
-                  'In Stock',
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Colors.white,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                'Free Shipping',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
+                    ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '\$${_product!.discountedPrice}',
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold,
                       ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Text(
-                  'Free Shipping',
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Colors.white,
+                Text(
+                  '\$${_product!.price}',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.grey.shade700,
+                        decoration: TextDecoration.lineThrough,
                       ),
                 ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                ),
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              child: Row(
                 children: [
-                  Text(
-                    '\$${_product!.discountedPrice}',
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  const Icon(
+                    Icons.star,
+                    size: 24,
+                    color: Colors.amber,
                   ),
+                  const SizedBox(width: 5),
                   Text(
-                    '\$${_product!.price}',
+                    _product!.rating.toString(),
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Colors.grey.shade700,
-                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.bold,
                         ),
                   ),
                 ],
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
+            ),
+            const SizedBox(width: 20),
+            Text(
+              '(${_product!.noOfReviews} Reviews)',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Colors.blue,
+                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Text(
+          "Size",
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (final size in ["S", "M", "L", "XL"])
               Container(
+                margin: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 35,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.grey.shade300,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.star,
-                      size: 24,
-                      color: Colors.amber,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      _product!.rating.toString(),
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.grey.shade700,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
+                child: Text(
+                  size,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
               ),
-              const SizedBox(width: 20),
-              Text(
-                '(${_product!.noOfReviews} Reviews)',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Colors.blue,
-                    ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(
-            "Size",
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              for (final size in ["S", "M", "L", "XL"])
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 35,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  child: Text(
-                    size,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -378,12 +375,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          child: Text(
-            _isInCart ? 'Remove from Cart' : 'Add to Cart',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.shopping_cart, color: Colors.white),
+              const SizedBox(width: 10),
+              Text(
+                _isInCart ? 'Remove from Cart' : 'Add to Cart',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
           ),
         ));
   }
