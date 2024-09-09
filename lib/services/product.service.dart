@@ -93,9 +93,11 @@ class ProductApiService {
 
     // Sort products according to name
     if (sort == 0) {
-      allProd.sort((a, b) => a.name.compareTo(b.name));
+      allProd
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     } else {
-      allProd.sort((a, b) => b.name.compareTo(a.name));
+      allProd
+          .sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
     }
 
     // Paginate the products

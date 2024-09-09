@@ -69,7 +69,7 @@ final List<Product> allProducts = [
   ),
   Product(
     id: 15,
-    name: 'IPhone 14',
+    name: 'iPhone 14',
     image: "assets/images/macbook.png",
     price: 236,
     discount: 2,
@@ -360,7 +360,7 @@ final List<Product> allProducts = [
     price: 2,
     discount: 0,
     description: 'Blue Ballpoint Pen',
-    categoryId: 10,
+    categoryId: 9,
     rating: 4.1,
     noOfReviews: 18,
   ),

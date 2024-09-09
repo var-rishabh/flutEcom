@@ -5,6 +5,7 @@ import 'package:flut_mart/utils/models/product.model.dart';
 
 // services
 import 'package:flut_mart/services/favourite.service.dart';
+import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/services/product.service.dart';
 
 // widgets
@@ -97,10 +98,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     );
                   },
                 ),
-                if (_favoriteItems.isEmpty)
-                  const Center(
-                    child: Text('No products found'),
-                  ),
+                if (_favoriteItems.isEmpty) const NoData()
               ],
             ),
           ),

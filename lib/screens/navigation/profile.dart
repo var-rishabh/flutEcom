@@ -63,54 +63,96 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage(_user!.avatar),
-            ),
-            const SizedBox(height: 20),
-
-            // User Information
-            _buildProfileInfo('Name', _user!.name),
-            _buildProfileInfo('Email', _user!.email),
-            _buildProfileInfo('Username', "N/A"),
-            _buildProfileInfo('Phone', 'N/A'),
-            _buildProfileInfo('Address', 'N/A'),
-
-            const SizedBox(height: 40),
-
-            // Logout Button
-            ElevatedButton(
-              onPressed: _logout,
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
+      child: _isLoading
+          ? const SizedBox(
+              width: double.infinity,
+              height: 500,
+              child: Center(child: CircularProgressIndicator()),
+            )
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 30,
+                            spreadRadius: 1,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        radius: 90,
+                        backgroundImage: NetworkImage(_user!.avatar),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  _buildProfileInfo('Name', _user!.name),
+                  _buildProfileInfo('Email', _user!.email),
+                  _buildProfileInfo('Username', "testUser"),
+                  _buildProfileInfo('Phone', '+91 78458 94578'),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Addresses",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  _buildProfileInfo('Home',
+                      '508, Le-Bestow Co-Living Aira\nNear Shilparamam, Hitech City\nHyderabad, India'),
+                  _buildProfileInfo('Office',
+                      'Cyber Towers, 1st Floor, Hitech\nCity, Hyderabad, India'),
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: _logout,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      minimumSize: const Size(double.infinity, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Logout',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
               ),
-              child: Text('Logout'),
             ),
-          ],
-        ),
-      ),
     );
   }
 
-  // Widget to display each profile information
   Widget _buildProfileInfo(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '$label:',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            label,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 16),
+          Flexible(
+            child: Text(
+              value,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+            ),
           ),
         ],
       ),
