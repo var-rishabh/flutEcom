@@ -54,7 +54,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         await _productApiService.getProductsByCategoryId(
       _categoryId,
       _currentPage,
-      _isAscending ? 0 : 1,
+      _isAscending ? 2 : 3,
     );
 
     setState(() {
@@ -71,7 +71,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void _sortProducts() {
     setState(() {
       _isAscending = !_isAscending;
-      _currentPage = 1; // Reset to the first page when sorting changes
+      _currentPage = 1;
     });
     fetchProducts();
   }
@@ -152,7 +152,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           await fetchProducts();
         },
         child: SingleChildScrollView(
-          controller: _scrollController, // Assign the scroll controller
+          controller: _scrollController,
           child: Column(
             children: [
               Padding(
@@ -195,9 +195,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               Theme.of(context).scaffoldBackgroundColor,
                             ),
                           ),
-                          label: _isAscending
-                              ? const Text('Asc')
-                              : const Text('Des'),
+                          label: const Text('Price'),
                           icon: _isAscending
                               ? const Icon(Icons.arrow_downward)
                               : const Icon(Icons.arrow_upward),

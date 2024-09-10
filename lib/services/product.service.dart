@@ -103,11 +103,11 @@ class ProductApiService {
           .sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
     }
 
-    // Sort products according to price
-    if (sort == 2) {
-      allProd.sort((a, b) => a.price.compareTo(b.price));
+    // Sort products according to discounted price
+    else if (sort == 2) {
+      allProd.sort((a, b) => a.discountedPrice.compareTo(b.discountedPrice));
     } else if (sort == 3) {
-      allProd.sort((a, b) => b.price.compareTo(a.price));
+      allProd.sort((a, b) => b.discountedPrice.compareTo(a.discountedPrice));
     }
 
     // Paginate the products
