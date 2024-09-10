@@ -215,7 +215,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         mainAxisSpacing: 10,
                         mainAxisExtent: 270,
                       ),
-                      itemCount: _products.length,
+                      itemCount: searchQuery.isEmpty
+                          ? _products.length
+                          : _products
+                              .where((product) => product.name
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()))
+                              .length,
                       itemBuilder: (context, index) {
                         final Product product = searchQuery.isEmpty
                             ? _products[index]
