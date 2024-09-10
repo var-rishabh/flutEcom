@@ -29,6 +29,7 @@ class CategoryCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(right: 20),
       child: OutlinedButton(
+        autofocus: false,
         onPressed: () {
           Navigator.of(context).pushNamed(
             '/products',
@@ -44,6 +45,9 @@ class CategoryCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
+          side: const BorderSide(
+            color: Colors.transparent,
+          ),
         ),
         child: Column(
           children: [
@@ -55,7 +59,7 @@ class CategoryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Center(
-                child: Image.asset(
+                child: Image.network(
                   image,
                   width: boxSize * 0.7,
                   height: boxSize * 0.7,

@@ -104,9 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildProfileInfo('Username', "testUser"),
                   _buildProfileInfo('Phone', '+91 78458 94578'),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     "Addresses",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   _buildProfileInfo('Home',
                       '508, Le-Bestow Co-Living Aira\nNear Shilparamam, Hitech City\nHyderabad, India'),

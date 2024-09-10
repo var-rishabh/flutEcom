@@ -34,13 +34,17 @@ class KTextTheme {
       fontFamily: 'SUSE',
       fontSize: 14,
     ),
-    labelLarge: TextStyle(
-      fontFamily: 'SUSE',
-      fontSize: 14,
-    ),
     bodySmall: TextStyle(
       fontFamily: 'SUSE',
       fontSize: 12,
+    ),
+    labelLarge: TextStyle(
+      fontFamily: 'SUSE',
+      fontSize: 18,
+    ),
+    labelMedium: TextStyle(
+      fontFamily: 'SUSE',
+      fontSize: 14,
     ),
     labelSmall: TextStyle(
       fontFamily: 'SUSE',

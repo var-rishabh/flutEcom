@@ -1,10 +1,11 @@
 import 'package:flut_mart/utils/models/product.model.dart';
+import 'package:flut_mart/utils/constants/images.constant.dart';
 
 final List<Product> allProducts = [
   Product(
     id: 1,
     name: 'Macbook Pro',
-    image: 'assets/images/macbook.png',
+    image: KImages.macbook,
     price: 999,
     discount: 10,
     description: 'Apple Macbook Pro 13-inch',
@@ -15,7 +16,7 @@ final List<Product> allProducts = [
   Product(
     id: 10,
     name: 'Samsung Galaxy S21',
-    image: 'assets/images/samsung.png',
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: 'Samsung Galaxy S21',
@@ -26,7 +27,7 @@ final List<Product> allProducts = [
   Product(
     id: 11,
     name: 'Realme Narzo 20 Pro',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 650,
     discount: 12,
     description: "New Random Phone in the market.",
@@ -37,7 +38,7 @@ final List<Product> allProducts = [
   Product(
     id: 12,
     name: 'Samsung Galaxy S22',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S22",
@@ -48,7 +49,7 @@ final List<Product> allProducts = [
   Product(
     id: 13,
     name: 'Nokia 256',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 56,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -59,7 +60,7 @@ final List<Product> allProducts = [
   Product(
     id: 14,
     name: 'Samsung A20',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: "12GB RAM",
@@ -70,7 +71,7 @@ final List<Product> allProducts = [
   Product(
     id: 15,
     name: 'iPhone 14',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 236,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -81,7 +82,7 @@ final List<Product> allProducts = [
   Product(
     id: 16,
     name: 'Realme 6 Pro',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: "128GB",
@@ -92,7 +93,7 @@ final List<Product> allProducts = [
   Product(
     id: 17,
     name: 'OnePlus 9T',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 405,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -103,7 +104,7 @@ final List<Product> allProducts = [
   Product(
     id: 18,
     name: 'Huawei P30',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21 Ultra",
@@ -114,7 +115,7 @@ final List<Product> allProducts = [
   Product(
     id: 19,
     name: 'Samsung Fold 3',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 698,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -125,7 +126,7 @@ final List<Product> allProducts = [
   Product(
     id: 20,
     name: 'Oppo Reno 6',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21 Ultra 5G",
@@ -136,7 +137,7 @@ final List<Product> allProducts = [
   Product(
     id: 21,
     name: 'Blackberry Key 3',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 102,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -147,7 +148,7 @@ final List<Product> allProducts = [
   Product(
     id: 22,
     name: 'MI 11 Ultra',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21 Ultra 5G 128GB 12GB RAM",
@@ -158,7 +159,7 @@ final List<Product> allProducts = [
   Product(
     id: 23,
     name: 'Google Pixel 6',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 968,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -169,7 +170,7 @@ final List<Product> allProducts = [
   Product(
     id: 24,
     name: 'Google Pixel 6 Pro',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21 Ultra",
@@ -180,7 +181,7 @@ final List<Product> allProducts = [
   Product(
     id: 25,
     name: 'IPhone 12 Pro Max',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 758,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -191,7 +192,7 @@ final List<Product> allProducts = [
   Product(
     id: 26,
     name: 'MI 10T',
-    image: "assets/images/macbook.png",
+    image: KImages.macbook,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21 Ultra 5G 128GB 12GB RAM",
@@ -202,7 +203,7 @@ final List<Product> allProducts = [
   Product(
     id: 27,
     name: 'OnePlus 12T',
-    image: "assets/images/macbook.png",
+    image: KImages.macbook,
     price: 399,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -213,7 +214,7 @@ final List<Product> allProducts = [
   Product(
     id: 28,
     name: 'Oppo 12',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21",
@@ -224,7 +225,7 @@ final List<Product> allProducts = [
   Product(
     id: 29,
     name: 'Windows Phone',
-    image: "assets/images/samsung.png",
+    image: KImages.samsung,
     price: 789,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -235,7 +236,7 @@ final List<Product> allProducts = [
   Product(
     id: 30,
     name: 'Microsoft Surface',
-    image: "assets/images/macbook.png",
+    image: KImages.macbook,
     price: 950,
     discount: 30,
     description: "Samsung Galaxy S21 Ultra",
@@ -246,7 +247,7 @@ final List<Product> allProducts = [
   Product(
     id: 31,
     name: 'IPhone 10 Mini',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 145,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -257,7 +258,7 @@ final List<Product> allProducts = [
   Product(
     id: 32,
     name: 'Samsung B56',
-    image: "assets/images/macbook.png",
+    image: KImages.macbook,
     price: 950,
     discount: 30,
     description: "5G 128GB 12GB RAM",
@@ -268,7 +269,7 @@ final List<Product> allProducts = [
   Product(
     id: 33,
     name: 'IPhone 5',
-    image: "assets/images/iphone.png",
+    image: KImages.iPhone,
     price: 697,
     discount: 2,
     description: "New Random Phone in the market.",
@@ -279,7 +280,7 @@ final List<Product> allProducts = [
   Product(
     id: 2,
     name: 'T-shirt',
-    image: 'assets/images/tshirt.png',
+    image: KImages.tshirt,
     price: 20,
     discount: 5,
     description: 'Men\'s Casual Slim Fit',
@@ -290,7 +291,7 @@ final List<Product> allProducts = [
   Product(
     id: 3,
     name: 'Shoes',
-    image: 'assets/images/shoe.png',
+    image: KImages.shoes,
     price: 50,
     discount: 15,
     description: 'Men\'s Running Shoe',
@@ -301,7 +302,7 @@ final List<Product> allProducts = [
   Product(
     id: 4,
     name: 'Chair',
-    image: 'assets/images/chair.png',
+    image: KImages.chair,
     price: 100,
     discount: 20,
     description: 'Wooden Dining Chair',
@@ -312,7 +313,7 @@ final List<Product> allProducts = [
   Product(
     id: 5,
     name: 'Book',
-    image: 'assets/images/books.png',
+    image: KImages.books,
     price: 10,
     discount: 1,
     description: 'The Great Gatsby',
@@ -323,7 +324,7 @@ final List<Product> allProducts = [
   Product(
     id: 6,
     name: 'Lipstick',
-    image: 'assets/images/beauty.png',
+    image: KImages.beauty,
     price: 12,
     discount: 0,
     description: 'Red Lipstick',
@@ -334,7 +335,7 @@ final List<Product> allProducts = [
   Product(
     id: 7,
     name: 'Dumbbell',
-    image: 'assets/images/health.png',
+    image: KImages.health,
     price: 30,
     discount: 0,
     description: '10kg Dumbbell',
@@ -345,7 +346,7 @@ final List<Product> allProducts = [
   Product(
     id: 8,
     name: 'Toy',
-    image: 'assets/images/toys.png',
+    image: KImages.toys,
     price: 15,
     discount: 5,
     description: 'Kids Toy',
@@ -356,7 +357,7 @@ final List<Product> allProducts = [
   Product(
     id: 9,
     name: 'Pen',
-    image: 'assets/images/stationary.png',
+    image: KImages.stationary,
     price: 2,
     discount: 0,
     description: 'Blue Ballpoint Pen',

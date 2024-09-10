@@ -89,13 +89,13 @@ class _ProductCardState extends State<ProductCard> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.3),
               spreadRadius: 1,
               blurRadius: 0,
               offset: const Offset(0, 0),
@@ -108,7 +108,7 @@ class _ProductCardState extends State<ProductCard> {
             Stack(
               children: [
                 Center(
-                  child: Image.asset(
+                  child: Image.network(
                     widget.product.image,
                     height: 120,
                     width: 120,
@@ -140,42 +140,39 @@ class _ProductCardState extends State<ProductCard> {
             ),
             Text(
               widget.product.name,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             Text(
               widget.product.description,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade700,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.grey.shade500,
+                  ),
             ),
             const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '\$${widget.product.discountedPrice.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     Text(
                       '\$${widget.product.price}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey.shade500,
-                        decoration: TextDecoration.lineThrough,
-                        decorationThickness: 2,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Colors.grey.shade500,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Theme.of(context).dividerColor,
+                          ),
                     ),
                   ],
                 ),
@@ -190,8 +187,9 @@ class _ProductCardState extends State<ProductCard> {
                         color: _isInCart
                             ? Theme.of(context).primaryColor
                             : Colors.grey.shade500,
-                        size: 30,
+                        size: 25,
                       ),
+                      padding: const EdgeInsets.all(0),
                       onPressed: _toggleCart,
                     ),
                     IconButton(
@@ -200,8 +198,9 @@ class _ProductCardState extends State<ProductCard> {
                         color: _isInFavorites
                             ? Theme.of(context).primaryColor
                             : Colors.grey.shade500,
-                        size: 30,
+                        size: 25,
                       ),
+                      padding: const EdgeInsets.all(0),
                       onPressed: _toggleFavorite,
                     ),
                   ],

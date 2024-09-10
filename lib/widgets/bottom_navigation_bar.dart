@@ -20,7 +20,8 @@ class KBottomNavigationBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05), // Shadow color
+            color:
+                Theme.of(context).dividerColor.withOpacity(0.1), // Shadow color
             spreadRadius: 5,
             blurRadius: 15,
             offset: const Offset(0, 2),

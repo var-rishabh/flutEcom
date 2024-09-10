@@ -34,7 +34,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _current = 0;
 
   // Add a variable to keep track of the selected size
-  String _selectedSize = "";
+  String _selectedSize = "S";
 
   Future<void> _loadProductDetails() async {
     final product =
@@ -185,13 +185,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               });
             },
           ),
-          items: ["assets/images/macbook.png", "assets/images/shoe.png"]
-              .map((imageUrl) {
+          items: [_product!.image, _product!.image].map((imageUrl) {
             return Builder(
               builder: (BuildContext context) {
-                return Image.asset(
+                return Image.network(
                   imageUrl,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                   width: MediaQuery.of(context).size.width,
                 );
               },
@@ -209,12 +208,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Container(
                   width: _current == i ? 30 : 10,
                   height: 5,
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
                     borderRadius:
                         _current == i ? BorderRadius.circular(5) : null,
                     shape: _current == i ? BoxShape.rectangle : BoxShape.circle,
-                    color: _current == i ? Colors.black : Colors.black38,
+                    color: _current == i
+                        ? Theme.of(context).dividerColor
+                        : Theme.of(context).dividerColor.withOpacity(0.5),
                   ),
                 ),
             ],
@@ -313,8 +314,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Text(
                   '\$${_product!.price}',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Colors.grey.shade700,
+                        color: Colors.grey.shade500,
                         decoration: TextDecoration.lineThrough,
+                        decorationColor: Theme.of(context).dividerColor,
                       ),
                 ),
               ],
@@ -343,7 +345,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Text(
                     _product!.rating.toString(),
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Colors.grey.shade700,
+                          color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -397,7 +399,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: isSelected
                             ? Theme.of(context).primaryColor
-                            : Colors.black,
+                            : Theme.of(context).dividerColor,
                         fontWeight:
                             isSelected ? FontWeight.bold : FontWeight.normal,
                       ),

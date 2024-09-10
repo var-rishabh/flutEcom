@@ -98,9 +98,16 @@ class ProductApiService {
     if (sort == 0) {
       allProd
           .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-    } else {
+    } else if (sort == 1) {
       allProd
           .sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
+    }
+
+    // Sort products according to price
+    if (sort == 2) {
+      allProd.sort((a, b) => a.price.compareTo(b.price));
+    } else if (sort == 3) {
+      allProd.sort((a, b) => b.price.compareTo(a.price));
     }
 
     // Paginate the products
