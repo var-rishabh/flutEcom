@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
+// helpers
+import 'package:flut_mart/utils/helper/responsive.dart';
+
 // widgets
 import 'package:flut_mart/widgets/input.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/submit_button.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = '/login';
@@ -74,104 +78,123 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Lottie.asset(
-                  'assets/animations/auth.json',
-                  height: 350,
-                ),
-              ),
-              Text(
-                'Login',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Enter your credentials to login.',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-              ),
-              const SizedBox(height: 30),
-              KInputField(
-                labelText: 'Email',
-                icon: Icons.email,
-                controller: _emailController,
-              ),
-              const SizedBox(height: 8),
-              KInputField(
-                labelText: 'Password',
-                icon: Icons.lock,
-                controller: _passwordController,
-                obscureText: true,
-              ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisSize: MainAxisSize.max,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Responsive.isMobile(context)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _loginUser,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Submit',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
+                  Center(
+                    child: Lottie.asset(
+                      'assets/animations/auth.json',
+                      height: 350,
+                    ),
+                  ),
+                  _loginSection(
+                    context,
+                    _emailController,
+                    _passwordController,
+                    _loginUser,
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Lottie.asset(
+                      'assets/animations/auth.json',
+                      height: 500,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 300,
+                    child: _loginSection(
+                      context,
+                      _emailController,
+                      _passwordController,
+                      _loginUser,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Don\'t have an account? ',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed('/signup');
-                      },
-                      child: Text(
-                        'SignUp',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
+}
+
+Widget _loginSection(
+    BuildContext context, emailController, passwordController, loginUser) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Login',
+        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: Theme.of(context).colorScheme.secondary,
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      const SizedBox(height: 8),
+      Text(
+        'Enter your credentials to login.',
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+      ),
+      const SizedBox(height: 30),
+      KInputField(
+        labelText: 'Email',
+        icon: Icons.email,
+        controller: emailController,
+      ),
+      const SizedBox(height: 8),
+      KInputField(
+        labelText: 'Password',
+        icon: Icons.lock,
+        controller: passwordController,
+        obscureText: true,
+      ),
+      const SizedBox(height: 30),
+      Row(
+        children: [
+          Expanded(
+            child: SubmitButton(
+              onSubmit: loginUser,
+              text: 'Submit',
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 30),
+      Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Don\'t have an account? ',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/signup');
+              },
+              child: Text(
+                'SignUp',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }
