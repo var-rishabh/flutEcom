@@ -25,8 +25,21 @@ class _KAppBarState extends State<KAppBar> {
     return AppBar(
       centerTitle: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      leading: !widget.needBackButton
+      leading: widget.needBackButton
           ? Padding(
+              padding: const EdgeInsets.fromLTRB(10, 15, 0, 0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Theme.of(context).primaryColor,
+                  size: 25,
+                ),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+            )
+          : Padding(
               padding: const EdgeInsets.fromLTRB(10, 15, 0, 0),
               child: IconButton(
                 icon: Icon(
@@ -38,19 +51,6 @@ class _KAppBarState extends State<KAppBar> {
                 ),
                 onPressed: () {
                   widget.onTabSelected(1);
-                },
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.fromLTRB(10, 15, 0, 0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Theme.of(context).primaryColor,
-                  size: 25,
-                ),
-                onPressed: () {
-                  Navigator.pop(context, true);
                 },
               ),
             ),

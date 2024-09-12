@@ -22,13 +22,13 @@ class KImages {
   static const String kitchen =
       'https://static.vecteezy.com/system/resources/previews/047/241/571/non_2x/kitchen-pot-isolated-on-transparent-background-free-png.png';
   static const String macbook =
-      'https://www.freepnglogos.com/uploads/macbook-png/macbook-the-church-apple-your-source-for-apple-news-and-33.png';
+      'https://static.vecteezy.com/system/resources/previews/040/491/879/non_2x/ai-generated-laptop-laptop-logo-laptop-with-transparent-background-free-png.png';
   static const String pets =
       'https://static.vecteezy.com/system/resources/previews/022/983/455/non_2x/dog-and-cat-free-illustration-icons-free-png.png';
   static const String samsung =
-      'https://images.anandtech.com/doci/13981/spec_1_678x452.png';
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Samsung_Galaxy_Z_Fold_5G.png/800px-Samsung_Galaxy_Z_Fold_5G.png';
   static const String shoes =
-      'https://pngimg.com/uploads/running_shoes/running_shoes_PNG5782.png';
+      'https://static.vecteezy.com/system/resources/previews/027/252/640/non_2x/modern-sport-shoes-free-png.png';
   static const String stationary =
       'https://static.vecteezy.com/system/resources/previews/013/261/079/non_2x/stationary-jar-3d-illustration-free-png.png';
   static const String toys =
