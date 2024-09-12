@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 // models
 import 'package:flut_mart/utils/models/user.model.dart';
 
+// helpers
+import 'package:flut_mart/utils/helper/responsive.dart';
+
 // services
 import 'package:flut_mart/services/auth.service.dart';
 
 // widgets
 import 'package:flut_mart/widgets/input.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/submit_button.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = '/signup';
@@ -102,144 +106,184 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Lottie.asset(
-                  'assets/animations/signup.json',
-                  height: 250,
-                ),
-              ),
-              Text(
-                'Signup',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Enter your credentials to signup.',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: KInputField(
-                      labelText: 'First Name',
-                      controller: _firstNameController,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: KInputField(
-                      labelText: 'Last Name',
-                      controller: _lastNameController,
-                    ),
-                  ),
-                ],
-              ),
-              KInputField(
-                labelText: 'Email',
-                icon: Icons.email,
-                controller: _emailController,
-              ),
-              KInputField(
-                labelText: 'Password',
-                icon: Icons.lock,
-                controller: _passwordController,
-                obscureText: true,
-              ),
-              KInputField(
-                labelText: 'Street',
-                icon: Icons.add_road,
-                controller: _streetController,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: KInputField(
-                      labelText: 'City',
-                      controller: _cityController,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: KInputField(
-                      labelText: 'Zip Code',
-                      controller: _zipCodeController,
-                      maxLength: 6,
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _signupUser,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 18,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Submit',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Responsive.isMobile(context)
+            ? SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Already have an account? ',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/login');
-                      },
-                      child: Text(
-                        'Login',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    Center(
+                      child: Lottie.asset(
+                        'assets/animations/signup.json',
+                        height: 250,
                       ),
+                    ),
+                    _signUpScreen(
+                      context,
+                      _firstNameController,
+                      _lastNameController,
+                      _emailController,
+                      _passwordController,
+                      _streetController,
+                      _cityController,
+                      _zipCodeController,
+                      _signupUser,
                     ),
                   ],
                 ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Lottie.asset(
+                      'assets/animations/signup.json',
+                      height: 500,
+                    ),
+                  ),
+                  const SizedBox(width: 50),
+                  SizedBox(
+                    width: 400,
+                    child: _signUpScreen(
+                      context,
+                      _firstNameController,
+                      _lastNameController,
+                      _emailController,
+                      _passwordController,
+                      _streetController,
+                      _cityController,
+                      _zipCodeController,
+                      _signupUser,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
+}
+
+Widget _signUpScreen(
+    BuildContext context,
+    firstNameController,
+    lastNameController,
+    emailController,
+    passwordController,
+    streetController,
+    cityController,
+    zipCodeController,
+    signupUser) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Signup',
+        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: Theme.of(context).colorScheme.secondary,
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      const SizedBox(height: 8),
+      Text(
+        'Enter your credentials to signup.',
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+      ),
+      const SizedBox(height: 20),
+      Row(
+        children: [
+          Expanded(
+            child: KInputField(
+              labelText: 'First Name',
+              controller: firstNameController,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: KInputField(
+              labelText: 'Last Name',
+              controller: lastNameController,
+            ),
+          ),
+        ],
+      ),
+      KInputField(
+        labelText: 'Email',
+        icon: Icons.email,
+        controller: emailController,
+      ),
+      KInputField(
+        labelText: 'Password',
+        icon: Icons.lock,
+        controller: passwordController,
+        obscureText: true,
+      ),
+      KInputField(
+        labelText: 'Street',
+        icon: Icons.add_road,
+        controller: streetController,
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: KInputField(
+              labelText: 'City',
+              controller: cityController,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: KInputField(
+              labelText: 'Zip Code',
+              controller: zipCodeController,
+              maxLength: 6,
+              keyboardType: TextInputType.number,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 10),
+      Row(
+        children: [
+          Expanded(
+            child: SubmitButton(
+              onSubmit: signupUser,
+              text: 'Submit',
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 30),
+      Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Already have an account? ',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed('/login');
+              },
+              child: Text(
+                'Login',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }

@@ -1,12 +1,12 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
+// helpers
+import 'package:flut_mart/utils/helper/responsive.dart';
+
 // services
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/token.service.dart';
-
-// helpers
-import 'package:flut_mart/utils/helper/responsive.dart';
 
 // widgets
 import 'package:flut_mart/widgets/input.dart';
@@ -81,23 +81,25 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Responsive.isMobile(context)
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Lottie.asset(
-                      'assets/animations/auth.json',
-                      height: 350,
+            ? SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Lottie.asset(
+                        'assets/animations/auth.json',
+                        height: 350,
+                      ),
                     ),
-                  ),
-                  _loginSection(
-                    context,
-                    _emailController,
-                    _passwordController,
-                    _loginUser,
-                  ),
-                ],
+                    _loginSection(
+                      context,
+                      _emailController,
+                      _passwordController,
+                      _loginUser,
+                    ),
+                  ],
+                ),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
