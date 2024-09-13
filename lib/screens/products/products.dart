@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-// models
+import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/utils/models/product.model.dart';
-
-// services
 import 'package:flut_mart/services/product.service.dart';
 
-// widgets
 import 'package:flut_mart/widgets/app_bar.dart';
 import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/widgets/product_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
+import 'package:flut_mart/widgets/web_app_bar.dart';
 
 class ProductsScreen extends StatefulWidget {
   static const String routeName = '/products';
@@ -61,7 +59,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       if (_currentPage == 1) {
         _products = products;
       } else {
-        _products.addAll(products); // Add new products to the list
+        _products.addAll(products);
       }
       _hasMoreProducts = products.length == 20;
       _isLoading = false;
@@ -139,11 +137,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
         <String, dynamic>{}) as Map;
 
     return Scaffold(
-      appBar: KAppBar(
-        currentIndex: arguments['currentIndex'],
-        onTabSelected: arguments['onTabSelected'],
-        needBackButton: true,
-      ),
+      appBar: Responsive.isDesktop(context)
+          ? null
+          : KAppBar(
+              currentIndex: arguments['currentIndex'],
+              onTabSelected: arguments['onTabSelected'],
+              needBackButton: true,
+            ),
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
