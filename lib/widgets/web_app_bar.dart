@@ -30,78 +30,86 @@ class _WebAppBarState extends State<WebAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'RunoStore',
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-        KIconButton(
-          icon: Icons.home,
-          isActive: widget.currentIndex == 0,
-          onTap: () => widget.onTabSelected(0),
-        ),
-        KIconButton(
-          icon: Icons.explore,
-          isActive: widget.currentIndex == 1,
-          onTap: () => widget.onTabSelected(1),
-        ),
-        const Spacer(),
-        Expanded(
-          child: KSearchBar(
-            controller: _searchController,
-            hintText: 'What are you looking for?',
-            onChanged: (query) {
-              setState(() {
-                searchQuery = query;
-              });
-            },
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 30,
+            spreadRadius: 10,
+            offset: const Offset(0, 0),
           ),
-        ),
-        KIconButton(
-          icon: Icons.home,
-          isActive: widget.currentIndex == 0,
-          onTap: () => widget.onTabSelected(0),
-        ),
-      ],
-    );
-    Expanded(
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'RunoStore',
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          KIconButton(
-            icon: Icons.home,
-            isActive: widget.currentIndex == 0,
+          InkWell(
             onTap: () => widget.onTabSelected(0),
-          ),
-          KIconButton(
-            icon: Icons.explore,
-            isActive: widget.currentIndex == 1,
-            onTap: () => widget.onTabSelected(1),
+            child: Text(
+              'RunoStore',
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
           const Spacer(),
+          Expanded(
+            flex: 5,
+            child: KSearchBar(
+              controller: _searchController,
+              hintText: 'What are you looking for?',
+              onChanged: (query) {
+                setState(() {
+                  searchQuery = query;
+                });
+              },
+            ),
+          ),
+          const Spacer(),
+          Row(
+            children: [
+              Icon(
+                Icons.location_pin,
+                size: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                'Deliver to ',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              Text(
+                'Hitech City, Hyderabad',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                size: 20,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 20,
+          ),
           KIconButton(
-            icon: Icons.favorite,
-            isActive: widget.currentIndex == 2,
-            onTap: () => widget.onTabSelected(2),
+            icon: Icons.shopping_cart,
+            isActive: widget.currentIndex == 4,
+            onTap: () => widget.onTabSelected(4),
           ),
           KIconButton(
             icon: Icons.person,
             isActive: widget.currentIndex == 3,
             onTap: () => widget.onTabSelected(3),
-          )
+          ),
         ],
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flut_mart/utils/helper/responsive.dart';
+
 List<Color> colors = [
   Colors.red.shade50,
   Colors.blue.shade50,
@@ -66,13 +68,20 @@ class CategoryCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 5),
+            Responsive.isDesktop(context)
+                ? const SizedBox(height: 10)
+                : const SizedBox(height: 5),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Responsive.isDesktop(context)
+                  ? Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold,
+                      )
+                  : Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontWeight: FontWeight.bold,
+                      ),
             ),
           ],
         ),

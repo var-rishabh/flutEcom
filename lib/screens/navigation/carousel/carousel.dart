@@ -17,7 +17,6 @@ class _KCarouselState extends State<KCarousel> {
   Widget build(BuildContext context) {
     return Container(
       height: 400,
-      // width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(15),

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-// helper
 import 'package:flut_mart/utils/helper/responsive.dart';
 
-// screens
 import 'package:flut_mart/screens/navigation/cart.dart';
 import 'package:flut_mart/screens/navigation/explore.dart';
 import 'package:flut_mart/screens/navigation/favourite.dart';
 import 'package:flut_mart/screens/navigation/home.dart';
 import 'package:flut_mart/screens/navigation/profile.dart';
 
-// widgets
 import 'package:flut_mart/widgets/app_bar.dart';
 import 'package:flut_mart/widgets/bottom_navigation_bar.dart';
 

@@ -4,7 +4,7 @@ class KTextTheme {
   static const TextTheme suseTextTheme = TextTheme(
     headlineLarge: TextStyle(
       fontFamily: 'SUSE',
-      fontSize: 48,
+      fontSize: 45,
     ),
     headlineMedium: TextStyle(
       fontFamily: 'SUSE',

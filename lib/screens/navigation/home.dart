@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-// helpers
 import 'package:flut_mart/utils/helper/responsive.dart';
-
-// models
 import 'package:flut_mart/utils/models/category.model.dart';
-
-// services
 import 'package:flut_mart/services/category.service.dart';
 
-// widgets
 import 'package:flut_mart/screens/navigation/carousel/carousel.dart';
 import 'package:flut_mart/widgets/category_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
@@ -121,62 +115,156 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
           const SizedBox(height: 20),
-          _categories.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
-                    SizedBox(
-                      height:
-                          130, // Adjust the height according to the card size
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: halfLength,
-                        itemBuilder: (context, index) {
-                          final Category category = _categories[index];
-                          return CategoryCard(
-                            key: Key(category.id.toString()),
-                            id: category.id,
-                            title: category.name,
-                            image: category.image,
-                            boxSize: 80,
-                            currentIndex: widget.currentIndex,
-                            onTabSelected: widget.onTabSelected,
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10), // Space between two rows
-                    SizedBox(
-                      height:
-                          130, // Adjust the height according to the card size
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: _categories.length - halfLength,
-                        itemBuilder: (context, index) {
-                          final Category category =
-                              _categories[halfLength + index];
-                          return CategoryCard(
-                            key: Key(category.id.toString()),
-                            id: category.id,
-                            title: category.name,
-                            image: category.image,
-                            boxSize: 80,
-                            currentIndex: widget.currentIndex,
-                            onTabSelected: widget.onTabSelected,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-            child: KCarousel(),
+          if (!Responsive.isDesktop(context))
+            _categories.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : MobileCategory(
+                    halfLength: halfLength,
+                    categories: _categories,
+                    widget: widget,
+                  ),
+          Padding(
+            padding: Responsive.isDesktop(context)
+                ? const EdgeInsets.symmetric(
+                    horizontal: 100,
+                    vertical: 20,
+                  )
+                : const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: const KCarousel(),
           ),
+          Responsive.isDesktop(context)
+              ? Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 100,
+                    vertical: 40,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Categories',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 50),
+                      LaptopCategory(
+                        categories: _categories,
+                        widget: widget,
+                      ),
+                      const SizedBox(height: 100),
+                    ],
+                  ),
+                )
+              : Container(),
         ],
       ),
+    );
+  }
+}
+
+// Mobile Category
+class MobileCategory extends StatelessWidget {
+  final int halfLength;
+  final List<Category> _categories;
+  final HomeScreen widget;
+
+  const MobileCategory({
+    super.key,
+    required this.halfLength,
+    required List<Category> categories,
+    required this.widget,
+  }) : _categories = categories;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 130,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: halfLength,
+            itemBuilder: (context, index) {
+              final Category category = _categories[index];
+              return CategoryCard(
+                key: Key(category.id.toString()),
+                id: category.id,
+                title: category.name,
+                image: category.image,
+                boxSize: 80,
+                currentIndex: widget.currentIndex,
+                onTabSelected: widget.onTabSelected,
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 130,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: _categories.length - halfLength,
+            itemBuilder: (context, index) {
+              final Category category = _categories[halfLength + index];
+              return CategoryCard(
+                key: Key(category.id.toString()),
+                id: category.id,
+                title: category.name,
+                image: category.image,
+                boxSize: 80,
+                currentIndex: widget.currentIndex,
+                onTabSelected: widget.onTabSelected,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Laptop Category
+class LaptopCategory extends StatelessWidget {
+  final List<Category> _categories;
+  final HomeScreen widget;
+
+  const LaptopCategory({
+    super.key,
+    required List<Category> categories,
+    required this.widget,
+  }) : _categories = categories;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        mainAxisSpacing: 80,
+        mainAxisExtent: 200,
+      ),
+      itemCount: _categories.length,
+      itemBuilder: (context, index) {
+        final Category category = _categories[index];
+        return CategoryCard(
+          key: Key(category.id.toString()),
+          id: category.id,
+          title: category.name,
+          image: category.image,
+          boxSize: 160,
+          currentIndex: widget.currentIndex,
+          onTabSelected: widget.onTabSelected,
+        );
+      },
     );
   }
 }

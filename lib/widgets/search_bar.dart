@@ -37,9 +37,9 @@ class KSearchBar extends StatelessWidget {
           labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.secondary,
               ),
-          icon: Icon(
+          icon: const Icon(
             Icons.search,
-            color: Theme.of(context).iconTheme.color,
+            color: Colors.black54,
           ),
           suffixIcon: controller.text.isNotEmpty
               ? IconButton(
