@@ -8,7 +8,6 @@ import 'package:flut_mart/widgets/app_bar.dart';
 import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/widgets/product_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
-import 'package:flut_mart/widgets/web_app_bar.dart';
 
 class ProductsScreen extends StatefulWidget {
   static const String routeName = '/products';
@@ -162,96 +161,171 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    KSearchBar(
-                      controller: _searchController,
-                      hintText: 'Search Product...',
-                      onChanged: (query) {
-                        setState(() {
-                          searchQuery = query;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Products',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: _sortProducts,
-                          style: ButtonStyle(
-                            foregroundColor: WidgetStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.secondary,
-                            ),
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                              Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                          ),
-                          label: const Text('Price'),
-                          icon: _isAscending
-                              ? const Icon(Icons.arrow_downward)
-                              : const Icon(Icons.arrow_upward),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        mainAxisExtent: 270,
+                    Padding(
+                      padding: Responsive.isDesktop(context)
+                          ? const EdgeInsets.symmetric(
+                              horizontal: 100,
+                              vertical: 10,
+                            )
+                          : const EdgeInsets.all(0),
+                      child: KSearchBar(
+                        controller: _searchController,
+                        hintText: 'Search Product...',
+                        onChanged: (query) {
+                          setState(() {
+                            searchQuery = query;
+                          });
+                        },
                       ),
-                      itemCount: searchQuery.isEmpty
-                          ? _products.length
-                          : _products
-                              .where((product) => product.name
-                                  .toLowerCase()
-                                  .contains(searchQuery.toLowerCase()))
-                              .length,
-                      itemBuilder: (context, index) {
-                        final Product product = searchQuery.isEmpty
-                            ? _products[index]
-                            : _products
-                                .where((product) => product.name
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()))
-                                .toList()[index];
-                        return ProductCard(
-                          product: product,
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/product-details',
-                              arguments: {
-                                'productId': product.id,
-                                'currentIndex': arguments['currentIndex'],
-                                'onTabSelected': arguments['onTabSelected'],
-                              },
-                            ).then((value) {
-                              if (value != null && value == true) {
-                                setState(() {
-                                  _currentPage = 1;
-                                  _isInitialized = false;
-                                });
-                                fetchProducts();
-                              }
-                            });
-                          },
-                        );
-                      },
                     ),
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: Responsive.isDesktop(context)
+                          ? const EdgeInsets.symmetric(
+                              horizontal: 100,
+                              vertical: 10,
+                            )
+                          : const EdgeInsets.all(0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Products',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: _sortProducts,
+                            style: ButtonStyle(
+                              foregroundColor: WidgetStateProperty.all<Color>(
+                                Theme.of(context).colorScheme.secondary,
+                              ),
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                Theme.of(context).scaffoldBackgroundColor,
+                              ),
+                            ),
+                            label: const Text('Price'),
+                            icon: _isAscending
+                                ? const Icon(Icons.arrow_downward)
+                                : const Icon(Icons.arrow_upward),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Responsive.isDesktop(context)
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 100,
+                              vertical: 10,
+                            ),
+                          child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 400,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 50,
+                                mainAxisExtent: 270,
+                              ),
+                              itemCount: searchQuery.isEmpty
+                                  ? _products.length
+                                  : _products
+                                      .where((product) => product.name
+                                          .toLowerCase()
+                                          .contains(searchQuery.toLowerCase()))
+                                      .length,
+                              itemBuilder: (context, index) {
+                                final Product product = searchQuery.isEmpty
+                                    ? _products[index]
+                                    : _products
+                                        .where((product) => product.name
+                                            .toLowerCase()
+                                            .contains(searchQuery.toLowerCase()))
+                                        .toList()[index];
+                                return ProductCard(
+                                  product: product,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/product-details',
+                                      arguments: {
+                                        'productId': product.id,
+                                        'currentIndex': arguments['currentIndex'],
+                                        'onTabSelected':
+                                            arguments['onTabSelected'],
+                                      },
+                                    ).then((value) {
+                                      if (value != null && value == true) {
+                                        setState(() {
+                                          _currentPage = 1;
+                                          _isInitialized = false;
+                                        });
+                                        fetchProducts();
+                                      }
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                        )
+                        : GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              mainAxisExtent: 270,
+                            ),
+                            itemCount: searchQuery.isEmpty
+                                ? _products.length
+                                : _products
+                                    .where((product) => product.name
+                                        .toLowerCase()
+                                        .contains(searchQuery.toLowerCase()))
+                                    .length,
+                            itemBuilder: (context, index) {
+                              final Product product = searchQuery.isEmpty
+                                  ? _products[index]
+                                  : _products
+                                      .where((product) => product.name
+                                          .toLowerCase()
+                                          .contains(searchQuery.toLowerCase()))
+                                      .toList()[index];
+                              return ProductCard(
+                                product: product,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/product-details',
+                                    arguments: {
+                                      'productId': product.id,
+                                      'currentIndex': arguments['currentIndex'],
+                                      'onTabSelected':
+                                          arguments['onTabSelected'],
+                                    },
+                                  ).then((value) {
+                                    if (value != null && value == true) {
+                                      setState(() {
+                                        _currentPage = 1;
+                                        _isInitialized = false;
+                                      });
+                                      fetchProducts();
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
                     if (_isLoading)
                       const Padding(
                         padding: EdgeInsets.all(8.0),

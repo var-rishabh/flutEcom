@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-// widgets
 import 'package:flut_mart/widgets/icon_button.dart';
 
 class KBottomNavigationBar extends StatelessWidget {

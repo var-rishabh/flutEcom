@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// widgets
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 
@@ -106,9 +105,9 @@ class _WebAppBarState extends State<WebAppBar> {
             onTap: () => widget.onTabSelected(4),
           ),
           KIconButton(
-            icon: Icons.person,
-            isActive: widget.currentIndex == 3,
-            onTap: () => widget.onTabSelected(3),
+            icon: Icons.favorite,
+            isActive: widget.currentIndex == 2,
+            onTap: () => widget.onTabSelected(2),
           ),
         ],
       ),

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// models
+
+import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/utils/models/product.model.dart';
 
-// services
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/services/product.service.dart';
 
-// widgets
 import 'package:flut_mart/widgets/snackbar.dart';
 
 class CartScreen extends StatefulWidget {
@@ -78,7 +77,9 @@ class _CartScreenState extends State<CartScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: Responsive.isDesktop(context) ?
+            const EdgeInsets.symmetric(horizontal: 100, vertical: 40)
+            : const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
                 Row(
@@ -123,7 +124,14 @@ class _CartScreenState extends State<CartScreen> {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: Responsive.isDesktop(context) ? 
+                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 600,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 50,
+                    mainAxisExtent: 200,
+                  )
+                  : const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,

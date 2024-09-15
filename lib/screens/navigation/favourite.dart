@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-// models
+import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/utils/models/product.model.dart';
 
-// services
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/services/product.service.dart';
 
-// widgets
+
+import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/product_card.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -51,7 +51,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: Responsive.isDesktop(context)
+                ? const EdgeInsets.symmetric(horizontal: 100, vertical: 40)
+                : const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,37 +69,75 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                     ),
+                    KIconButton(
+                      icon: Icons.home,
+                      isActive: widget.currentIndex == 0,
+                      onTap: () => widget.onTabSelected(0),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    mainAxisExtent: 270,
-                  ),
-                  itemCount: _favoriteItems.length,
-                  itemBuilder: (context, index) {
-                    final Product product = _favoriteItems.toList()[index];
-                    return ProductCard(
-                      product: product,
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/product-details',
-                          arguments: {
-                            'productId': product.id,
-                            'currentIndex': widget.currentIndex,
-                            'onTabSelected': widget.onTabSelected,
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
+                const SizedBox(height: 30),
+                Responsive.isDesktop(context)
+                    ? GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 400,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 50,
+                          mainAxisExtent: 270,
+                        ),
+                        itemCount: _favoriteItems.length,
+                        itemBuilder: (context, index) {
+                          final Product product =
+                              _favoriteItems.toList()[index];
+                          return ProductCard(
+                            product: product,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/product-details',
+                                arguments: {
+                                  'productId': product.id,
+                                  'currentIndex': widget.currentIndex,
+                                  'onTabSelected': widget.onTabSelected,
+                                },
+                              );
+                            },
+                          );
+                        },
+                      )
+                    : GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          mainAxisExtent: 270,
+                        ),
+                        itemCount: _favoriteItems.length,
+                        itemBuilder: (context, index) {
+                          final Product product =
+                              _favoriteItems.toList()[index];
+                          return ProductCard(
+                            product: product,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/product-details',
+                                arguments: {
+                                  'productId': product.id,
+                                  'currentIndex': widget.currentIndex,
+                                  'onTabSelected': widget.onTabSelected,
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
                 if (_favoriteItems.isEmpty) const NoData()
               ],
             ),
