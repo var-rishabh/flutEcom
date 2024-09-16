@@ -8,10 +8,8 @@ class KSnackBar {
     VoidCallback? actionFunction,
     String? type,
   }) {
-    // closing any existing snackbars
     ScaffoldMessenger.of(context).clearSnackBars();
 
-    // Define the snackbar
     final snackBar = SnackBar(
       content: Text(label),
       duration: const Duration(seconds: 2),
@@ -25,6 +23,8 @@ class KSnackBar {
         borderRadius: BorderRadius.circular(10),
       ),
       showCloseIcon: actionLabel == null,
+      elevation: 2,
+      width: 400,
       action: actionLabel != null
           ? SnackBarAction(
               label: actionLabel,
@@ -33,7 +33,6 @@ class KSnackBar {
           : null,
     );
 
-    // Show the snackbar
     return ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

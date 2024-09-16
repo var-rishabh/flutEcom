@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flut_mart/utils/helper/responsive.dart';
 
 class KSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -15,7 +16,15 @@ class KSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+      padding: Responsive.isDesktop(context)
+          ? const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 0,
+            )
+          : const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 2,
+            ),
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: const BorderRadius.only(

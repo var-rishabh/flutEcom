@@ -166,14 +166,16 @@ class _ProductCardState extends State<ProductCard> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    Text(
-                      '\$${widget.product.price}',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.grey.shade500,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: Theme.of(context).dividerColor,
-                          ),
-                    ),
+                    widget.product.discount > 0
+                        ? Text(
+                            '\$${widget.product.price}',
+                            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: Colors.grey.shade500,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationColor: Theme.of(context).dividerColor,
+                                ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
                 Row(

@@ -7,7 +7,6 @@ import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/services/product.service.dart';
 
-
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/product_card.dart';
 
@@ -52,15 +51,30 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         children: [
           Padding(
             padding: Responsive.isDesktop(context)
-                ? const EdgeInsets.symmetric(horizontal: 100, vertical: 40)
+                ? const EdgeInsets.symmetric(horizontal: 100, vertical: 20)
                 : const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Responsive.isDesktop(context)
+                        ? Row(
+                            children: [
+                              KIconButton(
+                                icon: Icons.home,
+                                isActive: widget.currentIndex == 0,
+                                onTap: () => widget.onTabSelected(0),
+                              ),
+                              const Icon(Icons.arrow_forward_ios),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
                     Text(
                       'Your Favorites',
                       style:
@@ -69,24 +83,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                     ),
-                    KIconButton(
-                      icon: Icons.home,
-                      isActive: widget.currentIndex == 0,
-                      onTap: () => widget.onTabSelected(0),
-                    ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 Responsive.isDesktop(context)
                     ? GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 400,
+                          maxCrossAxisExtent: 400,
                           crossAxisSpacing: 20,
-                          mainAxisSpacing: 50,
-                          mainAxisExtent: 270,
+                          mainAxisSpacing: 30,
+                          mainAxisExtent: 250,
                         ),
                         itemCount: _favoriteItems.length,
                         itemBuilder: (context, index) {

@@ -5,6 +5,7 @@ import 'package:flut_mart/utils/models/product.model.dart';
 import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';
+import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/widgets/product_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
@@ -23,8 +24,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   String searchQuery = '';
 
   final ProductApiService _productApiService = ProductApiService();
-  List<Product> _products = [];
   final ScrollController _scrollController = ScrollController();
+  List<Product> _products = [];
 
   int _currentPage = 1;
   bool _isAscending = true;
@@ -168,38 +169,67 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               vertical: 10,
                             )
                           : const EdgeInsets.all(0),
-                      child: KSearchBar(
-                        controller: _searchController,
-                        hintText: 'Search Product...',
-                        onChanged: (query) {
-                          setState(() {
-                            searchQuery = query;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: Responsive.isDesktop(context)
-                          ? const EdgeInsets.symmetric(
-                              horizontal: 100,
-                              vertical: 10,
-                            )
-                          : const EdgeInsets.all(0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Products',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          Row(
+                            children: [
+                              Responsive.isDesktop(context)
+                                  ? Row(
+                                      children: [
+                                        KIconButton(
+                                          icon: Icons.home,
+                                          isActive: false,
+                                          onTap: () => {
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/app',
+                                              arguments: {
+                                                'currentIndex': 0,
+                                                'onTabSelected':
+                                                    arguments['onTabSelected'],
+                                              },
+                                            )
+                                          },
+                                        ),
+                                        const Icon(Icons.arrow_forward_ios),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox(),
+                              Text(
+                                'Products',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
                           ),
+                          const Spacer(),
+                          Responsive.isDesktop(context)
+                              ? Expanded(
+                                  child: KSearchBar(
+                                    controller: _searchController,
+                                    hintText: 'Search Product...',
+                                    onChanged: (query) {
+                                      setState(() {
+                                        searchQuery = query;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox(),
+                          Responsive.isDesktop(context)
+                              ? const SizedBox(width: 20)
+                              : const SizedBox(),
                           ElevatedButton.icon(
                             onPressed: _sortProducts,
                             style: ButtonStyle(
@@ -218,22 +248,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    !Responsive.isDesktop(context)
+                        ? const SizedBox(height: 20)
+                        : const SizedBox(height: 0),
                     Responsive.isDesktop(context)
                         ? Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 100,
                               vertical: 10,
                             ),
-                          child: GridView.builder(
+                            child: GridView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 400,
+                                maxCrossAxisExtent: 400,
                                 crossAxisSpacing: 20,
-                                mainAxisSpacing: 50,
-                                mainAxisExtent: 270,
+                                mainAxisSpacing: 30,
+                                mainAxisExtent: 250,
                               ),
                               itemCount: searchQuery.isEmpty
                                   ? _products.length
@@ -248,7 +280,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     : _products
                                         .where((product) => product.name
                                             .toLowerCase()
-                                            .contains(searchQuery.toLowerCase()))
+                                            .contains(
+                                                searchQuery.toLowerCase()))
                                         .toList()[index];
                                 return ProductCard(
                                   product: product,
@@ -258,7 +291,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                       '/product-details',
                                       arguments: {
                                         'productId': product.id,
-                                        'currentIndex': arguments['currentIndex'],
+                                        'currentIndex':
+                                            arguments['currentIndex'],
                                         'onTabSelected':
                                             arguments['onTabSelected'],
                                       },
@@ -275,7 +309,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 );
                               },
                             ),
-                        )
+                          )
                         : GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

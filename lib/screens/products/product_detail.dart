@@ -9,6 +9,7 @@ import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';
+import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -31,7 +32,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _isInitialized = false;
   int _current = 0;
 
-  // Add a variable to keep track of the selected size
   String _selectedSize = "S";
 
   Future<void> _loadProductDetails() async {
@@ -108,11 +108,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         <String, dynamic>{}) as Map;
 
     return Scaffold(
-      appBar: KAppBar(
-        currentIndex: arguments['currentIndex'],
-        onTabSelected: arguments['onTabSelected'],
-        needBackButton: true,
-      ),
+      appBar: !Responsive.isDesktop(context)
+          ? KAppBar(
+              currentIndex: arguments['currentIndex'],
+              onTabSelected: arguments['onTabSelected'],
+              needBackButton: true,
+            )
+          : null,
       body: SingleChildScrollView(
         child: Padding(
           padding: Responsive.isDesktop(context)
@@ -122,52 +124,231 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildImageCarousel(),
-              const SizedBox(height: 40),
-              _buildProductDetails(),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: Responsive.isDesktop(context)
-                    ? MediaQuery.of(context).size.width * 0.3
-                    : double.infinity,
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                    ),
-                    child: ElevatedButton(
-                      onPressed: _toggleCart,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 24,
-                        ),
-                        backgroundColor: Theme.of(context).primaryColor,
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+              productsBar(context, arguments),
+              Responsive.isDesktop(context)
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 80),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.shopping_cart, color: Colors.white),
-                          const SizedBox(width: 10),
-                          Text(
-                            _isInCart ? 'Remove from Cart' : 'Add to Cart',
-                            style:
-                                Theme.of(context).textTheme.titleLarge!.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          Expanded(
+                            child: _buildImageCarousel(),
+                          ),
+                          const SizedBox(width: 100),
+                          Expanded(
+                            // flex: 2,
+                            child: _buildProductDetails(),
+                          ),
+                          Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 20),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Theme.of(context).dividerColor,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context)
+                                        .dividerColor
+                                        .withOpacity(0.05),
+                                    spreadRadius: 10,
+                                    blurRadius: 50,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ], 
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "About this item",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "- This Galaxy does a lot in one hand with its 15.73 cm\n- Do more than more with Multi View.\n- Our toughest Samsung Galaxy foldables ever.\n- Galaxy Z Fold4 is made with materials that are not only stunning.\n- Condenser Coil: Better cooling and requires low maintenance.",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                              height: 1.7,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Divider(
+                                    color: Theme.of(context).dividerColor.withOpacity(0.2),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "Delivery",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "by Wednesday, 18 September. Order within 7 hrs 3 mins.",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    )),
-              )
+                    )
+                  : Column(
+                      children: [
+                        _buildImageCarousel(),
+                        const SizedBox(height: 40),
+                        _buildProductDetails(),
+                        const SizedBox(height: 16),
+                        _cartButton(context),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Row productsBar(BuildContext context, Map<dynamic, dynamic> arguments) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Responsive.isDesktop(context)
+                ? Row(
+                    children: [
+                      KIconButton(
+                        icon: Icons.home,
+                        isActive: false,
+                        onTap: () => {
+                          Navigator.pushNamed(
+                            context,
+                            '/app',
+                            arguments: {
+                              'currentIndex': 0,
+                              'onTabSelected': arguments['onTabSelected'],
+                            },
+                          )
+                        },
+                      ),
+                      const Icon(Icons.arrow_forward_ios),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: Text(
+                          'Products',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(Icons.arrow_forward_ios),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
+            Responsive.isDesktop(context)
+                ? Text(
+                    _product!.name,
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  )
+                : const SizedBox(),
+          ],
+        ),
+      ],
+    );
+  }
+
+  SizedBox _cartButton(BuildContext context) {
+    return SizedBox(
+      // width: double,
+      child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+          ),
+          child: ElevatedButton(
+            onPressed: _toggleCart,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                vertical: 20,
+                horizontal: 24,
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.shopping_cart, color: Colors.white),
+                const SizedBox(width: 10),
+                Text(
+                  _isInCart ? 'Remove from Cart' : 'Add to Cart',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 
@@ -176,7 +357,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            height: 350,
+            height: Responsive.isDesktop(context) ? 500 : 350,
             autoPlay: true,
             autoPlayInterval: const Duration(seconds: 3),
             autoPlayAnimationDuration: const Duration(milliseconds: 800),
@@ -244,17 +425,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            // add to favorites button
-            IconButton(
-              onPressed: _toggleFavorite,
-              icon: Icon(
-                _isFavorite ? Icons.favorite : Icons.favorite_border,
-                size: 30,
-                color: _isFavorite
-                    ? Theme.of(context).primaryColor
-                    : Theme.of(context).iconTheme.color,
-              ),
-            ),
+            !Responsive.isDesktop(context)
+                ? IconButton(
+                    onPressed: _toggleFavorite,
+                    icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      size: 30,
+                      color: _isFavorite
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).iconTheme.color,
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
         const SizedBox(height: 5),
@@ -376,9 +558,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          width: Responsive.isDesktop(context)
-              ? MediaQuery.of(context).size.width * 0.3
-              : double.infinity,
+          width: Responsive.isDesktop(context) ? 400 : double.infinity,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: ["S", "M", "X", "XL", "XXL"].map((size) {
@@ -416,6 +596,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             }).toList(),
           ),
         ),
+        const SizedBox(height: 20),
+        Responsive.isDesktop(context)
+            ? Row(
+                children: [
+                  SizedBox(
+                    width:
+                        Responsive.isDesktop(context) ? 340 : double.infinity,
+                    child: _cartButton(context),
+                  ),
+                  const SizedBox(width: 20),
+                  IconButton(
+                    onPressed: _toggleFavorite,
+                    icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      size: 30,
+                      color: _isFavorite
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).iconTheme.color,
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox(),
       ],
     );
   }
