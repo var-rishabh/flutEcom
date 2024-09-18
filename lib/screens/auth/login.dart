@@ -37,14 +37,14 @@ class _LoginScreenState extends State<LoginScreen> {
       final password = _passwordController.text;
 
       if (email.isEmpty || password.isEmpty) {
+        setState(() {
+          _isLoading = false;
+        });
         KSnackBar.show(
           context: context,
           label: 'Please fill all fields',
           type: 'error',
         );
-        setState(() {
-          _isLoading = false;
-        });
         return;
       }
 
@@ -53,6 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
       await TokenService.saveToken(token);
 
       if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
         KSnackBar.show(
           context: context,
           label: 'Login Successful',
@@ -62,11 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
           '/app',
           (route) => false,
         );
-        setState(() {
-          _isLoading = false;
-        });
       }
     } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
       if (mounted) {
         KSnackBar.show(
           context: context,
@@ -74,9 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
           type: 'error',
         );
       }
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 

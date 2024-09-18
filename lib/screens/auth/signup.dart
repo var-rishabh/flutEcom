@@ -75,17 +75,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final id = response['id'];
 
       if (mounted && id != null) {
+        setState(() {
+          _isLoading = false;
+        });
         KSnackBar.show(
           context: context,
           label: 'SignUp Successful. Please login.',
           type: 'success',
         );
         Navigator.of(context).pushReplacementNamed('/login');
-        setState(() {
-          _isLoading = false;
-        });
       }
     } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
       if (mounted) {
         KSnackBar.show(
           context: context,
@@ -93,9 +96,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           type: 'error',
         );
       }
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
