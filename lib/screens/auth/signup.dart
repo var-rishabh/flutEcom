@@ -1,16 +1,10 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
-// models
 import 'package:flut_mart/utils/models/user.model.dart';
-
-// helpers
 import 'package:flut_mart/utils/helper/responsive.dart';
-
-// services
 import 'package:flut_mart/services/auth.service.dart';
 
-// widgets
 import 'package:flut_mart/widgets/input.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
@@ -34,10 +28,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _zipCodeController = TextEditingController();
 
   final AuthApiService _authApiService = AuthApiService();
+  bool _isLoading = false;
 
   // method to signup user
   void _signupUser() async {
     try {
+      if (_isLoading) return;
+      setState(() {
+        _isLoading = true;
+      });
       final firstName = _firstNameController.text;
       final lastName = _lastNameController.text;
       final email = _emailController.text;
@@ -58,6 +57,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           label: 'Please fill all the fields',
           type: 'error',
         );
+        setState(() {
+          _isLoading = false;
+        });
         return;
       }
 
@@ -79,6 +81,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           type: 'success',
         );
         Navigator.of(context).pushReplacementNamed('/login');
+        setState(() {
+          _isLoading = false;
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -88,6 +93,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           type: 'error',
         );
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -129,6 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _cityController,
                       _zipCodeController,
                       _signupUser,
+                      _isLoading,
                     ),
                   ],
                 ),
@@ -156,6 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _cityController,
                       _zipCodeController,
                       _signupUser,
+                      _isLoading,
                     ),
                   ),
                 ],
@@ -166,15 +176,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 }
 
 Widget _signUpScreen(
-    BuildContext context,
-    firstNameController,
-    lastNameController,
-    emailController,
-    passwordController,
-    streetController,
-    cityController,
-    zipCodeController,
-    signupUser) {
+  BuildContext context,
+  firstNameController,
+  lastNameController,
+  emailController,
+  passwordController,
+  streetController,
+  cityController,
+  zipCodeController,
+  signupUser,
+  isLoading,
+) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,6 +266,7 @@ Widget _signUpScreen(
             child: SubmitButton(
               onSubmit: signupUser,
               text: 'Submit',
+              isLoading: isLoading,
             ),
           ),
         ],

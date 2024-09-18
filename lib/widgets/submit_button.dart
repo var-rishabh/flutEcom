@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 class SubmitButton extends StatelessWidget {
   final Function onSubmit;
   final String text;
+  final bool isLoading;
 
-  const SubmitButton({super.key, required this.onSubmit, required this.text});
+  const SubmitButton({
+    super.key,
+    required this.onSubmit,
+    required this.text,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        onSubmit();
+        isLoading ? null : onSubmit();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).primaryColor,
@@ -21,13 +27,19 @@ class SubmitButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            )
+          : Text(
+              text,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-      ),
     );
   }
 }

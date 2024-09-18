@@ -1,5 +1,6 @@
 class Endpoint {
-  static const String baseUrl = 'https://api.escuelajs.co/api/v1';
+  static const String baseUrl = 'https://dummyjson.com';
+  static const String baseUrl2 = 'https://api.escuelajs.co/api/v1';
 
   // auth endpoints
   static const String login = '/auth/login';

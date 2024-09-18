@@ -1,14 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
-// helpers
 import 'package:flut_mart/utils/helper/responsive.dart';
-
-// services
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
-// widgets
 import 'package:flut_mart/widgets/input.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
@@ -27,9 +24,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthApiService _authApiService = AuthApiService();
 
+  bool _isLoading = false;
+
   // method to login user
   void _loginUser() async {
     try {
+      if (_isLoading) return;
+      setState(() {
+        _isLoading = true;
+      });
       final email = _emailController.text;
       final password = _passwordController.text;
 
@@ -39,6 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
           label: 'Please fill all fields',
           type: 'error',
         );
+        setState(() {
+          _isLoading = false;
+        });
         return;
       }
 
@@ -56,6 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
           '/app',
           (route) => false,
         );
+        setState(() {
+          _isLoading = false;
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -65,6 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
           type: 'error',
         );
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -97,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _emailController,
                       _passwordController,
                       _loginUser,
+                      _isLoading,
                     ),
                   ],
                 ),
@@ -118,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _emailController,
                       _passwordController,
                       _loginUser,
+                      _isLoading,
                     ),
                   ),
                 ],
@@ -128,7 +142,12 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 Widget _loginSection(
-    BuildContext context, emailController, passwordController, loginUser) {
+  BuildContext context,
+  emailController,
+  passwordController,
+  loginUser,
+  isLoading,
+) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,6 +186,7 @@ Widget _loginSection(
             child: SubmitButton(
               onSubmit: loginUser,
               text: 'Submit',
+              isLoading: isLoading,
             ),
           ),
         ],
