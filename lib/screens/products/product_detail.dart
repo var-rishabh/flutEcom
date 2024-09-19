@@ -504,14 +504,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '\$${_product.discountedPrice}',
+                  '\$${_product.discountedPrice.toString()}',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 Text(
-                  '\$${_product.price}',
+                  '\$${_product.price.toString()}',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.grey.shade500,
                         decoration: TextDecoration.lineThrough,
@@ -553,7 +553,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             const SizedBox(width: 20),
             Text(
-              '(${_product.noOfReviews} Reviews)',
+              '(${_product.noOfReviews.toString()} Reviews)',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Colors.blue,
                   ),

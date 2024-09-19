@@ -45,23 +45,10 @@ class ProductApiService {
     final response = await client.get(Uri.parse(getProducts));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final List<Product> products = List<Product>.from(
-        data["products"].map(
-          (x) => Product(
-            id: x['id'],
-            name: x['name'],
-            image: x['image'],
-            price: x['price'],
-            discount: x['discount'],
-            description: x['description'],
-            categoryId: x['categoryId'],
-            rating: x['rating'],
-            noOfReviews: x['noOfReviews'],
-          ),
-        ),
-      );
-      return products.firstWhere((product) => product.id.toString() == id);
+      final Products products = productFromJson(response.body);
+
+      return products.products
+          .firstWhere((product) => product.id.toString() == id);
     } else {
       throw Exception(response.body);
     }
@@ -73,22 +60,7 @@ class ProductApiService {
     final response = await client.get(Uri.parse(getProducts));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final List<Product> products = List<Product>.from(
-        data['products'].map(
-          (x) => Product(
-            id: x['id'],
-            name: x['name'],
-            image: x['image'],
-            price: x['price'],
-            discount: x['discount'],
-            description: x['description'],
-            categoryId: x['categoryId'],
-            rating: x['rating'],
-            noOfReviews: x['noOfReviews'],
-          ),
-        ),
-      );
+      final Products products = productFromJson(response.body);
 
       List<Product> allProducts = products
           .where((product) => product.categoryId == categoryId)
