@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flut_mart/utils/helper/responsive.dart';
-import 'package:flut_mart/utils/models/product.model.dart';
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';

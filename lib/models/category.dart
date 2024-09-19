@@ -1,9 +1,9 @@
-class Category {
+class ProductCategory {
   final int id;
   final String name;
   final String image;
 
-  Category({
+  ProductCategory({
     required this.id,
     required this.name,
     required this.image,

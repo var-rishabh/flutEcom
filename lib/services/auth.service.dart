@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'package:flut_mart/models/user.dart';
 import 'package:flut_mart/utils/constants/endpoint.constant.dart';
-import 'package:flut_mart/utils/models/user.model.dart';
 
 class AuthApiService {
   final http.Client client;

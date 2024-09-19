@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flut_mart/widgets/icon_button.dart';
+import 'package:flut_mart/widgets/location_text.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 
 class WebAppBar extends StatefulWidget {
@@ -69,33 +70,7 @@ class _WebAppBarState extends State<WebAppBar> {
             ),
           ),
           const Spacer(),
-          Row(
-            children: [
-              Icon(
-                Icons.location_pin,
-                size: 20,
-                color: Theme.of(context).primaryColor,
-              ),
-              const SizedBox(width: 5),
-              Text(
-                'Deliver to ',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-              ),
-              Text(
-                'Hitech City, Hyderabad',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-              ),
-              const Icon(
-                Icons.keyboard_arrow_down,
-                size: 20,
-              ),
-            ],
-          ),
+          const LocationText(),
           const SizedBox(
             width: 20,
           ),

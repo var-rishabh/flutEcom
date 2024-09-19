@@ -1,79 +1,79 @@
-import 'package:flut_mart/utils/models/category.model.dart';
+import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/constants/images.constant.dart';
 
 // populate the categories
-final List<Category> allCategories = [
-  Category(
+final List<ProductCategory> allCategories = [
+  ProductCategory(
     id: 1,
     name: 'Electronics',
     image: KImages.electronics,
   ),
-  Category(
+  ProductCategory(
     id: 2,
     name: 'Clothing',
     image: KImages.tshirt,
   ),
-  Category(
+  ProductCategory(
     id: 3,
     name: 'Shoes',
     image: KImages.shoes,
   ),
-  Category(
+  ProductCategory(
     id: 4,
     name: 'Furniture',
     image: KImages.chair,
   ),
-  Category(
+  ProductCategory(
     id: 5,
     name: 'Books',
     image: KImages.books,
   ),
-  Category(
+  ProductCategory(
     id: 6,
     name: 'Beauty',
     image: KImages.beauty,
   ),
-  Category(
+  ProductCategory(
     id: 7,
     name: 'Sports',
     image: KImages.football,
   ),
-  Category(
+  ProductCategory(
     id: 8,
     name: 'Toys',
     image: KImages.toys,
   ),
-  Category(
+  ProductCategory(
     id: 9,
     name: 'Stationery',
     image: KImages.stationary,
   ),
-  Category(
+  ProductCategory(
     id: 10,
     name: 'Kitchen',
     image: KImages.kitchen,
   ),
-  Category(
+  ProductCategory(
     id: 11,
     name: 'Drinks',
     image: KImages.drinks,
   ),
-  Category(
+  ProductCategory(
     id: 12,
     name: 'Health',
     image: KImages.health,
   ),
-  Category(
+  ProductCategory(
     id: 13,
     name: 'Garden',
     image: KImages.garden,
   ),
-  Category(
+  ProductCategory(
     id: 14,
     name: 'Pets',
     image: KImages.pets,
   ),
-  Category(
+  ProductCategory(
     id: 15,
     name: 'Automotive',
     image: KImages.automotive,

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
-import 'package:flut_mart/utils/models/category.model.dart';
 import 'package:flut_mart/services/category.service.dart';
 
 import 'package:flut_mart/screens/navigation/carousel/carousel.dart';
 import 'package:flut_mart/widgets/category_card.dart';
+import 'package:flut_mart/widgets/location_text.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 import 'package:flut_mart/widgets/web_app_bar.dart';
 
@@ -25,15 +26,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final CategoryApiService _categoryApiService = CategoryApiService();
-  List<Category> _categories = [];
+  List<ProductCategory> _categories = [];
+  bool _isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
 
   Future<void> fetchCategories() async {
-    final List<Category> categories = await _categoryApiService.getCategories();
+    setState(() {
+      _isLoading = true;
+    });
+    final List<ProductCategory> categories =
+        await _categoryApiService.getCategories();
     setState(() {
       _categories = categories;
+      _isLoading = false;
     });
   }
 
@@ -76,48 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_pin,
-                            size: 20,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            'Deliver to ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                          ),
-                          Text(
-                            'Hitech City, Hyderabad',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                          ),
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 20,
-                          ),
-                        ],
-                      )
+                      const LocationText(),
                     ],
                   ),
                 ),
           const SizedBox(height: 20),
           if (!Responsive.isDesktop(context))
-            _categories.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+            _isLoading
+                ? const Padding(
+                    padding: EdgeInsets.only(bottom: 30),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
                 : MobileCategory(
                     halfLength: halfLength,
                     categories: _categories,
@@ -153,10 +129,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                       ),
                       const SizedBox(height: 50),
-                      LaptopCategory(
-                        categories: _categories,
-                        widget: widget,
-                      ),
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : LaptopCategory(
+                              categories: _categories,
+                              widget: widget,
+                            ),
                       const SizedBox(height: 100),
                     ],
                   ),
@@ -171,13 +149,13 @@ class _HomeScreenState extends State<HomeScreen> {
 // Mobile Category
 class MobileCategory extends StatelessWidget {
   final int halfLength;
-  final List<Category> _categories;
+  final List<ProductCategory> _categories;
   final HomeScreen widget;
 
   const MobileCategory({
     super.key,
     required this.halfLength,
-    required List<Category> categories,
+    required List<ProductCategory> categories,
     required this.widget,
   }) : _categories = categories;
 
@@ -192,7 +170,7 @@ class MobileCategory extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: halfLength,
             itemBuilder: (context, index) {
-              final Category category = _categories[index];
+              final ProductCategory category = _categories[index];
               return CategoryCard(
                 key: Key(category.id.toString()),
                 id: category.id,
@@ -213,7 +191,7 @@ class MobileCategory extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: _categories.length - halfLength,
             itemBuilder: (context, index) {
-              final Category category = _categories[halfLength + index];
+              final ProductCategory category = _categories[halfLength + index];
               return CategoryCard(
                 key: Key(category.id.toString()),
                 id: category.id,
@@ -233,12 +211,12 @@ class MobileCategory extends StatelessWidget {
 
 // Laptop Category
 class LaptopCategory extends StatelessWidget {
-  final List<Category> _categories;
+  final List<ProductCategory> _categories;
   final HomeScreen widget;
 
   const LaptopCategory({
     super.key,
-    required List<Category> categories,
+    required List<ProductCategory> categories,
     required this.widget,
   }) : _categories = categories;
 
@@ -254,7 +232,7 @@ class LaptopCategory extends StatelessWidget {
       ),
       itemCount: _categories.length,
       itemBuilder: (context, index) {
-        final Category category = _categories[index];
+        final ProductCategory category = _categories[index];
         return CategoryCard(
           key: Key(category.id.toString()),
           id: category.id,

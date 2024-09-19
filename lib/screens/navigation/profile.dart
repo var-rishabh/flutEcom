@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
-// models
-import 'package:flut_mart/utils/models/user.model.dart';
+import 'package:flut_mart/models/user.dart';
 
-// services
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
-// widgets
 import 'package:flut_mart/widgets/snackbar.dart';
 
 class ProfileScreen extends StatefulWidget {

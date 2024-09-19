@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
-import 'package:flut_mart/utils/models/product.model.dart';
 
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/widgets/no_data.dart';

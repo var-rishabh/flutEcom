@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
-import 'package:flut_mart/utils/models/product.model.dart';
 
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
@@ -162,7 +162,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     blurRadius: 50,
                                     offset: const Offset(0, 3),
                                   ),
-                                ], 
+                                ],
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,12 +189,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .secondary,
-                                              height: 1.7,
+                                          height: 1.7,
                                         ),
                                   ),
                                   const SizedBox(height: 10),
                                   Divider(
-                                    color: Theme.of(context).dividerColor.withOpacity(0.2),
+                                    color: Theme.of(context)
+                                        .dividerColor
+                                        .withOpacity(0.2),
                                   ),
                                   const SizedBox(height: 10),
                                   Text(

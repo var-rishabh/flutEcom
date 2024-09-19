@@ -1,4 +1,4 @@
-import 'package:flut_mart/utils/models/product.model.dart';
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/images.constant.dart';
 
 final List<Product> allProducts = [

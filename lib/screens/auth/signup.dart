@@ -1,7 +1,7 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flut_mart/utils/models/user.model.dart';
+import 'package:flut_mart/models/user.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/services/auth.service.dart';
 

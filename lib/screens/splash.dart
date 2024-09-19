@@ -2,7 +2,6 @@ import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-// services
 import 'package:flut_mart/services/token.service.dart';
 
 class SplashScreen extends StatefulWidget {

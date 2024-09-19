@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-// models
-import 'package:flut_mart/utils/models/product.model.dart';
-
-// services
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 
-// widgets
 import 'package:flut_mart/widgets/snackbar.dart';
 
 class ProductCard extends StatefulWidget {
@@ -169,10 +165,14 @@ class _ProductCardState extends State<ProductCard> {
                     widget.product.discount > 0
                         ? Text(
                             '\$${widget.product.price}',
-                            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
                                   color: Colors.grey.shade500,
                                   decoration: TextDecoration.lineThrough,
-                                  decorationColor: Theme.of(context).dividerColor,
+                                  decorationColor:
+                                      Theme.of(context).dividerColor,
                                 ),
                           )
                         : const SizedBox(),

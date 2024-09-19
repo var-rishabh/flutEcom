@@ -1,11 +1,8 @@
 import 'package:http/http.dart' as http;
 
-// constants
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/product.constant.dart';
 import 'package:flut_mart/utils/constants/endpoint.constant.dart';
-
-// models
-import 'package:flut_mart/utils/models/product.model.dart';
 
 class ProductApiService {
   final http.Client client;
