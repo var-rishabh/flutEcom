@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flut_mart/models/category.dart';
+import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/services/category.service.dart';
 
 import 'package:flut_mart/widgets/category_card.dart';
@@ -54,6 +55,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (Responsive.isDesktop(context)) {
+      widget.onTabSelected(0);
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [

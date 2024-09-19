@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flut_mart/models/product.dart';
-import 'package:flut_mart/utils/constants/product.constant.dart';
+
+// import 'package:flut_mart/utils/constants/product.constant.dart';
 import 'package:flut_mart/utils/constants/endpoint.constant.dart';
 
 class ProductApiService {
@@ -9,105 +11,106 @@ class ProductApiService {
 
   static const baseUrl = Endpoint.baseUrl;
   static const getProducts = Endpoint.getProducts;
-  static const getProduct = Endpoint.getProduct;
 
   ProductApiService({http.Client? client}) : client = client ?? http.Client();
 
-  // Get all Products
   Future<List<Product>> getAllProducts() async {
-    // final response = await client.get(Uri.parse('$baseUrl$getProducts'));
+    final response = await client.get(Uri.parse(getProducts));
 
-    // if (response.statusCode == 200) {
-    // return List<Product>.from(
-    //   jsonDecode(response.body).map(
-    //     (x) => Product(
-    //       id: x['id'],
-    //       name: x['name'],
-    //       image: x['image'],
-    //       price: x['price'],
-    //       discount: x['discount'],
-    //       rating: x['rating'],
-    //       description: x['description'],
-    //       categoryId: x['categoryId'],
-    //     ),
-    //   ),
-    // );
-    // } else {
-    //   throw Exception(response.body);
-    // }
-    return allProducts;
+    if (response.statusCode == 200) {
+      final products = List<Product>.from(
+        jsonDecode(response.body).map(
+          (x) => Product(
+            id: x['id'],
+            name: x['name'],
+            image: x['image'],
+            price: x['price'],
+            discount: x['discount'],
+            description: x['description'],
+            categoryId: x['categoryId'],
+            rating: x['rating'],
+            noOfReviews: x['noOfReviews'],
+          ),
+        ),
+      );
+      return products;
+    } else {
+      throw Exception(response.body);
+    }
+
+    // return allProducts;
   }
 
-  // Get Product by ID
   Future<Product> getProductById(String id) async {
-    // final response = await client.get(Uri.parse('$baseUrl$getProduct/$id'));
+    final response = await client.get(Uri.parse(getProducts));
 
-    // if (response.statusCode == 200) {
-    //   final product = jsonDecode(response.body);
-    //   return Product(
-    //     id: product['id'],
-    //     name: product['name'],
-    //     image: product['image'],
-    //     price: product['price'],
-    //     discount: product['discount'],
-    //     rating: product['rating'],
-    //     description: product['description'],
-    //     categoryId: product['categoryId'],
-    //   );
-    // } else {
-    //   throw Exception(response.body);
-    // }
-    return allProducts.firstWhere((product) => product.id.toString() == id);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final List<Product> products = List<Product>.from(
+        data["products"].map(
+          (x) => Product(
+            id: x['id'],
+            name: x['name'],
+            image: x['image'],
+            price: x['price'],
+            discount: x['discount'],
+            description: x['description'],
+            categoryId: x['categoryId'],
+            rating: x['rating'],
+            noOfReviews: x['noOfReviews'],
+          ),
+        ),
+      );
+      return products.firstWhere((product) => product.id.toString() == id);
+    } else {
+      throw Exception(response.body);
+    }
+    // return allProducts.firstWhere((product) => product.id.toString() == id);
   }
 
-  // Get Products by Category ID
   Future<List<Product>> getProductsByCategoryId(
       int categoryId, int page, int sort) async {
-    // final response = await client.get(Uri.parse('$baseUrl$getProducts'));
+    final response = await client.get(Uri.parse(getProducts));
 
-    // if (response.statusCode == 200) {
-    //   final products = List<Product>.from(
-    //     jsonDecode(response.body).map(
-    //       (x) => Product(
-    //         id: x['id'],
-    //         name: x['name'],
-    //         image: x['image'],
-    //         price: x['price'],
-    //         discount: x['discount'],
-    //         rating: x['rating'],
-    //         description: x['description'],
-    //         categoryId: x['categoryId'],
-    //       ),
-    //     ),
-    //   );
-    //   return products.where((product) => product.categoryId == categoryId).toList();
-    // } else {
-    //   throw Exception(response.body);
-    // }
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final List<Product> products = List<Product>.from(
+        data['products'].map(
+          (x) => Product(
+            id: x['id'],
+            name: x['name'],
+            image: x['image'],
+            price: x['price'],
+            discount: x['discount'],
+            description: x['description'],
+            categoryId: x['categoryId'],
+            rating: x['rating'],
+            noOfReviews: x['noOfReviews'],
+          ),
+        ),
+      );
 
-    await Future.delayed(const Duration(seconds: 1));
+      List<Product> allProducts = products
+          .where((product) => product.categoryId == categoryId)
+          .toList();
 
-    List<Product> allProd = allProducts
-        .where((product) => product.categoryId == categoryId)
-        .toList();
+      if (sort == 0) {
+        allProducts.sort(
+            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      } else if (sort == 1) {
+        allProducts.sort(
+            (a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
+      } else if (sort == 2) {
+        allProducts
+            .sort((a, b) => a.discountedPrice.compareTo(b.discountedPrice));
+      } else if (sort == 3) {
+        allProducts
+            .sort((a, b) => b.discountedPrice.compareTo(a.discountedPrice));
+      }
 
-    // Sort products according to name
-    if (sort == 0) {
-      allProd
-          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-    } else if (sort == 1) {
-      allProd
-          .sort((a, b) => b.name.toLowerCase().compareTo(a.name.toLowerCase()));
+      return allProducts.skip((page - 1) * 20).take(20).toList();
+    } else {
+      throw Exception(response.body);
     }
-
-    // Sort products according to discounted price
-    else if (sort == 2) {
-      allProd.sort((a, b) => a.discountedPrice.compareTo(b.discountedPrice));
-    } else if (sort == 3) {
-      allProd.sort((a, b) => b.discountedPrice.compareTo(a.discountedPrice));
-    }
-
-    // Paginate the products
-    return allProd.skip((page - 1) * 20).take(20).toList();
   }
 }

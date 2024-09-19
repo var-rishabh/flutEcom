@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// screens
 import 'package:flut_mart/screens/app.dart';
 import 'package:flut_mart/screens/products/products.dart';
 import 'package:flut_mart/screens/products/product_detail.dart';
@@ -9,7 +8,6 @@ import 'package:flut_mart/screens/splash.dart';
 import 'package:flut_mart/screens/auth/login.dart';
 import 'package:flut_mart/screens/auth/signup.dart';
 
-// utils
 import 'package:flut_mart/utils/theme/theme.dart';
 
 void main() {

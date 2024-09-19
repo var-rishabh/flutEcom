@@ -25,16 +25,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final ProductApiService _productApiService = ProductApiService();
   final CartService _cartService = CartService();
   final FavoritesService _favoritesService = FavoritesService();
-  Product? _product;
+  late Product _product;
   bool _isInCart = false;
   bool _isFavorite = false;
-  int _productId = 0;
   bool _isInitialized = false;
+  bool _isLoading = false;
+  int _productId = 0;
   int _current = 0;
 
   String _selectedSize = "S";
 
   Future<void> _loadProductDetails() async {
+    setState(() {
+      _isLoading = true;
+    });
     final product =
         await _productApiService.getProductById(_productId.toString());
     final isInCart = await _cartService.isInCart(product.id.toString());
@@ -45,14 +49,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _product = product;
       _isInCart = isInCart;
       _isFavorite = isFavorite;
+      _isLoading = false;
     });
   }
 
   Future<void> _toggleFavorite() async {
     if (_isFavorite) {
-      await _favoritesService.removeFromFavorites(_product!.id.toString());
+      await _favoritesService.removeFromFavorites(_product.id.toString());
     } else {
-      await _favoritesService.addToFavorites(_product!.id.toString());
+      await _favoritesService.addToFavorites(_product.id.toString());
     }
     setState(() {
       _isFavorite = !_isFavorite;
@@ -69,9 +74,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Future<void> _toggleCart() async {
     if (_isInCart) {
-      await _cartService.removeFromCart(_product!.id.toString());
+      await _cartService.removeFromCart(_product.id.toString());
     } else {
-      await _cartService.addToCart(_product!.id.toString());
+      await _cartService.addToCart(_product.id.toString());
     }
     setState(() {
       _isInCart = !_isInCart;
@@ -94,7 +99,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           <String, dynamic>{}) as Map;
 
       setState(() {
-        _productId = arguments['productId'] ?? 0;
+        _productId = arguments['productId'];
       });
 
       _loadProductDetails();
@@ -125,123 +130,128 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               productsBar(context, arguments),
-              Responsive.isDesktop(context)
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 80),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: _buildImageCarousel(),
-                          ),
-                          const SizedBox(width: 100),
-                          Expanded(
-                            // flex: 2,
-                            child: _buildProductDetails(),
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 20),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 20,
-                              ),
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Theme.of(context).dividerColor,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .dividerColor
-                                        .withOpacity(0.05),
-                                    spreadRadius: 10,
-                                    blurRadius: 50,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "About this item",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    "- This Galaxy does a lot in one hand with its 15.73 cm\n- Do more than more with Multi View.\n- Our toughest Samsung Galaxy foldables ever.\n- Galaxy Z Fold4 is made with materials that are not only stunning.\n- Condenser Coil: Better cooling and requires low maintenance.",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          height: 1.7,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Divider(
-                                    color: Theme.of(context)
-                                        .dividerColor
-                                        .withOpacity(0.2),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    "Delivery",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    "by Wednesday, 18 September. Order within 7 hrs 3 mins.",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+              _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
                     )
-                  : Column(
-                      children: [
-                        _buildImageCarousel(),
-                        const SizedBox(height: 40),
-                        _buildProductDetails(),
-                        const SizedBox(height: 16),
-                        _cartButton(context),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                  : Responsive.isDesktop(context)
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 80),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _buildImageCarousel(),
+                              ),
+                              const SizedBox(width: 100),
+                              Expanded(
+                                // flex: 2,
+                                child: _buildProductDetails(),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20,
+                                    horizontal: 20,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Theme.of(context).dividerColor,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .dividerColor
+                                            .withOpacity(0.05),
+                                        spreadRadius: 10,
+                                        blurRadius: 50,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "About this item",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge!
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        "- This Galaxy does a lot in one hand with its 15.73 cm\n- Do more than more with Multi View.\n- Our toughest Samsung Galaxy foldables ever.\n- Galaxy Z Fold4 is made with materials that are not only stunning.\n- Condenser Coil: Better cooling and requires low maintenance.",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              height: 1.7,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Divider(
+                                        color: Theme.of(context)
+                                            .dividerColor
+                                            .withOpacity(0.2),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        "Delivery",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge!
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        "by Wednesday, 18 September.\nOrder within 7 hrs 3 mins.",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            _buildImageCarousel(),
+                            const SizedBox(height: 40),
+                            _buildProductDetails(),
+                            const SizedBox(height: 16),
+                            _cartButton(context),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
             ],
           ),
         ),
@@ -303,7 +313,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 : const SizedBox(),
             Responsive.isDesktop(context)
                 ? Text(
-                    _product!.name,
+                    _isLoading ? "" : _product.name,
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.bold,
@@ -373,7 +383,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               });
             },
           ),
-          items: [_product!.image, _product!.image].map((imageUrl) {
+          items: [_product.image, _product.image].map((imageUrl) {
             return Builder(
               builder: (BuildContext context) {
                 return Image.network(
@@ -421,7 +431,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              _product!.name,
+              _product.name,
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                     fontWeight: FontWeight.bold,
@@ -443,7 +453,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         const SizedBox(height: 5),
         Text(
-          _product!.description,
+          _product.description,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Theme.of(context).colorScheme.secondary,
               ),
@@ -494,14 +504,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '\$${_product!.discountedPrice}',
+                  '\$${_product.discountedPrice}',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 Text(
-                  '\$${_product!.price}',
+                  '\$${_product.price}',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.grey.shade500,
                         decoration: TextDecoration.lineThrough,
@@ -532,7 +542,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    _product!.rating.toString(),
+                    _product.rating.toString(),
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                           fontWeight: FontWeight.bold,
@@ -543,7 +553,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             const SizedBox(width: 20),
             Text(
-              '(${_product!.noOfReviews} Reviews)',
+              '(${_product.noOfReviews} Reviews)',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Colors.blue,
                   ),

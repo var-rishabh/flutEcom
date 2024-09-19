@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:flut_mart/services/cart.service.dart';
+import 'package:flut_mart/services/favourite.service.dart';
+import 'package:flut_mart/services/token.service.dart';
+
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/location_text.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
+import 'package:flut_mart/widgets/snackbar.dart';
 
 class WebAppBar extends StatefulWidget {
   final int currentIndex;
@@ -83,6 +88,22 @@ class _WebAppBarState extends State<WebAppBar> {
             icon: Icons.favorite,
             isActive: widget.currentIndex == 2,
             onTap: () => widget.onTabSelected(2),
+          ),
+          KIconButton(
+            icon: Icons.logout,
+            isActive: widget.currentIndex == 3,
+            onTap: () async {
+              await TokenService.deleteToken();
+              Navigator.of(context).pushReplacementNamed('/login');
+              KSnackBar.show(
+                context: context,
+                label: 'Logout Successful',
+                type: 'success',
+              );
+
+              await CartService().clearCart();
+              await FavoritesService().clearFavorites();
+            },
           ),
         ],
       ),

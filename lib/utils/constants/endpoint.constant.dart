@@ -10,6 +10,6 @@ class Endpoint {
   static const String getCategories =
       'https://mocki.io/v1/ebe4acb8-a859-43ee-ace8-e151b03f392b';
 
-  static const String getProducts = '/products';
-  static const String getProduct = '/products/';
+  static const String getProducts =
+      'https://mocki.io/v1/6e249193-db64-4b8c-b055-371ba386c3a2';
 }
