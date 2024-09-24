@@ -11,14 +11,7 @@ import 'package:flut_mart/widgets/search_bar.dart';
 import 'package:flut_mart/widgets/web_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  final int currentIndex;
-  final Function(int) onTabSelected;
-
-  const HomeScreen({
-    super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
-  });
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -26,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final CategoryApiService _categoryApiService = CategoryApiService();
-  List<ProductCategory> _categories = [];
+  List<Category> _categories = [];
   bool _isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
@@ -36,8 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _isLoading = true;
     });
-    final List<ProductCategory> categories =
-        await _categoryApiService.getCategories();
+    final List<Category> categories = await _categoryApiService.getCategories();
     setState(() {
       _categories = categories;
       _isLoading = false;
@@ -64,10 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Responsive.isDesktop(context)
-              ? WebAppBar(
-                  currentIndex: widget.currentIndex,
-                  onTabSelected: widget.onTabSelected,
-                )
+              ? const WebAppBar()
               : Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -149,13 +138,13 @@ class _HomeScreenState extends State<HomeScreen> {
 // Mobile Category
 class MobileCategory extends StatelessWidget {
   final int halfLength;
-  final List<ProductCategory> _categories;
+  final List<Category> _categories;
   final HomeScreen widget;
 
   const MobileCategory({
     super.key,
     required this.halfLength,
-    required List<ProductCategory> categories,
+    required List<Category> categories,
     required this.widget,
   }) : _categories = categories;
 
@@ -170,15 +159,13 @@ class MobileCategory extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: halfLength,
             itemBuilder: (context, index) {
-              final ProductCategory category = _categories[index];
+              final Category category = _categories[index];
               return CategoryCard(
                 key: Key(category.id.toString()),
                 id: category.id,
                 title: category.name,
                 image: category.image,
                 boxSize: 80,
-                currentIndex: widget.currentIndex,
-                onTabSelected: widget.onTabSelected,
               );
             },
           ),
@@ -191,15 +178,13 @@ class MobileCategory extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: _categories.length - halfLength,
             itemBuilder: (context, index) {
-              final ProductCategory category = _categories[halfLength + index];
+              final Category category = _categories[halfLength + index];
               return CategoryCard(
                 key: Key(category.id.toString()),
                 id: category.id,
                 title: category.name,
                 image: category.image,
                 boxSize: 80,
-                currentIndex: widget.currentIndex,
-                onTabSelected: widget.onTabSelected,
               );
             },
           ),
@@ -211,12 +196,12 @@ class MobileCategory extends StatelessWidget {
 
 // Laptop Category
 class LaptopCategory extends StatelessWidget {
-  final List<ProductCategory> _categories;
+  final List<Category> _categories;
   final HomeScreen widget;
 
   const LaptopCategory({
     super.key,
-    required List<ProductCategory> categories,
+    required List<Category> categories,
     required this.widget,
   }) : _categories = categories;
 
@@ -232,15 +217,13 @@ class LaptopCategory extends StatelessWidget {
       ),
       itemCount: _categories.length,
       itemBuilder: (context, index) {
-        final ProductCategory category = _categories[index];
+        final Category category = _categories[index];
         return CategoryCard(
           key: Key(category.id.toString()),
           id: category.id,
           title: category.name,
           image: category.image,
           boxSize: 160,
-          currentIndex: widget.currentIndex,
-          onTabSelected: widget.onTabSelected,
         );
       },
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/models/user.dart';
-
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
@@ -50,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _logout() async {
     await TokenService.deleteToken();
     if (mounted) {
-      Navigator.of(context).pushReplacementNamed('/login');
+      context.go(KRoutes.login);
       KSnackBar.show(
         context: context,
         label: 'Logout Successful',

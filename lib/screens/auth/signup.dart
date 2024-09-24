@@ -1,8 +1,10 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/models/user.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
 
 import 'package:flut_mart/widgets/input.dart';
@@ -10,8 +12,6 @@ import 'package:flut_mart/widgets/snackbar.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
 
 class SignUpScreen extends StatefulWidget {
-  static const String routeName = '/signup';
-
   const SignUpScreen({super.key});
 
   @override
@@ -83,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           label: 'SignUp Successful. Please login.',
           type: 'success',
         );
-        Navigator.of(context).pushReplacementNamed('/login');
+        context.go(KRoutes.login);
       }
     } catch (e) {
       setState(() {
@@ -284,7 +284,7 @@ Widget _signUpScreen(
             ),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushReplacementNamed('/login');
+                context.go(KRoutes.login);
               },
               child: Text(
                 'Login',

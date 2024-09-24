@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
@@ -8,14 +9,7 @@ import 'package:flut_mart/widgets/category_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 
 class ExploreScreen extends StatefulWidget {
-  final int currentIndex;
-  final Function(int) onTabSelected;
-
-  const ExploreScreen({
-    super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
-  });
+  const ExploreScreen({super.key});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
@@ -26,15 +20,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String searchQuery = '';
 
   final CategoryApiService _categoryApiService = CategoryApiService();
-  List<ProductCategory> _categories = [];
+  List<Category> _categories = [];
   bool _isLoading = false;
 
   Future<void> fetchCategories() async {
     setState(() {
       _isLoading = true;
     });
-    final List<ProductCategory> categories =
-        await _categoryApiService.getCategories();
+    final List<Category> categories = await _categoryApiService.getCategories();
     setState(() {
       _categories = categories;
       _isLoading = false;
@@ -56,7 +49,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     if (Responsive.isDesktop(context)) {
-      widget.onTabSelected(0);
+      context.go('/home');
     }
 
     return SingleChildScrollView(
@@ -106,7 +99,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     .contains(searchQuery.toLowerCase()))
                                 .length,
                         itemBuilder: (context, index) {
-                          final ProductCategory category = searchQuery.isEmpty
+                          final Category category = searchQuery.isEmpty
                               ? _categories[index]
                               : _categories
                                   .where((category) => category.name
@@ -117,8 +110,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             id: category.id,
                             title: category.name,
                             image: category.image,
-                            currentIndex: widget.currentIndex,
-                            onTabSelected: widget.onTabSelected,
                           );
                         },
                       ),

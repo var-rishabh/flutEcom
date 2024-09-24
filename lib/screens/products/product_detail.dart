@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/models/product.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/services/cart.service.dart';
+import 'package:flut_mart/services/category.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/product.service.dart';
 
@@ -13,9 +17,14 @@ import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  static const String routeName = '/product-details';
+  final int categoryId;
+  final int productId;
 
-  const ProductDetailsScreen({super.key});
+  const ProductDetailsScreen({
+    super.key,
+    required this.categoryId,
+    required this.productId,
+  });
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -23,22 +32,38 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final ProductApiService _productApiService = ProductApiService();
+  final CategoryApiService _categoryApiService = CategoryApiService();
   final CartService _cartService = CartService();
   final FavoritesService _favoritesService = FavoritesService();
+
   late Product _product;
+  late int _categoryId;
+  late String _categoryName;
+
   bool _isInCart = false;
   bool _isFavorite = false;
-  bool _isInitialized = false;
   bool _isLoading = false;
   int _productId = 0;
   int _current = 0;
 
   String _selectedSize = "S";
 
+  @override
+  void initState() {
+    super.initState();
+    _productId = widget.productId;
+    _categoryId = widget.categoryId;
+    _loadProductDetails();
+  }
+
   Future<void> _loadProductDetails() async {
     setState(() {
       _isLoading = true;
     });
+    final Category category = await _categoryApiService.getCategoryById(
+      _categoryId,
+    );
+
     final product =
         await _productApiService.getProductById(_productId.toString());
     final isInCart = await _cartService.isInCart(product.id.toString());
@@ -46,6 +71,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         await _favoritesService.isFavorite(product.id.toString());
 
     setState(() {
+      _categoryName = category.name;
       _product = product;
       _isInCart = isInCart;
       _isFavorite = isFavorite;
@@ -91,32 +117,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!_isInitialized) {
-      final arguments = (ModalRoute.of(context)?.settings.arguments ??
-          <String, dynamic>{}) as Map;
-
-      setState(() {
-        _productId = arguments['productId'];
-      });
-
-      _loadProductDetails();
-      _isInitialized = true;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
 
     return Scaffold(
       appBar: !Responsive.isDesktop(context)
-          ? KAppBar(
-              currentIndex: arguments['currentIndex'],
-              onTabSelected: arguments['onTabSelected'],
+          ? const KAppBar(
+              selectedIndex: 0,
               needBackButton: true,
             )
           : null,
@@ -272,14 +280,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         icon: Icons.home,
                         isActive: false,
                         onTap: () => {
-                          Navigator.pushNamed(
-                            context,
-                            '/app',
-                            arguments: {
-                              'currentIndex': 0,
-                              'onTabSelected': arguments['onTabSelected'],
-                            },
-                          )
+                          context.go(KRoutes.home),
                         },
                       ),
                       const Icon(Icons.arrow_forward_ios),
@@ -288,10 +289,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.pop(context, true);
+                          context.go(
+                            '/category/$_categoryId',
+                            extra: _categoryId,
+                          );
                         },
                         child: Text(
-                          'Products',
+                          _categoryName,
                           style: Theme.of(context)
                               .textTheme
                               .headlineSmall!

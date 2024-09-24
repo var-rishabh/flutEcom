@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flut_mart/screens/app.dart';
-import 'package:flut_mart/screens/products/products.dart';
-import 'package:flut_mart/screens/products/product_detail.dart';
-import 'package:flut_mart/screens/splash.dart';
-import 'package:flut_mart/screens/auth/login.dart';
-import 'package:flut_mart/screens/auth/signup.dart';
-
 import 'package:flut_mart/utils/theme/theme.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 
 void main() {
-  // lock the orientation to portrait
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -24,21 +17,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: KThemeData.lightTheme,
       darkTheme: KThemeData.darkTheme,
-      routes: {
-        SplashScreen.routeName: (context) => const SplashScreen(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
-        SignUpScreen.routeName: (context) => const SignUpScreen(),
-        AppScreen.routeName: (context) => const AppScreen(),
-        ProductsScreen.routeName: (context) => const ProductsScreen(),
-        ProductDetailsScreen.routeName: (context) =>
-            const ProductDetailsScreen(),
-      },
-      initialRoute: '/',
+      routerConfig: KRoutes.routerConfig,
     );
   }
 }

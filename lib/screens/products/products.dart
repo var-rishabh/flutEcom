@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/models/product.dart';
+import 'package:flut_mart/models/category.dart';
+import 'package:flut_mart/services/category.service.dart';
 import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';
@@ -11,9 +15,12 @@ import 'package:flut_mart/widgets/product_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 
 class ProductsScreen extends StatefulWidget {
-  static const String routeName = '/products';
+  final int categoryId;
 
-  const ProductsScreen({super.key});
+  const ProductsScreen({
+    super.key,
+    required this.categoryId,
+  });
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -24,13 +31,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
   String searchQuery = '';
 
   final ProductApiService _productApiService = ProductApiService();
+  final CategoryApiService _categoryApiService = CategoryApiService();
   final ScrollController _scrollController = ScrollController();
   List<Product> _products = [];
+  int _categoryId = 0;
+  String _categoryName = '';
 
   int _currentPage = 1;
   bool _isAscending = true;
-  int _categoryId = 0;
-  bool _isInitialized = false;
   bool _hasMoreProducts = true;
   bool _isLoading = false;
   bool _showScrollToTop = false;
@@ -39,6 +47,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    _categoryId = widget.categoryId;
+    fetchProducts();
   }
 
   Future<void> fetchProducts() async {
@@ -55,12 +65,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
       _isAscending ? 2 : 3,
     );
 
+    final Category category = await _categoryApiService.getCategoryById(
+      _categoryId,
+    );
+
     setState(() {
       if (_currentPage == 1) {
         _products = products;
       } else {
         _products.addAll(products);
       }
+      _categoryName = category.name;
       _hasMoreProducts = products.length == 20;
       _isLoading = false;
     });
@@ -109,22 +124,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!_isInitialized) {
-      final arguments = (ModalRoute.of(context)?.settings.arguments ??
-          <String, dynamic>{}) as Map;
-      setState(() {
-        _categoryId = arguments['categoryId'] ?? 0;
-      });
-
-      fetchProducts();
-      _isInitialized = true;
-    }
-  }
-
-  @override
   void dispose() {
     _scrollController.dispose();
     _searchController.dispose();
@@ -133,15 +132,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
     return Scaffold(
       appBar: Responsive.isDesktop(context)
           ? null
-          : KAppBar(
-              currentIndex: arguments['currentIndex'],
-              onTabSelected: arguments['onTabSelected'],
+          : const KAppBar(
+              selectedIndex: 1,
               needBackButton: true,
             ),
       body: RefreshIndicator(
@@ -181,15 +176,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                           icon: Icons.home,
                                           isActive: false,
                                           onTap: () => {
-                                            Navigator.pushNamed(
-                                              context,
-                                              '/app',
-                                              arguments: {
-                                                'currentIndex': 0,
-                                                'onTabSelected':
-                                                    arguments['onTabSelected'],
-                                              },
-                                            )
+                                            context.go(KRoutes.home),
                                           },
                                         ),
                                         const Icon(Icons.arrow_forward_ios),
@@ -200,7 +187,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     )
                                   : const SizedBox(),
                               Text(
-                                'Products',
+                                _categoryName,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineSmall!
@@ -286,25 +273,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                 return ProductCard(
                                   product: product,
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/product-details',
-                                      arguments: {
-                                        'productId': product.id,
-                                        'currentIndex':
-                                            arguments['currentIndex'],
-                                        'onTabSelected':
-                                            arguments['onTabSelected'],
-                                      },
-                                    ).then((value) {
-                                      if (value != null && value == true) {
-                                        setState(() {
-                                          _currentPage = 1;
-                                          _isInitialized = false;
-                                        });
-                                        fetchProducts();
-                                      }
-                                    });
+                                    context.push(
+                                      '/product/${product.id}',
+                                      extra: _categoryId,
+                                    );
                                   },
                                 );
                               },
@@ -338,24 +310,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                               return ProductCard(
                                 product: product,
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/product-details',
-                                    arguments: {
-                                      'productId': product.id,
-                                      'currentIndex': arguments['currentIndex'],
-                                      'onTabSelected':
-                                          arguments['onTabSelected'],
-                                    },
-                                  ).then((value) {
-                                    if (value != null && value == true) {
-                                      setState(() {
-                                        _currentPage = 1;
-                                        _isInitialized = false;
-                                      });
-                                      fetchProducts();
-                                    }
-                                  });
+                                  context.push(
+                                    '/product/${product.id}', // productId in the URL
+                                    extra: _categoryId, // categoryId in extra
+                                  );
                                 },
                               );
                             },

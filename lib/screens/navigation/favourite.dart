@@ -1,4 +1,6 @@
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
@@ -10,21 +12,14 @@ import 'package:flut_mart/services/product.service.dart';
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/product_card.dart';
 
-class FavoritesScreen extends StatefulWidget {
-  final int currentIndex;
-  final Function(int) onTabSelected;
-
-  const FavoritesScreen({
-    super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
-  });
+class FavouriteScreen extends StatefulWidget {
+  const FavouriteScreen({super.key});
 
   @override
-  State<FavoritesScreen> createState() => _FavoritesScreenState();
+  State<FavouriteScreen> createState() => _FavouriteScreenState();
 }
 
-class _FavoritesScreenState extends State<FavoritesScreen> {
+class _FavouriteScreenState extends State<FavouriteScreen> {
   final FavoritesService _favoritesService = FavoritesService();
   final ProductApiService _productApiService = ProductApiService();
   List<Product> _favoriteItems = [];
@@ -65,8 +60,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             children: [
                               KIconButton(
                                 icon: Icons.home,
-                                isActive: widget.currentIndex == 0,
-                                onTap: () => widget.onTabSelected(0),
+                                isActive: false,
+                                onTap: () => {
+                                  context.go('/home'),
+                                },
                               ),
                               const Icon(Icons.arrow_forward_ios),
                               const SizedBox(
@@ -104,14 +101,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           return ProductCard(
                             product: product,
                             onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/product-details',
-                                arguments: {
-                                  'productId': product.id,
-                                  'currentIndex': widget.currentIndex,
-                                  'onTabSelected': widget.onTabSelected,
-                                },
+                              context.push(
+                                '/product/${product.id}',
+                                extra: product.categoryId,
                               );
                             },
                           );
@@ -134,14 +126,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           return ProductCard(
                             product: product,
                             onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/product-details',
-                                arguments: {
-                                  'productId': product.id,
-                                  'currentIndex': widget.currentIndex,
-                                  'onTabSelected': widget.onTabSelected,
-                                },
+                              context.push(
+                                '/product/${product.id}',
+                                extra: product.categoryId,
                               );
                             },
                           );

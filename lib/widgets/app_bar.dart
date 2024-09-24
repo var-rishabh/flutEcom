@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:flut_mart/utils/helper/routes.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 
 class KAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final int currentIndex;
-  final Function(int) onTabSelected;
+  final int selectedIndex;
   final bool needBackButton;
 
   @override
@@ -10,8 +13,7 @@ class KAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   const KAppBar({
     super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
+    required this.selectedIndex,
     this.needBackButton = false,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
@@ -35,7 +37,7 @@ class _KAppBarState extends State<KAppBar> {
                   size: 25,
                 ),
                 onPressed: () {
-                  Navigator.pop(context, true);
+                  context.pop();
                 },
               ),
             )
@@ -44,13 +46,13 @@ class _KAppBarState extends State<KAppBar> {
               child: IconButton(
                 icon: Icon(
                   Icons.grid_view_outlined,
-                  color: widget.currentIndex == 1
+                  color: matchRoute(context, KRoutes.explore)
                       ? Theme.of(context).primaryColor
                       : Colors.grey,
                   size: 25,
                 ),
                 onPressed: () {
-                  widget.onTabSelected(1);
+                  context.go(KRoutes.explore);
                 },
               ),
             ),
@@ -70,15 +72,13 @@ class _KAppBarState extends State<KAppBar> {
           child: IconButton(
             icon: Icon(
               Icons.favorite,
-              color: widget.currentIndex == 2
+              color: matchRoute(context, KRoutes.favorites)
                   ? Theme.of(context).primaryColor
                   : Colors.grey,
               size: 25,
             ),
             onPressed: () {
-              // close all navigation drawers
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              widget.onTabSelected(2);
+              context.go(KRoutes.favorites);
             },
           ),
         ),

@@ -18,22 +18,10 @@ class ProductApiService {
     final response = await client.get(Uri.parse(getProducts));
 
     if (response.statusCode == 200) {
-      final products = List<Product>.from(
-        jsonDecode(response.body).map(
-          (x) => Product(
-            id: x['id'],
-            name: x['name'],
-            image: x['image'],
-            price: x['price'],
-            discount: x['discount'],
-            description: x['description'],
-            categoryId: x['categoryId'],
-            rating: x['rating'],
-            noOfReviews: x['noOfReviews'],
-          ),
-        ),
-      );
-      return products;
+      final Products products = productFromJson(response.body);
+      List<Product> allProducts = products.products;
+
+      return allProducts;
     } else {
       throw Exception(response.body);
     }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flut_mart/models/product.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/services/cart.service.dart';
@@ -12,14 +14,7 @@ import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/snackbar.dart';
 
 class CartScreen extends StatefulWidget {
-  final int currentIndex;
-  final Function(int) onTabSelected;
-
-  const CartScreen({
-    super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
-  });
+  const CartScreen({super.key});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -92,8 +87,10 @@ class _CartScreenState extends State<CartScreen> {
                                 children: [
                                   KIconButton(
                                     icon: Icons.home,
-                                    isActive: widget.currentIndex == 0,
-                                    onTap: () => widget.onTabSelected(0),
+                                    isActive: false,
+                                    onTap: () {
+                                      context.go(KRoutes.home);
+                                    },
                                   ),
                                   const Icon(Icons.arrow_forward_ios),
                                   const SizedBox(
@@ -163,19 +160,10 @@ class _CartScreenState extends State<CartScreen> {
                     final Product product = _cartItems[index];
                     return GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/product-details',
-                          arguments: {
-                            'productId': product.id,
-                            'currentIndex': widget.currentIndex,
-                            'onTabSelected': widget.onTabSelected,
-                          },
-                        ).then((value) {
-                          if (value != null && value == true) {
-                            _loadCartItems();
-                          }
-                        });
+                        context.push(
+                          '/product/${product.id}',
+                          extra: product.categoryId,
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
@@ -309,9 +297,10 @@ class _CartScreenState extends State<CartScreen> {
                                                             1) +
                                                         1;
                                                 _saveQuantity(
-                                                    product.id.toString(),
-                                                    _cartQuantities[product.id
-                                                        .toString()]!);
+                                                  product.id.toString(),
+                                                  _cartQuantities[
+                                                      product.id.toString()]!,
+                                                );
                                               },
                                             );
                                           },
@@ -371,7 +360,7 @@ class _CartScreenState extends State<CartScreen> {
                                   '\$${product.discountedPrice}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleLarge!
+                                      .headlineSmall!
                                       .copyWith(
                                         color: Theme.of(context)
                                             .colorScheme

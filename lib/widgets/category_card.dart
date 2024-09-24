@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/utils/helper/responsive.dart';
 
@@ -13,8 +14,6 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final String image;
   final double boxSize;
-  final int currentIndex;
-  final Function(int) onTabSelected;
 
   const CategoryCard({
     super.key,
@@ -22,8 +21,6 @@ class CategoryCard extends StatelessWidget {
     required this.title,
     required this.image,
     this.boxSize = 100,
-    required this.currentIndex,
-    required this.onTabSelected,
   });
 
   @override
@@ -33,13 +30,9 @@ class CategoryCard extends StatelessWidget {
       child: OutlinedButton(
         autofocus: false,
         onPressed: () {
-          Navigator.of(context).pushNamed(
-            '/products',
-            arguments: {
-              "categoryId": id,
-              "currentIndex": currentIndex,
-              "onTabSelected": onTabSelected,
-            },
+          context.push(
+            '/category/$id',
+            extra: id,
           );
         },
         style: OutlinedButton.styleFrom(

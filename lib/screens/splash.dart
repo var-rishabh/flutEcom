@@ -1,12 +1,12 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/services/token.service.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 
 class SplashScreen extends StatefulWidget {
-  static const String routeName = '/';
-
   const SplashScreen({super.key});
 
   @override
@@ -29,9 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
         _isLoggedIn().then((isLoggedIn) {
           if (mounted) {
             if (isLoggedIn) {
-              Navigator.of(context).pushReplacementNamed('/app');
+              context.go(KRoutes.home);
             } else {
-              Navigator.of(context).pushReplacementNamed('/login');
+              context.go(KRoutes.login);
             }
           }
         });

@@ -1,14 +1,13 @@
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:flut_mart/utils/helper/routes.dart';
 import 'package:flut_mart/widgets/icon_button.dart';
 
 class KBottomNavigationBar extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onTabSelected;
-
   const KBottomNavigationBar({
     super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
   });
 
   @override
@@ -42,24 +41,32 @@ class KBottomNavigationBar extends StatelessWidget {
           children: [
             KIconButton(
               icon: Icons.home,
-              isActive: currentIndex == 0,
-              onTap: () => onTabSelected(0),
+              isActive: matchRoute(context, KRoutes.home),
+              onTap: () {
+                context.go('/home');
+              },
             ),
             KIconButton(
               icon: Icons.explore,
-              isActive: currentIndex == 1,
-              onTap: () => onTabSelected(1),
+              isActive: matchRoute(context, KRoutes.explore),
+              onTap: () {
+                context.go('/explore');
+              },
             ),
             const SizedBox(width: 80), // For the floating action button gap
             KIconButton(
               icon: Icons.favorite,
-              isActive: currentIndex == 2,
-              onTap: () => onTabSelected(2),
+              isActive: matchRoute(context, KRoutes.favorites),
+              onTap: () {
+                context.go('/favorites');
+              },
             ),
             KIconButton(
               icon: Icons.person,
-              isActive: currentIndex == 3,
-              onTap: () => onTabSelected(3),
+              isActive: matchRoute(context, KRoutes.profile),
+              onTap: () {
+                context.go('/profile');
+              },
             ),
           ],
         ),

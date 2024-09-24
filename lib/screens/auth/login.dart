@@ -1,7 +1,9 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/utils/helper/responsive.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
@@ -10,8 +12,6 @@ import 'package:flut_mart/widgets/snackbar.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const String routeName = '/login';
-
   const LoginScreen({super.key});
 
   @override
@@ -60,10 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           label: 'Login Successful',
           type: 'success',
         );
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          '/app',
-          (route) => false,
-        );
+        context.go(KRoutes.home);
       }
     } catch (e) {
       setState(() {
@@ -203,7 +200,7 @@ Widget _loginSection(
             ),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed('/signup');
+                context.go(KRoutes.signup);
               },
               child: Text(
                 'SignUp',
