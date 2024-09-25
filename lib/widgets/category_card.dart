@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 List<Color> colors = [
@@ -30,10 +32,19 @@ class CategoryCard extends StatelessWidget {
       child: OutlinedButton(
         autofocus: false,
         onPressed: () {
-          context.push(
+          context.go(
             '/category/$id',
             extra: id,
           );
+          print(Provider.of<RoutesProvider>(
+            context,
+          ).currentRoute);
+          print(Provider.of<RoutesProvider>(
+            context,
+          ).previousRoute);
+          Provider.of<RoutesProvider>(
+            context,
+          ).setCurrentRoute('/category/$id');
         },
         style: OutlinedButton.styleFrom(
           padding: EdgeInsets.zero,

@@ -1,7 +1,9 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
@@ -61,6 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
           type: 'success',
         );
         context.go(KRoutes.home);
+        Provider.of<RoutesProvider>(context, listen: false)
+            .setCurrentRoute(KRoutes.home);
       }
     } catch (e) {
       setState(() {
@@ -201,6 +205,8 @@ Widget _loginSection(
             GestureDetector(
               onTap: () {
                 context.go(KRoutes.signup);
+                Provider.of<RoutesProvider>(context, listen: false)
+                    .setCurrentRoute(KRoutes.signup);
               },
               child: Text(
                 'SignUp',

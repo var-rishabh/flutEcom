@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/utils/helper/routes.dart';
@@ -21,23 +23,11 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppState extends State<AppScreen> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: Responsive.isDesktop(context)
-          ? null
-          : KAppBar(
-              selectedIndex: _selectedIndex,
-            ),
+      appBar: Responsive.isDesktop(context) ? null : const KAppBar(),
       floatingActionButton: Responsive.isDesktop(context)
           ? null
           : FloatingActionButton(

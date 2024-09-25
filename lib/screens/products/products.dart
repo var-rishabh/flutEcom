@@ -136,7 +136,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
       appBar: Responsive.isDesktop(context)
           ? null
           : const KAppBar(
-              selectedIndex: 1,
               needBackButton: true,
             ),
       body: RefreshIndicator(

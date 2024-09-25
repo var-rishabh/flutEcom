@@ -124,7 +124,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return Scaffold(
       appBar: !Responsive.isDesktop(context)
           ? const KAppBar(
-              selectedIndex: 0,
               needBackButton: true,
             )
           : null,

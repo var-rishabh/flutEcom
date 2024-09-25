@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/helper/routes.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 
 class KAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final int selectedIndex;
   final bool needBackButton;
 
   @override
@@ -13,7 +14,6 @@ class KAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   const KAppBar({
     super.key,
-    required this.selectedIndex,
     this.needBackButton = false,
   }) : preferredSize = const Size.fromHeight(kToolbarHeight);
 
@@ -24,6 +24,8 @@ class KAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _KAppBarState extends State<KAppBar> {
   @override
   Widget build(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return AppBar(
       centerTitle: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -31,13 +33,14 @@ class _KAppBarState extends State<KAppBar> {
           ? Padding(
               padding: const EdgeInsets.fromLTRB(10, 15, 0, 0),
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.grey,
                   size: 25,
                 ),
                 onPressed: () {
-                  context.pop();
+                  context.go(routesProvider.previousRoute);
+                  routesProvider.setCurrentRoute(routesProvider.previousRoute);
                 },
               ),
             )
@@ -53,6 +56,7 @@ class _KAppBarState extends State<KAppBar> {
                 ),
                 onPressed: () {
                   context.go(KRoutes.explore);
+                  routesProvider.setCurrentRoute(KRoutes.explore);
                 },
               ),
             ),
@@ -79,6 +83,7 @@ class _KAppBarState extends State<KAppBar> {
             ),
             onPressed: () {
               context.go(KRoutes.favorites);
+              routesProvider.setCurrentRoute(KRoutes.favorites);
             },
           ),
         ),

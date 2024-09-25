@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-// create a provider to manage the current route and the previous route
 
-class RoutesProvider extends ChangeNotifier {
+class RoutesProvider with ChangeNotifier {
   String _currentRoute = '/';
   String _previousRoute = '/';
 
@@ -9,9 +8,9 @@ class RoutesProvider extends ChangeNotifier {
 
   String get previousRoute => _previousRoute;
 
-  void setCurrentRoute(String route) {
+  void setCurrentRoute(String newRoute) {
     _previousRoute = _currentRoute;
-    _currentRoute = route;
+    _currentRoute = newRoute;
     notifyListeners();
   }
 }
