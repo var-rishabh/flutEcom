@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import 'package:flut_mart/provider/category.dart';
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
-import 'package:flut_mart/services/category.service.dart';
 
 import 'package:flut_mart/widgets/category_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
@@ -19,25 +20,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
 
-  final CategoryApiService _categoryApiService = CategoryApiService();
-  List<Category> _categories = [];
-  bool _isLoading = false;
-
-  Future<void> fetchCategories() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final List<Category> categories = await _categoryApiService.getCategories();
-    setState(() {
-      _categories = categories;
-      _isLoading = false;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    fetchCategories();
+    Provider.of<CategoryProvider>(
+      context,
+      listen: false,
+    ).fetchCategories();
   }
 
   @override
@@ -48,6 +37,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context);
+
     if (Responsive.isDesktop(context)) {
       context.go('/home');
     }
@@ -78,7 +70,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       ),
                 ),
                 const SizedBox(height: 20),
-                _isLoading
+                categoryProvider.isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
@@ -92,16 +84,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           mainAxisExtent: 130,
                         ),
                         itemCount: searchQuery.isEmpty
-                            ? _categories.length
-                            : _categories
+                            ? categoryProvider.categories.length
+                            : categoryProvider.categories
                                 .where((category) => category.name
                                     .toLowerCase()
                                     .contains(searchQuery.toLowerCase()))
                                 .length,
                         itemBuilder: (context, index) {
                           final Category category = searchQuery.isEmpty
-                              ? _categories[index]
-                              : _categories
+                              ? categoryProvider.categories[index]
+                              : categoryProvider.categories
                                   .where((category) => category.name
                                       .toLowerCase()
                                       .contains(searchQuery.toLowerCase()))

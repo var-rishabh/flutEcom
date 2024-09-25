@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:flut_mart/provider/category.dart';
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
-import 'package:flut_mart/services/category.service.dart';
 
 import 'package:flut_mart/screens/navigation/carousel/carousel.dart';
 import 'package:flut_mart/widgets/category_card.dart';
@@ -18,28 +19,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final CategoryApiService _categoryApiService = CategoryApiService();
-  List<Category> _categories = [];
-  bool _isLoading = false;
-
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
-
-  Future<void> fetchCategories() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final List<Category> categories = await _categoryApiService.getCategories();
-    setState(() {
-      _categories = categories;
-      _isLoading = false;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    fetchCategories();
+    Provider.of<CategoryProvider>(
+      context,
+      listen: false,
+    ).fetchCategories();
   }
 
   @override
@@ -50,7 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final int halfLength = (_categories.length / 2).ceil();
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context);
+
+    final int halfLength = (categoryProvider.categories.length / 2).ceil();
 
     return SingleChildScrollView(
       child: Column(
@@ -78,14 +70,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
           const SizedBox(height: 20),
           if (!Responsive.isDesktop(context))
-            _isLoading
+            categoryProvider.isLoading
                 ? const Padding(
                     padding: EdgeInsets.only(bottom: 30),
                     child: Center(child: CircularProgressIndicator()),
                   )
                 : MobileCategory(
                     halfLength: halfLength,
-                    categories: _categories,
+                    categories: categoryProvider.categories,
                     widget: widget,
                   ),
           Padding(
@@ -118,10 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                       ),
                       const SizedBox(height: 50),
-                      _isLoading
+                      categoryProvider.isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : LaptopCategory(
-                              categories: _categories,
+                              categories: categoryProvider.categories,
                               widget: widget,
                             ),
                       const SizedBox(height: 100),
