@@ -1,7 +1,6 @@
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/provider/routes.dart';
@@ -25,21 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 2), () {
-        _isLoggedIn().then((isLoggedIn) {
-          if (mounted) {
-            final routeProvider =
-                Provider.of<RoutesProvider>(context, listen: false);
-            if (isLoggedIn) {
-              context.go(KRoutes.home);
-              routeProvider.setCurrentRoute(KRoutes.home);
-            } else {
-              context.go(KRoutes.login);
-              routeProvider.setCurrentRoute(KRoutes.login);
-            }
+    Future.delayed(const Duration(seconds: 2), () {
+      _isLoggedIn().then((isLoggedIn) {
+        if (mounted) {
+          final routeProvider =
+              Provider.of<RoutesProvider>(context, listen: false);
+          if (isLoggedIn) {
+            context.go(KRoutes.home);
+            routeProvider.setCurrentRoute(KRoutes.home);
+          } else {
+            context.go(KRoutes.login);
+            routeProvider.setCurrentRoute(KRoutes.login);
           }
-        });
+        }
       });
     });
   }

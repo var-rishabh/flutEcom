@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:flut_mart/provider/routes.dart';
 
 import 'package:flut_mart/screens/app.dart';
 import 'package:flut_mart/screens/splash.dart';

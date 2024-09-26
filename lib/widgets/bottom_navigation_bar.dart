@@ -1,8 +1,10 @@
-import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:flut_mart/utils/helper/routes.dart';
+import 'package:flut_mart/provider/routes.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
+
 import 'package:flut_mart/widgets/icon_button.dart';
 
 class KBottomNavigationBar extends StatelessWidget {
@@ -12,6 +14,8 @@ class KBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -41,31 +45,35 @@ class KBottomNavigationBar extends StatelessWidget {
           children: [
             KIconButton(
               icon: Icons.home,
-              isActive: matchRoute(context, KRoutes.home),
+              isActive: routesProvider.currentRoute == KRoutes.home,
               onTap: () {
-                context.go('/home');
+                context.go(KRoutes.home);
+                routesProvider.setCurrentRoute(KRoutes.home);
               },
             ),
             KIconButton(
               icon: Icons.explore,
-              isActive: matchRoute(context, KRoutes.explore),
+              isActive: routesProvider.currentRoute == KRoutes.explore,
               onTap: () {
-                context.go('/explore');
+                context.go(KRoutes.explore);
+                routesProvider.setCurrentRoute(KRoutes.explore);
               },
             ),
             const SizedBox(width: 80), // For the floating action button gap
             KIconButton(
               icon: Icons.favorite,
-              isActive: matchRoute(context, KRoutes.favorites),
+              isActive: routesProvider.currentRoute == KRoutes.favorites,
               onTap: () {
-                context.go('/favorites');
+                context.go(KRoutes.favorites);
+                routesProvider.setCurrentRoute(KRoutes.favorites);
               },
             ),
             KIconButton(
               icon: Icons.person,
-              isActive: matchRoute(context, KRoutes.profile),
+              isActive: routesProvider.currentRoute == KRoutes.profile,
               onTap: () {
-                context.go('/profile');
+                context.go(KRoutes.profile);
+                routesProvider.setCurrentRoute(KRoutes.profile);
               },
             ),
           ],

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
-import 'package:flut_mart/utils/helper/routes.dart';
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/token.service.dart';
@@ -33,6 +34,8 @@ class _WebAppBarState extends State<WebAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -52,6 +55,7 @@ class _WebAppBarState extends State<WebAppBar> {
           InkWell(
             onTap: () {
               context.go(KRoutes.home);
+              routesProvider.setCurrentRoute(KRoutes.home);
             },
             child: Text(
               'RunoStore',
@@ -81,27 +85,30 @@ class _WebAppBarState extends State<WebAppBar> {
           ),
           KIconButton(
             icon: Icons.shopping_cart,
-            isActive: matchRoute(context, KRoutes.cart),
+            isActive: routesProvider.currentRoute == KRoutes.cart,
             onTap: () {
               context.go(KRoutes.cart);
+              routesProvider.setCurrentRoute(KRoutes.cart);
             },
           ),
           KIconButton(
             icon: Icons.favorite,
-            isActive: matchRoute(context, KRoutes.favorites),
+            isActive: routesProvider.currentRoute == KRoutes.favorites,
             onTap: () {
               context.go(KRoutes.favorites);
+              routesProvider.setCurrentRoute(KRoutes.favorites);
             },
           ),
           KIconButton(
             icon: Icons.logout,
-            isActive: matchRoute(context, KRoutes.login),
+            isActive: routesProvider.currentRoute == KRoutes.login,
             onTap: () async {
               await TokenService.deleteToken();
               await CartService().clearCart();
               await FavoritesService().clearFavorites();
 
               context.go(KRoutes.login);
+              routesProvider.setCurrentRoute(KRoutes.login);
               KSnackBar.show(
                 context: context,
                 label: 'Logout Successful',

@@ -32,18 +32,13 @@ class CategoryCard extends StatelessWidget {
       child: OutlinedButton(
         autofocus: false,
         onPressed: () {
-          context.go(
+          context.push(
             '/category/$id',
             extra: id,
           );
-          print(Provider.of<RoutesProvider>(
-            context,
-          ).currentRoute);
-          print(Provider.of<RoutesProvider>(
-            context,
-          ).previousRoute);
           Provider.of<RoutesProvider>(
             context,
+            listen: false,
           ).setCurrentRoute('/category/$id');
         },
         style: OutlinedButton.styleFrom(

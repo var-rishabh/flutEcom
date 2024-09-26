@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
@@ -68,6 +70,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -90,6 +94,8 @@ class _CartScreenState extends State<CartScreen> {
                                     isActive: false,
                                     onTap: () {
                                       context.go(KRoutes.home);
+                                      routesProvider
+                                          .setCurrentRoute(KRoutes.home);
                                     },
                                   ),
                                   const Icon(Icons.arrow_forward_ios),
@@ -160,10 +166,12 @@ class _CartScreenState extends State<CartScreen> {
                     final Product product = _cartItems[index];
                     return GestureDetector(
                       onTap: () {
-                        context.push(
+                        context.go(
                           '/product/${product.id}',
                           extra: product.categoryId,
                         );
+                        routesProvider
+                            .setCurrentRoute('/product/${product.id}');
                       },
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
@@ -189,7 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                               width: 80,
                               fit: BoxFit.contain,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 25),
                             Expanded(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,

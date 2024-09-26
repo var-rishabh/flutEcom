@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flut_mart/provider/category.dart';
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/models/category.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/widgets/category_card.dart';
@@ -41,7 +43,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
         Provider.of<CategoryProvider>(context);
 
     if (Responsive.isDesktop(context)) {
-      context.go('/home');
+      context.go(KRoutes.home);
+      Provider.of<RoutesProvider>(context).setCurrentRoute(KRoutes.home);
     }
 
     return SingleChildScrollView(

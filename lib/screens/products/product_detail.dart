@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
@@ -38,7 +40,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   late Product _product;
   late int _categoryId;
-  late String _categoryName;
+  String _categoryName = '';
 
   bool _isInCart = false;
   bool _isFavorite = false;
@@ -118,12 +120,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
     return Scaffold(
       appBar: !Responsive.isDesktop(context)
-          ? const KAppBar(
+          ? KAppBar(
+              backIdentifier: widget.categoryId,
               needBackButton: true,
             )
           : null,
@@ -136,7 +136,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              productsBar(context, arguments),
+              productsBar(context),
               _isLoading
                   ? const Center(
                       child: CircularProgressIndicator(),
@@ -266,63 +266,65 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Row productsBar(BuildContext context, Map<dynamic, dynamic> arguments) {
+  Row productsBar(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            Responsive.isDesktop(context)
-                ? Row(
-                    children: [
-                      KIconButton(
-                        icon: Icons.home,
-                        isActive: false,
-                        onTap: () => {
-                          context.go(KRoutes.home),
-                        },
-                      ),
-                      const Icon(Icons.arrow_forward_ios),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          context.go(
-                            '/category/$_categoryId',
-                            extra: _categoryId,
-                          );
-                        },
-                        child: Text(
-                          _categoryName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .copyWith(
+            if (Responsive.isDesktop(context))
+              Row(
+                children: [
+                  KIconButton(
+                    icon: Icons.home,
+                    isActive: false,
+                    onTap: () => {
+                      context.go(KRoutes.home),
+                      routesProvider.setCurrentRoute(KRoutes.home),
+                    },
+                  ),
+                  const Icon(Icons.arrow_forward_ios),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      context.go(
+                        '/category/$_categoryId',
+                        extra: _categoryId,
+                      );
+                      routesProvider.setCurrentRoute(
+                        '/category/$_categoryId',
+                      );
+                    },
+                    child: Text(
+                      _categoryName,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.bold,
                               ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Icon(Icons.arrow_forward_ios),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  )
-                : const SizedBox(),
-            Responsive.isDesktop(context)
-                ? Text(
-                    _isLoading ? "" : _product.name,
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  )
-                : const SizedBox(),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  const Icon(Icons.arrow_forward_ios),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+            if (Responsive.isDesktop(context))
+              Text(
+                _isLoading ? "" : _product.name,
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
           ],
         ),
       ],
@@ -331,7 +333,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   SizedBox _cartButton(BuildContext context) {
     return SizedBox(
-      // width: double,
       child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 10,

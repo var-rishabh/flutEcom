@@ -12,5 +12,8 @@ class RoutesProvider with ChangeNotifier {
     _previousRoute = _currentRoute;
     _currentRoute = newRoute;
     notifyListeners();
+
+    print('Current Route: $_currentRoute');
+    print('Previous Route: $_previousRoute');
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/models/product.dart';
@@ -132,6 +134,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return Scaffold(
       appBar: Responsive.isDesktop(context)
           ? null
@@ -237,86 +241,47 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     !Responsive.isDesktop(context)
                         ? const SizedBox(height: 20)
                         : const SizedBox(height: 0),
-                    Responsive.isDesktop(context)
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
+                    GridView.builder(
+                      shrinkWrap: true,
+                      padding: Responsive.isDesktop(context)
+                          ? const EdgeInsets.symmetric(
                               horizontal: 100,
                               vertical: 10,
-                            ),
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 400,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 30,
-                                mainAxisExtent: 250,
-                              ),
-                              itemCount: searchQuery.isEmpty
-                                  ? _products.length
-                                  : _products
-                                      .where((product) => product.name
-                                          .toLowerCase()
-                                          .contains(searchQuery.toLowerCase()))
-                                      .length,
-                              itemBuilder: (context, index) {
-                                final Product product = searchQuery.isEmpty
-                                    ? _products[index]
-                                    : _products
-                                        .where((product) => product.name
-                                            .toLowerCase()
-                                            .contains(
-                                                searchQuery.toLowerCase()))
-                                        .toList()[index];
-                                return ProductCard(
-                                  product: product,
-                                  onTap: () {
-                                    context.push(
-                                      '/product/${product.id}',
-                                      extra: _categoryId,
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          )
-                        : GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              mainAxisExtent: 270,
-                            ),
-                            itemCount: searchQuery.isEmpty
-                                ? _products.length
-                                : _products
-                                    .where((product) => product.name
-                                        .toLowerCase()
-                                        .contains(searchQuery.toLowerCase()))
-                                    .length,
-                            itemBuilder: (context, index) {
-                              final Product product = searchQuery.isEmpty
-                                  ? _products[index]
-                                  : _products
-                                      .where((product) => product.name
-                                          .toLowerCase()
-                                          .contains(searchQuery.toLowerCase()))
-                                      .toList()[index];
-                              return ProductCard(
-                                product: product,
-                                onTap: () {
-                                  context.push(
-                                    '/product/${product.id}', // productId in the URL
-                                    extra: _categoryId, // categoryId in extra
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                            )
+                          : const EdgeInsets.all(0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: Responsive.isDesktop(context)
+                          ? desktopGridDelegate
+                          : mobileGridDelegate,
+                      itemCount: searchQuery.isEmpty
+                          ? _products.length
+                          : _products
+                              .where((product) => product.name
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()))
+                              .length,
+                      itemBuilder: (context, index) {
+                        final Product product = searchQuery.isEmpty
+                            ? _products[index]
+                            : _products
+                                .where((product) => product.name
+                                    .toLowerCase()
+                                    .contains(searchQuery.toLowerCase()))
+                                .toList()[index];
+                        return ProductCard(
+                          product: product,
+                          onTap: () {
+                            context.go(
+                              '/product/${product.id}',
+                              extra: product.categoryId,
+                            );
+                            routesProvider.setCurrentRoute(
+                              '/product/${product.id}',
+                            );
+                          },
+                        );
+                      },
+                    ),
                     if (_isLoading)
                       const Padding(
                         padding: EdgeInsets.all(8.0),
@@ -341,3 +306,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 }
+
+const SliverGridDelegateWithMaxCrossAxisExtent desktopGridDelegate =
+    SliverGridDelegateWithMaxCrossAxisExtent(
+  maxCrossAxisExtent: 400,
+  crossAxisSpacing: 20,
+  mainAxisSpacing: 30,
+  mainAxisExtent: 250,
+);
+
+const SliverGridDelegateWithFixedCrossAxisCount mobileGridDelegate =
+    SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 2,
+  crossAxisSpacing: 10,
+  mainAxisSpacing: 10,
+  mainAxisExtent: 270,
+);

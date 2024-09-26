@@ -1,8 +1,10 @@
-import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/models/product.dart';
+import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/services/favourite.service.dart';
@@ -41,6 +43,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -62,7 +66,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                 icon: Icons.home,
                                 isActive: false,
                                 onTap: () => {
-                                  context.go('/home'),
+                                  context.go(KRoutes.home),
+                                  routesProvider.setCurrentRoute(KRoutes.home),
                                 },
                               ),
                               const Icon(Icons.arrow_forward_ios),
@@ -83,57 +88,29 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Responsive.isDesktop(context)
-                    ? GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 400,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 30,
-                          mainAxisExtent: 250,
-                        ),
-                        itemCount: _favoriteItems.length,
-                        itemBuilder: (context, index) {
-                          final Product product =
-                              _favoriteItems.toList()[index];
-                          return ProductCard(
-                            product: product,
-                            onTap: () {
-                              context.push(
-                                '/product/${product.id}',
-                                extra: product.categoryId,
-                              );
-                            },
-                          );
-                        },
-                      )
-                    : GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          mainAxisExtent: 270,
-                        ),
-                        itemCount: _favoriteItems.length,
-                        itemBuilder: (context, index) {
-                          final Product product =
-                              _favoriteItems.toList()[index];
-                          return ProductCard(
-                            product: product,
-                            onTap: () {
-                              context.push(
-                                '/product/${product.id}',
-                                extra: product.categoryId,
-                              );
-                            },
-                          );
-                        },
-                      ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: Responsive.isDesktop(context)
+                      ? desktopGridDelegate
+                      : mobileGridDelegate,
+                  itemCount: _favoriteItems.length,
+                  itemBuilder: (context, index) {
+                    final Product product = _favoriteItems.toList()[index];
+                    return ProductCard(
+                      product: product,
+                      onTap: () {
+                        context.go(
+                          '/product/${product.id}',
+                          extra: product.categoryId,
+                        );
+                        routesProvider.setCurrentRoute(
+                          '/product/${product.id}',
+                        );
+                      },
+                    );
+                  },
+                ),
                 if (_favoriteItems.isEmpty) const NoData()
               ],
             ),
@@ -143,3 +120,19 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     );
   }
 }
+
+const SliverGridDelegateWithMaxCrossAxisExtent desktopGridDelegate =
+    SliverGridDelegateWithMaxCrossAxisExtent(
+  maxCrossAxisExtent: 400,
+  crossAxisSpacing: 20,
+  mainAxisSpacing: 30,
+  mainAxisExtent: 250,
+);
+
+const SliverGridDelegateWithFixedCrossAxisCount mobileGridDelegate =
+    SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 2,
+  crossAxisSpacing: 10,
+  mainAxisSpacing: 10,
+  mainAxisExtent: 270,
+);
