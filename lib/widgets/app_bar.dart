@@ -41,8 +41,8 @@ class _KAppBarState extends State<KAppBar> {
                 ),
                 onPressed: () {
                   if (routesProvider.currentRoute.startsWith('/category')) {
-                    context.go(KRoutes.explore);
-                    routesProvider.setCurrentRoute(KRoutes.explore);
+                    context.go(KRoutes.home);
+                    routesProvider.setCurrentRoute(KRoutes.home);
                     return;
                   }
                   context.go(
