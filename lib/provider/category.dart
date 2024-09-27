@@ -11,7 +11,7 @@ class CategoryProvider extends ChangeNotifier {
   String _errorMessage = '';
 
   List<Category> get categories => _categories;
-
+  
   bool get isLoading => _isLoading;
 
   String get errorMessage => _errorMessage;

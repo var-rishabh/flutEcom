@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flut_mart/provider/category.dart';
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/provider/routes.dart';
 
 import 'package:flut_mart/utils/theme/theme.dart';
@@ -17,6 +18,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => RoutesProvider()),
       ],
       child: const MyApp(),

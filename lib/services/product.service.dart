@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flut_mart/models/product.dart';
 
-// import 'package:flut_mart/utils/constants/product.constant.dart';
 import 'package:flut_mart/utils/constants/endpoint.constant.dart';
 
 class ProductApiService {
@@ -25,8 +23,6 @@ class ProductApiService {
     } else {
       throw Exception(response.body);
     }
-
-    // return allProducts;
   }
 
   Future<Product> getProductById(String id) async {
@@ -40,7 +36,6 @@ class ProductApiService {
     } else {
       throw Exception(response.body);
     }
-    // return allProducts.firstWhere((product) => product.id.toString() == id);
   }
 
   Future<List<Product>> getProductsByCategoryId(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RoutesProvider with ChangeNotifier {
+class RoutesProvider extends ChangeNotifier {
   String _currentRoute = '/';
   String _previousRoute = '/';
 
@@ -12,8 +12,5 @@ class RoutesProvider with ChangeNotifier {
     _previousRoute = _currentRoute;
     _currentRoute = newRoute;
     notifyListeners();
-
-    print('Current Route: $_currentRoute');
-    print('Previous Route: $_previousRoute');
   }
 }
