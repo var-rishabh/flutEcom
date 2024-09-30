@@ -47,7 +47,7 @@ class ProductProvider extends ChangeNotifier {
     }
 
     _isLoading = false;
-    // notifyListeners();
+    notifyListeners();
   }
 
   Future<void> fetchProductById(String id) async {

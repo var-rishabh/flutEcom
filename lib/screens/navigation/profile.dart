@@ -9,6 +9,7 @@ import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
 import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/submit_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -21,6 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final AuthApiService _authApiService = AuthApiService();
   User? _user;
   bool _isLoading = true;
+  bool _isLoggingOut = false;
 
   @override
   void initState() {
@@ -49,6 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _logout() async {
+    setState(() {
+      _isLoggingOut = true;
+    });
+    await Future.delayed(const Duration(seconds: 1));
     await TokenService.deleteToken();
     if (mounted) {
       context.go(KRoutes.login);
@@ -60,6 +66,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await CartService().clearCart();
       await FavoritesService().clearFavorites();
     }
+    setState(() {
+      _isLoggingOut = false;
+    });
   }
 
   @override
@@ -114,22 +123,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildProfileInfo('Office',
                       'Cyber Towers, 1st Floor, Hitech\nCity, Hyderabad, India'),
                   const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: _logout,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      minimumSize: const Size(double.infinity, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SubmitButton(
+                          onSubmit: _logout,
+                          text: 'Logout',
+                          isLoading: _isLoggingOut,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'Logout',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
+                    ],
                   ),
                 ],
               ),

@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/provider/product.dart';
+import 'package:flut_mart/provider/category.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/models/product.dart';
-import 'package:flut_mart/services/category.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';
 import 'package:flut_mart/widgets/icon_button.dart';
@@ -31,11 +31,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
   final TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
 
-  final CategoryApiService _categoryApiService = CategoryApiService();
   final ScrollController _scrollController = ScrollController();
 
   int _categoryId = 0;
-  String _categoryName = '';
 
   int _currentPage = 1;
   bool _isAscending = true;
@@ -46,12 +44,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     _categoryId = widget.categoryId;
+    fetchProducts();
   }
 
   Future<void> fetchProducts() async {
     final ProductProvider productProvider =
         Provider.of<ProductProvider>(context, listen: false);
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
 
+    await categoryProvider.fetchCategoryById(_categoryId);
     await productProvider.fetchProductByCategory(
       _categoryId,
       _currentPage,
@@ -110,11 +112,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Fetching Prods ================================= ');
-    fetchProducts();
-
     final ProductProvider productProvider =
         Provider.of<ProductProvider>(context);
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context);
     final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
 
     return Scaffold(
@@ -163,7 +164,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   )
                                 : const SizedBox(),
                             Text(
-                              _categoryName,
+                              categoryProvider.category.name,
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineSmall!
