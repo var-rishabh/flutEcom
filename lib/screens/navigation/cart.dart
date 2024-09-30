@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flut_mart/provider/routes.dart';
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/widgets/no_data.dart';
-import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/notification.dart';
@@ -24,7 +24,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final CartService _cartService = CartService();
-  final ProductApiService _productApiService = ProductApiService();
   List<Product> _cartItems = [];
   final Map<String, int> _cartQuantities = {};
 
@@ -35,12 +34,21 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _loadCartItems() async {
+    final ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+
     final List<String> cartIds = await _cartService.getCartItems();
-    final List<Product> products = await Future.wait(
-        cartIds.map((id) => _productApiService.getProductById(id)));
+    final List<Product> products = [];
+
+    for (final String id in cartIds) {
+      await productProvider.fetchProductById(id);
+      products.add(productProvider.product);
+    }
+
     setState(() {
       _cartItems = products;
     });
+
     await _loadQuantities();
   }
 

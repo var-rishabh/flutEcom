@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/provider/routes.dart';
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/widgets/no_data.dart';
-import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/product_card.dart';
@@ -23,7 +23,6 @@ class FavouriteScreen extends StatefulWidget {
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
   final FavoritesService _favoritesService = FavoritesService();
-  final ProductApiService _productApiService = ProductApiService();
   List<Product> _favoriteItems = [];
 
   @override
@@ -33,9 +32,17 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   }
 
   Future<void> _loadFavorites() async {
+    final ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+
     final List<String> favoriteIds = await _favoritesService.getFavorites();
-    final List<Product> products = await Future.wait(
-        favoriteIds.map((id) => _productApiService.getProductById(id)));
+    final List<Product> products = [];
+
+    for (final String id in favoriteIds) {
+      await productProvider.fetchProductById(id);
+      products.add(productProvider.product);
+    }
+
     setState(() {
       _favoriteItems = products;
     });
@@ -98,7 +105,11 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                   itemBuilder: (context, index) {
                     final Product product = _favoriteItems.toList()[index];
                     return ProductCard(
+                      key: ValueKey(product.id),
                       product: product,
+                      onRemoveFavourite: () {
+                        _loadFavorites();
+                      },
                       onTap: () {
                         context.go(
                           '/product/${product.id}',

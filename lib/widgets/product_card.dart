@@ -9,11 +9,13 @@ import 'package:flut_mart/widgets/notification.dart';
 class ProductCard extends StatefulWidget {
   final Product product;
   final VoidCallback onTap;
+  final VoidCallback? onRemoveFavourite;
 
   const ProductCard({
     super.key,
     required this.product,
     required this.onTap,
+    this.onRemoveFavourite,
   });
 
   @override
@@ -51,6 +53,7 @@ class _ProductCardState extends State<ProductCard> {
     }
     setState(() {
       _isInFavorites = !_isInFavorites;
+      widget.onRemoveFavourite?.call();
     });
 
     if (mounted) {

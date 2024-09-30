@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flut_mart/provider/routes.dart';
+import 'package:flut_mart/provider/product.dart';
+import 'package:flut_mart/provider/category.dart';
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
@@ -33,14 +35,11 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  final ProductApiService _productApiService = ProductApiService();
-  final CategoryApiService _categoryApiService = CategoryApiService();
   final CartService _cartService = CartService();
   final FavoritesService _favoritesService = FavoritesService();
 
   late Product _product;
   late int _categoryId;
-  String _categoryName = '';
 
   bool _isInCart = false;
   bool _isFavorite = false;
@@ -59,22 +58,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Future<void> _loadProductDetails() async {
+    final ProductProvider productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    final CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+
     setState(() {
       _isLoading = true;
     });
-    final Category category = await _categoryApiService.getCategoryById(
-      _categoryId,
-    );
+    await categoryProvider.fetchCategoryById(_categoryId);
+    await productProvider.fetchProductById(_productId.toString());
 
-    final product =
-        await _productApiService.getProductById(_productId.toString());
-    final isInCart = await _cartService.isInCart(product.id.toString());
-    final isFavorite =
-        await _favoritesService.isFavorite(product.id.toString());
+    final isInCart =
+        await _cartService.isInCart(productProvider.product.id.toString());
+    final isFavorite = await _favoritesService
+        .isFavorite(productProvider.product.id.toString());
 
     setState(() {
-      _categoryName = category.name;
-      _product = product;
+      _product = productProvider.product;
       _isInCart = isInCart;
       _isFavorite = isFavorite;
       _isLoading = false;
@@ -299,7 +300,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       );
                     },
                     child: Text(
-                      _categoryName,
+                      Provider.of<CategoryProvider>(context)
+                          .category
+                          .name
+                          .toUpperCase(),
                       style:
                           Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 color: Theme.of(context).colorScheme.secondary,
