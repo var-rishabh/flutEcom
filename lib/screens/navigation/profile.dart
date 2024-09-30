@@ -98,9 +98,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
-                      child: CircleAvatar(
-                        radius: 90,
-                        backgroundImage: NetworkImage(_user!.avatar),
+                      child: Container(
+                        clipBehavior: Clip.antiAlias,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.network(
+                          _user!.avatar,
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Container(
+                              width: 200,
+                              height: 200,
+                              alignment: Alignment.center,
+                              child: const CircularProgressIndicator(),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
