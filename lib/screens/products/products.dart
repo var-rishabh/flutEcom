@@ -164,7 +164,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   )
                                 : const SizedBox(),
                             Text(
-                              categoryProvider.category.name,
+                              categoryProvider.category.name ?? '',
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineSmall!

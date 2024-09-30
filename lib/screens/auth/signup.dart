@@ -10,7 +10,7 @@ import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
 
 import 'package:flut_mart/widgets/input.dart';
-import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/notification.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -32,7 +32,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final AuthApiService _authApiService = AuthApiService();
   bool _isLoading = false;
 
-  // method to signup user
   void _signupUser() async {
     try {
       if (_isLoading) return;
@@ -54,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           city.isEmpty ||
           street.isEmpty ||
           zipCode.isEmpty) {
-        KSnackBar.show(
+        KNotification.show(
           context: context,
           label: 'Please fill all the fields',
           type: 'error',
@@ -80,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         setState(() {
           _isLoading = false;
         });
-        KSnackBar.show(
+        KNotification.show(
           context: context,
           label: 'SignUp Successful. Please login.',
           type: 'success',
@@ -94,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _isLoading = false;
       });
       if (mounted) {
-        KSnackBar.show(
+        KNotification.show(
           context: context,
           label: 'Invalid Credentials',
           type: 'error',

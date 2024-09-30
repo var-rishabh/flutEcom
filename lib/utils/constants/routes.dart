@@ -28,7 +28,6 @@ class KRoutes {
   static const String products = '/category/:categoryId';
   static const String productDetails = '/product/:productId';
 
-  // routing
   static GoRouter routerConfig() => GoRouter(
         initialLocation: KRoutes.splash,
         routes: [

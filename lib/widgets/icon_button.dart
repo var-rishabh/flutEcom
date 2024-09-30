@@ -17,7 +17,6 @@ class KIconButton extends StatelessWidget {
     return IconButton(
       icon: Icon(
         icon,
-        // color: isActive ? Colors.white : Colors.white70,
         color: isActive
             ? Theme.of(context).primaryColor
             : Theme.of(context).iconTheme.color,

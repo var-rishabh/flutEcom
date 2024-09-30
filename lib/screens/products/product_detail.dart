@@ -16,7 +16,7 @@ import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';
 import 'package:flut_mart/widgets/icon_button.dart';
-import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/notification.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final int categoryId;
@@ -92,7 +92,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     });
 
     if (mounted) {
-      KSnackBar.show(
+      KNotification.show(
         context: context,
         label: _isFavorite ? 'Added to Favorites' : 'Removed from Favorites',
         type: "success",
@@ -110,7 +110,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       _isInCart = !_isInCart;
     });
     if (mounted) {
-      KSnackBar.show(
+      KNotification.show(
         context: context,
         label: _isInCart ? 'Added to Cart' : 'Removed from Cart',
         type: "success",
@@ -152,7 +152,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                               const SizedBox(width: 100),
                               Expanded(
-                                // flex: 2,
                                 child: _buildProductDetails(),
                               ),
                               Expanded(

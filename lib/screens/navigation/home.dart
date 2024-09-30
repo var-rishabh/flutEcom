@@ -127,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// Mobile Category
 class MobileCategory extends StatelessWidget {
   final int halfLength;
   final List<Category> _categories;
@@ -186,7 +185,6 @@ class MobileCategory extends StatelessWidget {
   }
 }
 
-// Laptop Category
 class LaptopCategory extends StatelessWidget {
   final List<Category> _categories;
   final HomeScreen widget;

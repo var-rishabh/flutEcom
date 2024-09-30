@@ -7,7 +7,7 @@ class CategoryProvider extends ChangeNotifier {
   final CategoryApiService _categoryApiService = CategoryApiService();
 
   List<Category> _categories = [];
-  late Category _category;
+  Category _category = Category(id: 0, name: '', image: '');
   bool _isLoading = false;
   String _errorMessage = '';
 

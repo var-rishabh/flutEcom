@@ -1,7 +1,6 @@
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/constants/images.constant.dart';
 
-// populate the categories
 final List<Category> allCategories = [
   Category(
     id: 1,

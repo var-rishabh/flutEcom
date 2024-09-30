@@ -13,7 +13,7 @@ import 'package:flut_mart/widgets/no_data.dart';
 import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/icon_button.dart';
-import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/notification.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -342,7 +342,7 @@ class _CartScreenState extends State<CartScreen> {
                                           prefs.remove(product.id.toString());
                                         },
                                       );
-                                      KSnackBar.show(
+                                      KNotification.show(
                                         context: context,
                                         label: 'Product removed from cart',
                                         type: 'success',

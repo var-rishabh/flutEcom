@@ -15,7 +15,6 @@ class AuthApiService {
 
   AuthApiService({http.Client? client}) : client = client ?? http.Client();
 
-  // Login user
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
     final response = await client.post(
       Uri.parse('$baseUrl2$login'),
@@ -35,7 +34,6 @@ class AuthApiService {
     }
   }
 
-  // SignUp user
   Future<Map<String, dynamic>> signupUser(User user) async {
     final response = await client.post(
       Uri.parse('$baseUrl2$signup'),
@@ -51,7 +49,6 @@ class AuthApiService {
     }
   }
 
-  // Get User Profile
   Future<Map<String, dynamic>> getUserProfile(int userId) async {
     final response = await client.get(Uri.parse('$baseUrl2/users/$userId'));
 

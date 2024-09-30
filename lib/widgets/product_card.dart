@@ -4,7 +4,7 @@ import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 
-import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/notification.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -54,7 +54,7 @@ class _ProductCardState extends State<ProductCard> {
     });
 
     if (mounted) {
-      KSnackBar.show(
+      KNotification.show(
         context: context,
         label: _isInFavorites ? 'Added to Favorites' : 'Removed from Favorites',
         type: "success",
@@ -72,7 +72,7 @@ class _ProductCardState extends State<ProductCard> {
       _isInCart = !_isInCart;
     });
     if (mounted) {
-      KSnackBar.show(
+      KNotification.show(
         context: context,
         label: _isInCart ? 'Added to Cart' : 'Removed from Cart',
         type: "success",

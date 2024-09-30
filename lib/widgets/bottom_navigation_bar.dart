@@ -22,7 +22,7 @@ class KBottomNavigationBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color:
-                Theme.of(context).dividerColor.withOpacity(0.1), // Shadow color
+                Theme.of(context).dividerColor.withOpacity(0.1),
             spreadRadius: 5,
             blurRadius: 15,
             offset: const Offset(0, 2),
@@ -59,7 +59,7 @@ class KBottomNavigationBar extends StatelessWidget {
                 routesProvider.setCurrentRoute(KRoutes.explore);
               },
             ),
-            const SizedBox(width: 80), // For the floating action button gap
+            const SizedBox(width: 80),
             KIconButton(
               icon: Icons.favorite,
               isActive: routesProvider.currentRoute == KRoutes.favorites,

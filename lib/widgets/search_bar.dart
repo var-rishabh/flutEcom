@@ -56,7 +56,7 @@ class KSearchBar extends StatelessWidget {
                       color: Theme.of(context).colorScheme.secondary),
                   onPressed: () {
                     controller.clear();
-                    onChanged(''); // Trigger search reset
+                    onChanged('');
                   },
                 )
               : null,

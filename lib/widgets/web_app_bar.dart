@@ -11,7 +11,7 @@ import 'package:flut_mart/services/token.service.dart';
 import 'package:flut_mart/widgets/icon_button.dart';
 import 'package:flut_mart/widgets/location_text.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
-import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/notification.dart';
 
 class WebAppBar extends StatefulWidget {
   const WebAppBar({
@@ -109,7 +109,7 @@ class _WebAppBarState extends State<WebAppBar> {
 
               context.go(KRoutes.login);
               routesProvider.setCurrentRoute(KRoutes.login);
-              KSnackBar.show(
+              KNotification.show(
                 context: context,
                 label: 'Logout Successful',
                 type: 'success',

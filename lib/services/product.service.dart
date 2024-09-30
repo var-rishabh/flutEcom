@@ -42,7 +42,6 @@ class ProductApiService {
       int categoryId, int page, int sort) async {
     final response = await client.get(Uri.parse(getProducts));
 
-    // delay by 2 seconds
     await Future.delayed(const Duration(milliseconds: 200));
 
     if (response.statusCode == 200) {

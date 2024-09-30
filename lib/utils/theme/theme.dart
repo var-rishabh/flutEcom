@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-// utils
 import 'package:flut_mart/utils/constants/colors.constant.dart';
 import 'package:flut_mart/utils/theme/text.theme.dart';
 
 class KThemeData {
-  // Light Theme
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -27,7 +25,6 @@ class KThemeData {
     ),
   );
 
-  // Dark Theme
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,

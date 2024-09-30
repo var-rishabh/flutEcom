@@ -8,7 +8,7 @@ import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
-import 'package:flut_mart/widgets/snackbar.dart';
+import 'package:flut_mart/widgets/notification.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -43,7 +43,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isLoading = false;
       });
     } catch (error) {
-      // Handle error appropriately
       setState(() {
         _isLoading = false;
       });
@@ -58,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await TokenService.deleteToken();
     if (mounted) {
       context.go(KRoutes.login);
-      KSnackBar.show(
+      KNotification.show(
         context: context,
         label: 'Logout Successful',
         type: 'success',
