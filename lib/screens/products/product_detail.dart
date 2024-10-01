@@ -6,15 +6,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/provider/category.dart';
-import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/services/cart.service.dart';
-import 'package:flut_mart/services/category.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
-import 'package:flut_mart/services/product.service.dart';
 
 import 'package:flut_mart/widgets/app_bar.dart';
 import 'package:flut_mart/widgets/icon_button.dart';
