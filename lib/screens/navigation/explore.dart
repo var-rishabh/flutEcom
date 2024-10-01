@@ -13,6 +13,7 @@ import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flut_mart/widgets/category_card.dart';
 import 'package:flut_mart/widgets/recent_product_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
+import 'package:flut_mart/widgets/web_app_bar.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -52,28 +53,27 @@ class _ExploreScreenState extends State<ExploreScreen> {
         Provider.of<ProductProvider>(context);
     final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
 
-    if (Responsive.isDesktop(context)) {
-      context.go(KRoutes.home);
-      Provider.of<RoutesProvider>(context).setCurrentRoute(KRoutes.home);
-    }
-
     return SingleChildScrollView(
       child: Column(
         children: [
+          if (Responsive.isDesktop(context)) const WebAppBar(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: Responsive.isDesktop(context)
+                ? const EdgeInsets.symmetric(horizontal: 100, vertical: 20)
+                : const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                KSearchBar(
-                  controller: _searchController,
-                  hintText: 'What are you looking for?',
-                  onChanged: (query) {
-                    setState(() {
-                      searchQuery = query;
-                    });
-                  },
-                ),
+                if (Responsive.isMobile(context))
+                  KSearchBar(
+                    controller: _searchController,
+                    hintText: 'What are you looking for?',
+                    onChanged: (query) {
+                      setState(() {
+                        searchQuery = query;
+                      });
+                    },
+                  ),
                 const SizedBox(height: 20),
                 if (productProvider.recentProducts.isNotEmpty)
                   Column(
@@ -113,7 +113,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      Responsive.isMobile(context)
+                          ? const SizedBox(height: 30)
+                          : const SizedBox(height: 50),
                     ],
                   ),
                 Text(
@@ -131,12 +133,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     : GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 20,
-                          mainAxisExtent: 130,
-                        ),
+                        gridDelegate: Responsive.isDesktop(context)
+                            ? desktopGridDelegate
+                            : mobileGridDelegate,
                         itemCount: searchQuery.isEmpty
                             ? categoryProvider.categories.length
                             : categoryProvider.categories
@@ -153,9 +152,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                       .contains(searchQuery.toLowerCase()))
                                   .toList()[index];
                           return CategoryCard(
+                            key: Key(category.id.toString()),
                             id: category.id,
                             title: category.name,
                             image: category.image,
+                            boxSize: Responsive.isDesktop(context) ? 160 : 100,
                           );
                         },
                       ),
@@ -168,3 +169,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 }
+
+const mobileGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 3,
+  mainAxisSpacing: 20,
+  mainAxisExtent: 130,
+);
+
+const desktopGridDelegate = SliverGridDelegateWithMaxCrossAxisExtent(
+  maxCrossAxisExtent: 200,
+  mainAxisSpacing: 80,
+  mainAxisExtent: 200,
+);

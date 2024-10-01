@@ -297,10 +297,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       );
                     },
                     child: Text(
-                      Provider.of<CategoryProvider>(context)
-                          .category
-                          .name
-                          .toUpperCase(),
+                      Provider.of<CategoryProvider>(context).category.name,
                       style:
                           Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 color: Theme.of(context).colorScheme.secondary,

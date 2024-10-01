@@ -84,6 +84,14 @@ class _WebAppBarState extends State<WebAppBar> {
             width: 20,
           ),
           KIconButton(
+            icon: Icons.explore,
+            isActive: routesProvider.currentRoute == KRoutes.explore,
+            onTap: () {
+              context.go(KRoutes.explore);
+              routesProvider.setCurrentRoute(KRoutes.explore);
+            },
+          ),
+          KIconButton(
             icon: Icons.shopping_cart,
             isActive: routesProvider.currentRoute == KRoutes.cart,
             onTap: () {
