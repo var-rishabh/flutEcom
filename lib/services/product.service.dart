@@ -13,12 +13,19 @@ class ProductApiService {
 
   ProductApiService({http.Client? client}) : client = client ?? http.Client();
 
-  Future<List<Product>> getAllProducts() async {
+  Future<List<Product>> getAllProducts(String searchQuery) async {
     final response = await client.get(Uri.parse(getProducts));
 
     if (response.statusCode == 200) {
       final Products products = productFromJson(response.body);
-      List<Product> allProducts = products.products;
+      final List<Product> allProducts = [];
+
+      if (searchQuery != '') {
+        allProducts.addAll(products.products.where((product) =>
+            product.name.toLowerCase().contains(searchQuery.toLowerCase())));
+      } else {
+        allProducts.addAll(products.products);
+      }
 
       return allProducts;
     } else {
@@ -77,7 +84,7 @@ class ProductApiService {
     List<String> recentlyViewed = prefs.getStringList('recentlyViewed') ?? [];
 
     if (recentlyViewed.contains(productId)) {
-      return;
+      recentlyViewed.remove(productId);
     }
     if (recentlyViewed.length >= 7) {
       recentlyViewed.removeAt(0);
@@ -104,5 +111,40 @@ class ProductApiService {
   Future<void> clearRecentlyViewed() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('recentlyViewed', []);
+  }
+
+  Future<void> addToSearchHistory(String searchQuery) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> searchHistory = prefs.getStringList('searchHistory') ?? [];
+
+    if (searchHistory.contains(searchQuery)) {
+      searchHistory.remove(searchQuery);
+    }
+    if (searchHistory.length >= 10) {
+      searchHistory.removeAt(0);
+    }
+
+    searchHistory.add(searchQuery);
+    await prefs.setStringList('searchHistory', searchHistory);
+  }
+
+  Future<List<String>> getSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> searchHistory = prefs.getStringList('searchHistory') ?? [];
+
+    return searchHistory;
+  }
+
+  Future<void> removeSingleSearchHistory(String searchQuery) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> searchHistory = prefs.getStringList('searchHistory') ?? [];
+
+    searchHistory.remove(searchQuery);
+    await prefs.setStringList('searchHistory', searchHistory);
+  }
+
+  Future<void> clearSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('searchHistory', []);
   }
 }
