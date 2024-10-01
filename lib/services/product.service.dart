@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flut_mart/models/product.dart';
 
@@ -69,5 +70,39 @@ class ProductApiService {
     } else {
       throw Exception(response.body);
     }
+  }
+
+  Future<void> addToRecentlyViewed(String productId) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> recentlyViewed = prefs.getStringList('recentlyViewed') ?? [];
+
+    if (recentlyViewed.contains(productId)) {
+      return;
+    }
+    if (recentlyViewed.length >= 7) {
+      recentlyViewed.removeAt(0);
+    }
+
+    recentlyViewed.add(productId);
+    await prefs.setStringList('recentlyViewed', recentlyViewed);
+  }
+
+  Future<List<Product>> getRecentlyViewed() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> recentlyViewed = prefs.getStringList('recentlyViewed') ?? [];
+
+    List<Product> products = [];
+
+    for (var id in recentlyViewed) {
+      final product = await getProductById(id);
+      products.add(product);
+    }
+
+    return products;
+  }
+
+  Future<void> clearRecentlyViewed() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('recentlyViewed', []);
   }
 }

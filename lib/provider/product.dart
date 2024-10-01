@@ -7,6 +7,7 @@ class ProductProvider extends ChangeNotifier {
   final ProductApiService _productApiService = ProductApiService();
 
   List<Product> _products = [];
+  List<Product> _recentProducts = [];
   late Product _product;
   bool _isLoading = false;
   bool _hasMoreProducts = false;
@@ -15,6 +16,8 @@ class ProductProvider extends ChangeNotifier {
   Product get product => _product;
 
   List<Product> get products => _products;
+
+  List<Product> get recentProducts => _recentProducts;
 
   bool get hasMoreProducts => _hasMoreProducts;
 
@@ -58,6 +61,27 @@ class ProductProvider extends ChangeNotifier {
       _errorMessage = e.toString();
     }
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchRecentProducts() async {
+    _isLoading = true;
+    try {
+      _recentProducts = await _productApiService.getRecentlyViewed();
+    } catch (e) {
+      _errorMessage = e.toString();
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> addToRecentlyViewed(String productId) async {
+    await _productApiService.addToRecentlyViewed(productId);
+    notifyListeners();
+  }
+
+  Future<void> clearRecentProducts() async {
+    await _productApiService.clearRecentlyViewed();
     notifyListeners();
   }
 }

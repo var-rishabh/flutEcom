@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/models/user.dart';
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
 import 'package:flut_mart/services/cart.service.dart';
@@ -64,6 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
       await CartService().clearCart();
       await FavoritesService().clearFavorites();
+      await Provider.of<ProductProvider>(context, listen: false)
+          .clearRecentProducts();
     }
     setState(() {
       _isLoggingOut = false;

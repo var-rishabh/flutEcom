@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
@@ -86,7 +88,11 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: () {
+        Provider.of<ProductProvider>(context, listen: false)
+            .addToRecentlyViewed(widget.product.id.toString());
+        widget.onTap();
+      },
       child: Container(
         padding: const EdgeInsets.fromLTRB(12, 8, 0, 8),
         decoration: BoxDecoration(

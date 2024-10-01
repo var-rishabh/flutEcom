@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/provider/category.dart';
 import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/models/category.dart';
+import 'package:flut_mart/models/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/widgets/category_card.dart';
+import 'package:flut_mart/widgets/recent_product_card.dart';
 import 'package:flut_mart/widgets/search_bar.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -29,6 +32,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
       context,
       listen: false,
     ).fetchCategories();
+    Provider.of<ProductProvider>(
+      context,
+      listen: false,
+    ).fetchRecentProducts();
   }
 
   @override
@@ -41,6 +48,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     final CategoryProvider categoryProvider =
         Provider.of<CategoryProvider>(context);
+    final ProductProvider productProvider =
+        Provider.of<ProductProvider>(context);
+    final RoutesProvider routesProvider = Provider.of<RoutesProvider>(context);
 
     if (Responsive.isDesktop(context)) {
       context.go(KRoutes.home);
@@ -65,6 +75,47 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   },
                 ),
                 const SizedBox(height: 20),
+                if (productProvider.recentProducts.isNotEmpty)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Recent Viewed',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 220,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: productProvider.recentProducts.length,
+                          itemBuilder: (context, index) {
+                            final Product product =
+                                productProvider.recentProducts[
+                                    productProvider.recentProducts.length -
+                                        index -
+                                        1];
+                            return RecentProductCard(
+                              product: product,
+                              onTap: () {
+                                context.go(
+                                  '/product/${product.id}',
+                                  extra: product.categoryId,
+                                );
+                                routesProvider.setCurrentRoute(
+                                  '/product/${product.id}',
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                    ],
+                  ),
                 Text(
                   'Categories',
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(

@@ -1,11 +1,9 @@
-compileSdkVersion 31
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
 }
-
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"

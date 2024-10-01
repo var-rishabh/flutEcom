@@ -30,8 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
           final routeProvider =
               Provider.of<RoutesProvider>(context, listen: false);
           if (isLoggedIn) {
-            context.go(KRoutes.home);
-            routeProvider.setCurrentRoute(KRoutes.home);
+            context.go(KRoutes.explore);
+            routeProvider.setCurrentRoute(KRoutes.explore);
           } else {
             context.go(KRoutes.login);
             routeProvider.setCurrentRoute(KRoutes.login);
