@@ -33,6 +33,7 @@ class KProductSearchBar extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
       child: TypeAheadField(
+        retainOnLoading: true,
         hideOnEmpty: true,
         controller: controller,
         builder: (BuildContext context, controller, focusNode) {
@@ -70,18 +71,21 @@ class KProductSearchBar extends StatelessWidget {
                   suggestion,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.black87,
+                        fontWeight: controller.text.isNotEmpty
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                 ),
-                if (controller.text.isEmpty)
-                  IconButton(
-                    onPressed: () {
-                      productProvider.removeSingleSearchHistory(suggestion);
-                    },
-                    icon: const Icon(Icons.close),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
+                // if (controller.text.isEmpty)
+                //   IconButton(
+                //     onPressed: () {
+                //       productProvider.removeSingleSearchHistory(suggestion);
+                //     },
+                //     icon: const Icon(Icons.close),
+                //     padding: EdgeInsets.zero,
+                //     constraints: const BoxConstraints(),
+                //     color: Theme.of(context).scaffoldBackgroundColor,
+                //   ),
               ],
             ),
           );
