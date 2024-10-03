@@ -126,149 +126,156 @@ class _ProductsScreenState extends State<ProductsScreen> {
             ),
       body: SingleChildScrollView(
         controller: _scrollController,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: Responsive.isDesktop(context)
-                        ? const EdgeInsets.symmetric(
-                            horizontal: 100,
-                            vertical: 10,
-                          )
-                        : const EdgeInsets.all(0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (Responsive.isMobile(context))
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    bottom: 20,
+                  ),
+                  child: KSearchBar(
+                    controller: _searchController,
+                    hintText: 'Search Product...',
+                    onChanged: (query) {
+                      setState(() {
+                        searchQuery = query;
+                      });
+                    },
+                  ),
+                ),
+              Padding(
+                padding: Responsive.isDesktop(context)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: 100,
+                        vertical: 10,
+                      )
+                    : const EdgeInsets.all(0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Responsive.isDesktop(context)
-                                ? Row(
-                                    children: [
-                                      KIconButton(
-                                        icon: Icons.home,
-                                        isActive: false,
-                                        onTap: () => {
-                                          context.go(KRoutes.home),
-                                        },
-                                      ),
-                                      const Icon(Icons.arrow_forward_ios),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                    ],
-                                  )
-                                : const SizedBox(),
-                            Text(
-                              categoryProvider.category.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Responsive.isDesktop(context)
-                            ? Expanded(
-                                child: KSearchBar(
-                                  controller: _searchController,
-                                  hintText: 'Search Product...',
-                                  onChanged: (query) {
-                                    setState(() {
-                                      searchQuery = query;
-                                    });
-                                  },
-                                ),
-                              )
-                            : const SizedBox(),
-                        Responsive.isDesktop(context)
-                            ? const SizedBox(width: 20)
-                            : const SizedBox(),
-                        ElevatedButton.icon(
-                          onPressed: _sortProducts,
-                          style: ButtonStyle(
-                            foregroundColor: WidgetStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.secondary,
-                            ),
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                              Theme.of(context).scaffoldBackgroundColor,
-                            ),
+                        if (Responsive.isDesktop(context))
+                          Row(
+                            children: [
+                              KIconButton(
+                                icon: Icons.home,
+                                isActive: false,
+                                onTap: () => {
+                                  context.go(KRoutes.home),
+                                },
+                              ),
+                              const Icon(Icons.arrow_forward_ios),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                          label: const Text('Price'),
-                          icon: _isAscending
-                              ? const Icon(Icons.arrow_downward)
-                              : const Icon(Icons.arrow_upward),
+                        Text(
+                          categoryProvider.category.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),
-                  ),
-                  !Responsive.isDesktop(context)
-                      ? const SizedBox(height: 20)
-                      : const SizedBox(height: 0),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    padding: Responsive.isDesktop(context)
-                        ? const EdgeInsets.symmetric(
-                            horizontal: 100,
-                            vertical: 10,
-                          )
-                        : const EdgeInsets.all(0),
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: Responsive.isDesktop(context)
-                        ? desktopGridDelegate
-                        : mobileGridDelegate,
-                    itemCount: searchQuery.isEmpty
-                        ? productProvider.products.length
-                        : productProvider.products
-                            .where((product) => product.name
-                                .toLowerCase()
-                                .contains(searchQuery.toLowerCase()))
-                            .length,
-                    itemBuilder: (context, index) {
-                      final Product product = searchQuery.isEmpty
-                          ? productProvider.products[index]
-                          : productProvider.products
-                              .where((product) => product.name
-                                  .toLowerCase()
-                                  .contains(searchQuery.toLowerCase()))
-                              .toList()[index];
-                      return ProductCard(
-                        product: product,
-                        onTap: () {
-                          context.go(
-                            '/product/${product.id}',
-                            extra: product.categoryId,
-                          );
-                          routesProvider.setCurrentRoute(
-                            '/product/${product.id}',
-                          );
-                        },
+                    const Spacer(),
+                    if (!Responsive.isMobile(context))
+                      Expanded(
+                        child: KSearchBar(
+                          controller: _searchController,
+                          hintText: 'Search Product...',
+                          onChanged: (query) {
+                            setState(() {
+                              searchQuery = query;
+                            });
+                          },
+                        ),
+                      ),
+                    const SizedBox(width: 20),
+                    ElevatedButton.icon(
+                      onPressed: _sortProducts,
+                      style: ButtonStyle(
+                        foregroundColor: WidgetStateProperty.all<Color>(
+                          Theme.of(context).colorScheme.secondary,
+                        ),
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                          Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                      ),
+                      label: const Text('Price'),
+                      icon: _isAscending
+                          ? const Icon(Icons.arrow_downward)
+                          : const Icon(Icons.arrow_upward),
+                    ),
+                  ],
+                ),
+              ),
+              !Responsive.isDesktop(context)
+                  ? const SizedBox(height: 20)
+                  : const SizedBox(height: 0),
+              GridView.builder(
+                shrinkWrap: true,
+                padding: Responsive.isDesktop(context)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: 100,
+                        vertical: 10,
+                      )
+                    : const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: Responsive.isDesktop(context)
+                    ? desktopGridDelegate
+                    : mobileGridDelegate,
+                itemCount: searchQuery.isEmpty
+                    ? productProvider.products.length
+                    : productProvider.products
+                        .where((product) => product.name
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase()))
+                        .length,
+                itemBuilder: (context, index) {
+                  final Product product = searchQuery.isEmpty
+                      ? productProvider.products[index]
+                      : productProvider.products
+                          .where((product) => product.name
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase()))
+                          .toList()[index];
+                  return ProductCard(
+                    product: product,
+                    onTap: () {
+                      context.go(
+                        '/product/${product.id}',
+                        extra: product.categoryId,
+                      );
+                      routesProvider.setCurrentRoute(
+                        '/product/${product.id}',
                       );
                     },
-                  ),
-                  if (productProvider.isLoading)
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                  if (!productProvider.isLoading &&
-                      productProvider.products.isEmpty)
-                    const NoData(),
-                ],
+                  );
+                },
               ),
-            ),
-          ],
+              if (productProvider.isLoading)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              if (!productProvider.isLoading &&
+                  productProvider.products.isEmpty)
+                const NoData(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: _showScrollToTop

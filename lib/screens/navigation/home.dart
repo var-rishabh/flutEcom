@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flut_mart/provider/category.dart';
+import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
@@ -25,10 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    final ProductProvider productProvider = Provider.of<ProductProvider>(
+      context,
+      listen: false,
+    );
     Provider.of<CategoryProvider>(
       context,
       listen: false,
     ).fetchCategories();
+
+    productProvider.fetchAllProducts('');
+    productProvider.fetchSearchHistory();
   }
 
   @override
@@ -54,14 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Column(
                     children: [
-                      KSearchBar(
+                      KProductSearchBar(
                         controller: _searchController,
                         hintText: 'What are you looking for?',
-                        onChanged: (query) {
-                          setState(() {
-                            searchQuery = query;
-                          });
-                        },
                       ),
                       const SizedBox(height: 15),
                       const LocationText(),

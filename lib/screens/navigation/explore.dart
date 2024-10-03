@@ -7,7 +7,6 @@ import 'package:flut_mart/provider/category.dart';
 import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/models/category.dart';
 import 'package:flut_mart/models/product.dart';
-import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/utils/helper/responsive.dart';
 
 import 'package:flut_mart/widgets/category_card.dart';
@@ -24,19 +23,22 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   final TextEditingController _searchController = TextEditingController();
-  String searchQuery = '';
 
   @override
   void initState() {
+    final ProductProvider productProvider = Provider.of<ProductProvider>(
+      context,
+      listen: false,
+    );
+
     super.initState();
     Provider.of<CategoryProvider>(
       context,
       listen: false,
     ).fetchCategories();
-    Provider.of<ProductProvider>(
-      context,
-      listen: false,
-    ).fetchRecentProducts();
+    productProvider.fetchAllProducts('');
+    productProvider.fetchRecentProducts();
+    productProvider.fetchSearchHistory();
   }
 
   @override
@@ -65,14 +67,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (Responsive.isMobile(context))
-                  KSearchBar(
+                  KProductSearchBar(
                     controller: _searchController,
                     hintText: 'What are you looking for?',
-                    onChanged: (query) {
-                      setState(() {
-                        searchQuery = query;
-                      });
-                    },
                   ),
                 const SizedBox(height: 20),
                 if (productProvider.recentProducts.isNotEmpty)
@@ -136,21 +133,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         gridDelegate: Responsive.isDesktop(context)
                             ? desktopGridDelegate
                             : mobileGridDelegate,
-                        itemCount: searchQuery.isEmpty
-                            ? categoryProvider.categories.length
-                            : categoryProvider.categories
-                                .where((category) => category.name
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()))
-                                .length,
+                        itemCount: categoryProvider.categories.length,
                         itemBuilder: (context, index) {
-                          final Category category = searchQuery.isEmpty
-                              ? categoryProvider.categories[index]
-                              : categoryProvider.categories
-                                  .where((category) => category.name
-                                      .toLowerCase()
-                                      .contains(searchQuery.toLowerCase()))
-                                  .toList()[index];
+                          final Category category =
+                              categoryProvider.categories[index];
                           return CategoryCard(
                             key: Key(category.id.toString()),
                             id: category.id,

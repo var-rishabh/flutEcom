@@ -24,7 +24,6 @@ class WebAppBar extends StatefulWidget {
 
 class _WebAppBarState extends State<WebAppBar> {
   final TextEditingController _searchController = TextEditingController();
-  String searchQuery = '';
 
   @override
   void dispose() {
@@ -68,14 +67,9 @@ class _WebAppBarState extends State<WebAppBar> {
           const Spacer(),
           Expanded(
             flex: 5,
-            child: KSearchBar(
+            child: KProductSearchBar(
               controller: _searchController,
               hintText: 'What are you looking for?',
-              onChanged: (query) {
-                setState(() {
-                  searchQuery = query;
-                });
-              },
             ),
           ),
           const Spacer(),

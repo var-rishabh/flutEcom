@@ -332,7 +332,6 @@ class _CartScreenState extends State<CartScreen> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  transform: Matrix4.rotationZ(0.8),
                                   transformAlignment: Alignment.center,
                                   child: IconButton(
                                     icon: const Icon(Icons.add),
