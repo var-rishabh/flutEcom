@@ -68,6 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await FavoritesService().clearFavorites();
       await Provider.of<ProductProvider>(context, listen: false)
           .clearRecentProducts();
+      await Provider.of<ProductProvider>(context, listen: false)
+          .clearSearchHistory();
     }
     setState(() {
       _isLoggingOut = false;
