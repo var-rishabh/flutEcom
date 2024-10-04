@@ -79,6 +79,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final LocationProvider locationProvider =
+        Provider.of<LocationProvider>(context);
+
+    final String fullAddress = locationProvider.address.values
+        .where((element) => element.isNotEmpty)
+        .join(', ');
+
     return SingleChildScrollView(
       child: _isLoading
           ? const SizedBox(
@@ -136,24 +143,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildProfileInfo('Username', "testUser"),
                   _buildProfileInfo('Phone', '+91 78458 94578'),
                   const SizedBox(height: 20),
-                  Text(
-                    "Addresses",
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Address",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      if (fullAddress.isEmpty)
+                        InkWell(
+                          onTap: () {
+                            locationProvider.getCurrentLocation();
+                          },
+                          child: locationProvider.isLoading
+                              ? const SizedBox(
+                                  width: 10,
+                                  height: 10,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Row(
+                                  children: [
+                                    if (fullAddress.isEmpty)
+                                      Text(
+                                        ' (Tap to fetch location)',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                            ),
+                                      ),
+                                  ],
+                                ),
                         ),
+                    ],
                   ),
-                  // if (Provider.of<LocationProvider>(context)
-                  //     .fullAddress
-                  //     .isNotEmpty)
-                  //   _buildProfileInfo(
-                  //     'Home',
-                  //     Provider.of<LocationProvider>(context).fullAddress,
-                  //   ),
-                  _buildProfileInfo(
-                    'Office',
-                    'Cyber Towers, 1st Floor, Hitech City, Hyderabad, India',
-                  ),
+                  if (fullAddress.isNotEmpty)
+                    Column(
+                      children: [
+                        _buildProfileInfo("Street",
+                            '${locationProvider.address['street']!}, ${locationProvider.address['subLocality']!}'),
+                        _buildProfileInfo("City",
+                            '${locationProvider.address['locality']!}, ${locationProvider.address['postalCode']!}'),
+                        _buildProfileInfo("State",
+                            locationProvider.address['administrativeArea']!),
+                      ],
+                    ),
                   const SizedBox(height: 40),
                   Row(
                     children: [
