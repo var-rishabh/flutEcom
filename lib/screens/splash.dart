@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flut_mart/provider/location.dart';
 import 'package:flut_mart/provider/routes.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/token.service.dart';
@@ -30,8 +31,13 @@ class _SplashScreenState extends State<SplashScreen> {
           final routeProvider =
               Provider.of<RoutesProvider>(context, listen: false);
           if (isLoggedIn) {
-            context.go(KRoutes.explore);
-            routeProvider.setCurrentRoute(KRoutes.explore);
+            context.go(KRoutes.home);
+            routeProvider.setCurrentRoute(KRoutes.home);
+
+            Provider.of<LocationProvider>(
+              context,
+              listen: false,
+            ).getCurrentLocation();
           } else {
             context.go(KRoutes.login);
             routeProvider.setCurrentRoute(KRoutes.login);
