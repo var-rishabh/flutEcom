@@ -11,6 +11,14 @@ class LocationText extends StatelessWidget {
     final LocationProvider locationProvider =
         Provider.of<LocationProvider>(context);
 
+    final String street = locationProvider.address['street'] ?? '';
+    final String subLocality = locationProvider.address['subLocality'] ?? '';
+    final String locality = locationProvider.address['locality'] ?? '';
+
+    final String fullAddress = [street, subLocality, locality]
+        .where((element) => element.isNotEmpty)
+        .join(', ');
+
     return Row(
       children: [
         Tooltip(
@@ -32,7 +40,7 @@ class LocationText extends StatelessWidget {
                         size: 20,
                         color: Theme.of(context).primaryColor,
                       ),
-                      if (locationProvider.address.isEmpty)
+                      if (fullAddress.isEmpty)
                         Text(
                           ' Click to get your location',
                           style: Theme.of(context)
@@ -49,13 +57,13 @@ class LocationText extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         Text(
-          Provider.of<LocationProvider>(context).address,
+          fullAddress,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.secondary,
               ),
         ),
-        if (locationProvider.address.isNotEmpty)
+        if (fullAddress.isNotEmpty)
           const Icon(
             Icons.keyboard_arrow_down,
             size: 20,

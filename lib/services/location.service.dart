@@ -17,13 +17,20 @@ class LocationService {
     );
   }
 
-  Future<String> getAddressFromPosition(Position position) async {
+  Future<Map<String, String>> getAddressFromPosition(Position position) async {
     final placeMarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
     );
     final placeMark = placeMarks.first;
-    print('Placemarks ========================== $placeMark');
-    return '${placeMark.street}, ${placeMark.subLocality}, ${placeMark.locality}';
+
+    return {
+      'street': placeMark.street.toString(),
+      'subLocality': placeMark.subLocality.toString(),
+      'locality': placeMark.locality.toString(),
+      'administrativeArea': placeMark.administrativeArea.toString(),
+      'postalCode': placeMark.postalCode.toString(),
+      'country': placeMark.country.toString(),
+    };
   }
 }

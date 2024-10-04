@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flut_mart/models/user.dart';
+import 'package:flut_mart/provider/location.dart';
 import 'package:flut_mart/provider/product.dart';
 import 'package:flut_mart/utils/constants/routes.dart';
 import 'package:flut_mart/services/auth.service.dart';
@@ -142,10 +143,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  _buildProfileInfo('Home',
-                      '508, Le-Bestow Co-Living Aira\nNear Shilparamam, Hitech City\nHyderabad, India'),
-                  _buildProfileInfo('Office',
-                      'Cyber Towers, 1st Floor, Hitech\nCity, Hyderabad, India'),
+                  // if (Provider.of<LocationProvider>(context)
+                  //     .fullAddress
+                  //     .isNotEmpty)
+                  //   _buildProfileInfo(
+                  //     'Home',
+                  //     Provider.of<LocationProvider>(context).fullAddress,
+                  //   ),
+                  _buildProfileInfo(
+                    'Office',
+                    'Cyber Towers, 1st Floor, Hitech City, Hyderabad, India',
+                  ),
                   const SizedBox(height: 40),
                   Row(
                     children: [
@@ -178,9 +186,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontWeight: FontWeight.bold,
                 ),
           ),
+          const SizedBox(width: 30),
           Flexible(
             child: Text(
               value,
+              textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),

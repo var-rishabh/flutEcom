@@ -7,12 +7,20 @@ class LocationProvider extends ChangeNotifier {
   final LocationService _locationService = LocationService();
 
   late Position _position;
-  String _address = '';
+  Map<String, String> _address = {
+    'street': '',
+    'subLocality': '',
+    'locality': '',
+    'administrativeArea': '',
+    'postalCode': '',
+    'country': '',
+  };
+
   bool _isLoading = false;
 
   Position get position => _position;
 
-  String get address => _address;
+  Map<String, String> get address => _address;
 
   bool get isLoading => _isLoading;
 
@@ -23,7 +31,14 @@ class LocationProvider extends ChangeNotifier {
       _position = await _locationService.getCurrentLocation();
       _address = await _locationService.getAddressFromPosition(_position);
     } catch (e) {
-      _address = '';
+      _address = {
+        'street': '',
+        'subLocality': '',
+        'locality': '',
+        'administrativeArea': '',
+        'postalCode': '',
+        'country': '',
+      };
     }
     _isLoading = false;
     notifyListeners();
