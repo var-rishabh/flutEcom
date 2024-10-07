@@ -11,6 +11,7 @@ import 'package:flut_mart/services/cart.service.dart';
 import 'package:flut_mart/services/favourite.service.dart';
 import 'package:flut_mart/services/token.service.dart';
 
+import 'package:flut_mart/widgets/map.dart';
 import 'package:flut_mart/widgets/notification.dart';
 import 'package:flut_mart/widgets/submit_button.dart';
 
@@ -197,9 +198,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             '${locationProvider.address['locality']!}, ${locationProvider.address['postalCode']!}'),
                         _buildProfileInfo("State",
                             locationProvider.address['administrativeArea']!),
+                        SizedBox(
+                          height: 200,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: const KMap(),
+                          ),
+                        ),
                       ],
                     ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 30),
                   Row(
                     children: [
                       Expanded(
