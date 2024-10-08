@@ -32,7 +32,7 @@ class CategoryCard extends StatelessWidget {
       child: OutlinedButton(
         autofocus: false,
         onPressed: () {
-          context.push(
+          context.go(
             '/category/$id',
             extra: id,
           );
