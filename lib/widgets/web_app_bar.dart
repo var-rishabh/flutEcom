@@ -57,7 +57,7 @@ class _WebAppBarState extends State<WebAppBar> {
               routesProvider.setCurrentRoute(KRoutes.home);
             },
             child: Text(
-              'RunoStore',
+              'Runo Store',
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,

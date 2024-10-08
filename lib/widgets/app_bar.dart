@@ -72,7 +72,7 @@ class _KAppBarState extends State<KAppBar> {
       title: Padding(
         padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
         child: Text(
-          'RunoStore',
+          'Runo Store',
           style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
