@@ -38,14 +38,16 @@ class KNotification {
     ScaffoldMessenger.of(context).clearSnackBars();
 
     final snackBar = SnackBar(
-      content: Text(label),
+      content: Text(
+        label,
+        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+      ),
       duration: const Duration(seconds: 2),
       backgroundColor: type == 'error'
           ? Colors.red
-          : type == 'success'
-              ? Colors.green
-              : Colors.black54,
+          : Theme.of(context).scaffoldBackgroundColor,
       behavior: SnackBarBehavior.floating,
+      closeIconColor: Theme.of(context).colorScheme.secondary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -78,11 +80,23 @@ class KNotification {
       dragToClose: true,
       style: ToastificationStyle.fillColored,
       boxShadow: highModeShadow,
+      primaryColor: type == 'error'
+          ? Colors.red
+          : Theme.of(context).scaffoldBackgroundColor,
+      foregroundColor: type == 'error'
+          ? Colors.white
+          : Theme.of(context).colorScheme.secondary,
+      progressBarTheme: ProgressIndicatorThemeData(
+        linearTrackColor: type == 'error'
+            ? Colors.red
+            : Theme.of(context).scaffoldBackgroundColor,
+        color: type == 'error'
+            ? Colors.white
+            : Theme.of(context).colorScheme.secondary,
+      ),
       type: type == 'error'
           ? ToastificationType.error
-          : type == 'success'
-              ? ToastificationType.success
-              : ToastificationType.info,
+          : ToastificationType.success,
       borderRadius: BorderRadius.circular(12),
       alignment: Alignment.topRight,
     );
