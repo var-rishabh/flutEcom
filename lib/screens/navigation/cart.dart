@@ -334,7 +334,7 @@ class _CartScreenState extends State<CartScreen> {
                                 Container(
                                   transformAlignment: Alignment.center,
                                   child: IconButton(
-                                    icon: const Icon(Icons.add),
+                                    icon: const Icon(Icons.close),
                                     iconSize: 30,
                                     onPressed: () {
                                       setState(
