@@ -1,7 +1,6 @@
+import 'package:flut_mart/utils/helper/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
-
-import 'package:flut_mart/utils/helper/responsive.dart';
 
 class KNotification {
   static void show({
@@ -56,6 +55,7 @@ class KNotification {
       width: 400,
       action: actionLabel != null
           ? SnackBarAction(
+              textColor: Theme.of(context).colorScheme.secondary,
               label: actionLabel,
               onPressed: actionFunction ?? () {},
             )
